@@ -181,14 +181,21 @@
     height: 20px;
   }
 
+  .flex-align {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+
   .checkbox-label {
-    margin-right: 8px;
     display: inline-flex;
     align-items: center;
+    gap: 3px;
     font-size: 7.5pt;
     cursor: pointer;
+    white-space: nowrap;
   }
-  .checkbox-label input { margin-right: 3px; }
 
   .sub-note {
     font-size: 6.2pt;
@@ -240,7 +247,7 @@
   .narrative-card textarea {
     flex: 1;
     width: 100%;
-    min-height: 75px;
+    min-height: 80px;
     border: none;
     resize: none;
     font-family: inherit;
@@ -248,15 +255,6 @@
     padding: 5px;
     line-height: 1.3;
     background: #ffffff;
-  }
-
-  .weather-quick-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 3px;
-    padding: 3px 5px;
-    background: #fafafa;
-    border-bottom: 1px solid #e2e8f0;
   }
 
   /* SIGNATURE CANVAS */
@@ -351,60 +349,80 @@
     <div class="sub-title-bar">Interagency Aviation Operations &bull; UAS Contractor &amp; Resource Daily Diary</div>
   </div>
 
-  <!-- HEADER LOGISTICS -->
+  <!-- HEADER LOGISTICS (ALIGNED) -->
   <table>
     <tr>
-      <td colspan="2" style="width: 48%;">
-        <span class="bold">Activity / Mission:</span> &nbsp;
-        <label class="checkbox-label"><input type="checkbox" id="act_largefire"> Large Fire</label>
-        <label class="checkbox-label"><input type="checkbox" id="act_ia"> IA</label>
-        <label class="checkbox-label"><input type="checkbox" id="act_proj"> Project</label>
-        <label class="checkbox-label"><input type="checkbox" id="act_train"> Training</label>
+      <td style="width: 50%;">
+        <div class="flex-align">
+          <span class="bold">Activity / Mission:</span>
+          <label class="checkbox-label"><input type="checkbox" id="act_largefire"> Large Fire</label>
+          <label class="checkbox-label"><input type="checkbox" id="act_ia"> IA</label>
+          <label class="checkbox-label"><input type="checkbox" id="act_proj"> Project</label>
+          <label class="checkbox-label"><input type="checkbox" id="act_train"> Training</label>
+        </div>
       </td>
-      <td style="width: 24%;">
-        <span class="bold">FRAT Completed:</span> &nbsp;
-        <label class="checkbox-label"><input type="radio" name="frat" id="frat_yes"> Yes</label>
-        <label class="checkbox-label"><input type="radio" name="frat" id="frat_no"> No</label>
+      <td style="width: 25%;">
+        <div class="flex-align">
+          <span class="bold">FRAT Completed:</span>
+          <label class="checkbox-label"><input type="radio" name="frat" id="frat_yes"> Yes</label>
+          <label class="checkbox-label"><input type="radio" name="frat" id="frat_no"> No</label>
+        </div>
       </td>
-      <td style="width: 28%;">
-        <div style="display:flex; align-items:center;">
-          <span class="bold" style="white-space:nowrap; margin-right:4px;">Date:</span>
+      <td style="width: 25%;">
+        <div class="flex-align">
+          <span class="bold" style="white-space:nowrap;">Date:</span>
           <input type="date" id="doc_date">
         </div>
       </td>
     </tr>
     <tr>
-      <td style="width: 25%;">
-        <span class="bold">Contractor / Vendor:</span>
-        <input type="text" id="vendor_name" placeholder="Vendor / Company Name">
+      <td style="width: 50%;">
+        <div class="flex-align">
+          <span class="bold" style="white-space:nowrap; width:130px;">Contractor / Vendor:</span>
+          <input type="text" id="vendor_name" placeholder="Vendor / Company Name">
+        </div>
       </td>
-      <td style="width: 25%;">
-        <span class="bold">Incident / Project Name:</span>
-        <input type="text" id="inc_name" placeholder="Incident / Project">
-      </td>
-      <td style="width: 25%;">
-        <span class="bold">Host Agency / Unit:</span>
-        <input type="text" id="agency_name" placeholder="Host Agency">
-      </td>
-      <td style="width: 25%;">
-        <span class="bold">Resource Order #:</span>
-        <input type="text" id="order_num" placeholder="A-...">
+      <td colspan="2" style="width: 50%;">
+        <div class="flex-align">
+          <span class="bold" style="white-space:nowrap; width:130px;">Incident / Project:</span>
+          <input type="text" id="inc_name" placeholder="Incident or Project Name">
+        </div>
       </td>
     </tr>
     <tr>
-      <td style="width: 25%;">
-        <span class="bold">Launch Base / Helibase:</span>
-        <input type="text" id="base_loc" placeholder="Base / Staging Location">
+      <td style="width: 50%;">
+        <div class="flex-align">
+          <span class="bold" style="white-space:nowrap; width:130px;">Launch Base / Helibase:</span>
+          <input type="text" id="base_loc" placeholder="Base / Staging Location">
+        </div>
       </td>
       <td style="width: 25%;">
-        <span class="bold">Contract Type:</span> &nbsp;
-        <label class="checkbox-label"><input type="radio" name="ctype" id="ct_cwn"> CWN</label>
-        <label class="checkbox-label"><input type="radio" name="ctype" id="ct_exu"> Ex-Use</label>
-        <label class="checkbox-label"><input type="radio" name="ctype" id="ct_agency"> Agency</label>
+        <div class="flex-align">
+          <span class="bold" style="white-space:nowrap;">Agency:</span>
+          <input type="text" id="agency_name" placeholder="Host Agency / Unit">
+        </div>
       </td>
-      <td colspan="2">
-        <span class="bold">UAS Manager (UASM) / Govt Rep:</span>
-        <input type="text" id="uasm_name" placeholder="Manager Name">
+      <td style="width: 25%;">
+        <div class="flex-align">
+          <span class="bold" style="white-space:nowrap;">Order #:</span>
+          <input type="text" id="order_num" placeholder="A-...">
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td style="width: 50%;">
+        <div class="flex-align">
+          <span class="bold" style="white-space:nowrap; margin-right:4px;">Contract Type:</span>
+          <label class="checkbox-label"><input type="radio" name="ctype" id="ct_cwn"> CWN</label>
+          <label class="checkbox-label"><input type="radio" name="ctype" id="ct_exu"> Exclusive Use</label>
+          <label class="checkbox-label"><input type="radio" name="ctype" id="ct_agency"> Agency</label>
+        </div>
+      </td>
+      <td colspan="2" style="width: 50%;">
+        <div class="flex-align">
+          <span class="bold" style="white-space:nowrap; width:130px;">UAS Manager / Gov Rep:</span>
+          <input type="text" id="uasm_name" placeholder="Manager Name">
+        </div>
       </td>
     </tr>
   </table>
@@ -589,18 +607,12 @@
         <textarea id="box_ac_status" placeholder="Detail airworthiness logs, power trends, motor/sensor calibrations, maintenance actions, battery cycle records, or reasons for unavailability..."></textarea>
       </div>
 
-      <!-- 16. WEATHER OBSERVATIONS & NARRATIVE -->
+      <!-- 16. WEATHER NARRATIVE -->
       <div class="narrative-card">
         <div class="narrative-card-header">
-          16. Weather Report &amp; Observations <span class="sub-note">(Wind, temp, visibility, micro-trends)</span>
+          16. Weather Observations &amp; Narrative <span class="sub-note">(Wind, temp, visibility, micro-trends, delays)</span>
         </div>
-        <div class="weather-quick-grid">
-          <input type="text" id="wx_wind" placeholder="Wind / Gusts (kts)">
-          <input type="text" id="wx_temp" placeholder="Temp (°F/°C)">
-          <input type="text" id="wx_vis" placeholder="Ceiling / Vis">
-          <input type="text" id="wx_solar" placeholder="KP Index / Sats">
-        </div>
-        <textarea id="box_weather" placeholder="Detail local weather conditions, turbulence/inversion layers, thermal activity, wind shifts, or weather-induced delays/abort reasons..."></textarea>
+        <textarea id="box_weather" placeholder="Detail local on-site weather, surface wind/gusts, temperature, turbulence/inversion layers, thermal activity, wind shifts, or weather-induced aborts/delays..."></textarea>
       </div>
 
       <!-- 17. NARRATIVE REPORT -->
@@ -615,23 +627,23 @@
 
   </div>
 
-  <!-- SECTION 5: APPROVAL SIGNATURES -->
+  <!-- SECTION 5: APPROVAL SIGNATURES (PERFECTLY ALIGNED) -->
   <table>
     <tr>
-      <td style="width: 38%; vertical-align: top;">
-        <span class="bold">Govt Representative / UASM Name (Print):</span>
-        <input type="text" id="sig_name" placeholder="Printed Name &amp; Title" style="margin-top:2px;">
+      <td style="width: 40%; vertical-align: bottom; padding-bottom: 5px;">
+        <div class="bold" style="margin-bottom: 4px;">Govt Representative / UASM Name (Print):</div>
+        <input type="text" id="sig_name" placeholder="Printed Full Name &amp; Title">
       </td>
-      <td style="width: 42%; vertical-align: top;">
-        <span class="bold">Govt Representative Signature:</span> <span class="sub-note">(Draw signature below)</span>
+      <td style="width: 40%; vertical-align: top;">
+        <div class="bold" style="margin-bottom: 2px;">Govt Representative Signature: <span class="sub-note">(Draw signature below)</span></div>
         <div class="sig-container" id="sig-box">
           <canvas id="sig-canvas"></canvas>
           <button type="button" class="sig-clear-btn" onclick="clearSignature()">Clear</button>
         </div>
       </td>
-      <td style="width: 20%; vertical-align: top;">
-        <span class="bold">Date:</span>
-        <input type="date" id="sig_date" style="margin-top:2px;">
+      <td style="width: 20%; vertical-align: bottom; padding-bottom: 5px;">
+        <div class="bold" style="margin-bottom: 4px;">Date:</div>
+        <input type="date" id="sig_date">
       </td>
     </tr>
   </table>
@@ -639,7 +651,7 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'uas_daily_summary_5veh_5pers_vendor_v3';
+  const STORAGE_KEY = 'uas_daily_summary_clean_aligned_v1';
   let totalCostGlobal = 0;
   let currentFileHandle = null;
 
