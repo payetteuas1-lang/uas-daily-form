@@ -349,7 +349,7 @@
     <div class="sub-title-bar">Interagency Aviation Operations &bull; UAS Contractor &amp; Resource Daily Diary</div>
   </div>
 
-  <!-- HEADER LOGISTICS (ALIGNED) -->
+  <!-- HEADER LOGISTICS -->
   <table>
     <tr>
       <td style="width: 50%;">
@@ -433,17 +433,17 @@
     <!-- LEFT COLUMN -->
     <div class="col-left">
 
-      <!-- 4 PILOTS & 4 AIRCRAFT TRACKING -->
+      <!-- 4 PILOTS & 4 AIRCRAFT TRACKING (EXPANDED MAKE/MODEL) -->
       <table>
         <tr class="bg-header bold center">
-          <td colspan="2" style="width: 50%;">PILOT FLIGHT TIME (UP TO 4)</td>
-          <td colspan="4" style="width: 50%;">UAS AIRFRAME TRACKING (UP TO 4)</td>
+          <td colspan="2" style="width: 44%;">PILOT FLIGHT TIME (UP TO 4)</td>
+          <td colspan="4" style="width: 56%;">UAS AIRFRAME TRACKING (UP TO 4)</td>
         </tr>
         <tr class="bg-sub center bold" style="font-size: 7pt;">
-          <td style="width: 36%;">Pilot / Operator Name</td>
-          <td style="width: 14%;">Flt Hrs</td>
-          <td style="width: 17%;">FAA Reg / Tail</td>
-          <td style="width: 17%;">Make / Model</td>
+          <td style="width: 32%;">Pilot / Operator Name</td>
+          <td style="width: 12%;">Flt Hrs</td>
+          <td style="width: 14%;">Tail / Reg #</td>
+          <td style="width: 26%;">Make / Model</td>
           <td style="width: 8%;">Sort</td>
           <td style="width: 8%;">Flt</td>
         </tr>
@@ -451,7 +451,7 @@
           <td><input type="text" id="p1_name" placeholder="Pilot 1 (RPIC)"></td>
           <td><input type="number" step="0.1" id="p1_flt" placeholder="0.0"></td>
           <td><input type="text" id="ac1_reg" placeholder="Tail #1"></td>
-          <td><input type="text" id="ac1_model" placeholder="Model"></td>
+          <td><input type="text" id="ac1_model" placeholder="Make / Model"></td>
           <td><input type="number" id="ac1_sorties" placeholder="0"></td>
           <td><input type="number" step="0.1" id="ac1_flt" placeholder="0.0"></td>
         </tr>
@@ -459,7 +459,7 @@
           <td><input type="text" id="p2_name" placeholder="Pilot 2"></td>
           <td><input type="number" step="0.1" id="p2_flt" placeholder="0.0"></td>
           <td><input type="text" id="ac2_reg" placeholder="Tail #2"></td>
-          <td><input type="text" id="ac2_model" placeholder="Model"></td>
+          <td><input type="text" id="ac2_model" placeholder="Make / Model"></td>
           <td><input type="number" id="ac2_sorties" placeholder="0"></td>
           <td><input type="number" step="0.1" id="ac2_flt" placeholder="0.0"></td>
         </tr>
@@ -467,7 +467,7 @@
           <td><input type="text" id="p3_name" placeholder="Pilot 3"></td>
           <td><input type="number" step="0.1" id="p3_flt" placeholder="0.0"></td>
           <td><input type="text" id="ac3_reg" placeholder="Tail #3"></td>
-          <td><input type="text" id="ac3_model" placeholder="Model"></td>
+          <td><input type="text" id="ac3_model" placeholder="Make / Model"></td>
           <td><input type="number" id="ac3_sorties" placeholder="0"></td>
           <td><input type="number" step="0.1" id="ac3_flt" placeholder="0.0"></td>
         </tr>
@@ -475,7 +475,7 @@
           <td><input type="text" id="p4_name" placeholder="Pilot 4"></td>
           <td><input type="number" step="0.1" id="p4_flt" placeholder="0.0"></td>
           <td><input type="text" id="ac4_reg" placeholder="Tail #4"></td>
-          <td><input type="text" id="ac4_model" placeholder="Model"></td>
+          <td><input type="text" id="ac4_model" placeholder="Make / Model"></td>
           <td><input type="number" id="ac4_sorties" placeholder="0"></td>
           <td><input type="number" step="0.1" id="ac4_flt" placeholder="0.0"></td>
         </tr>
@@ -627,7 +627,7 @@
 
   </div>
 
-  <!-- SECTION 5: APPROVAL SIGNATURES (PERFECTLY ALIGNED) -->
+  <!-- SECTION 5: APPROVAL SIGNATURES -->
   <table>
     <tr>
       <td style="width: 40%; vertical-align: bottom; padding-bottom: 5px;">
@@ -651,7 +651,7 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'uas_daily_summary_clean_aligned_v1';
+  const STORAGE_KEY = 'uas_daily_summary_clean_aligned_v2';
   let totalCostGlobal = 0;
   let currentFileHandle = null;
 
