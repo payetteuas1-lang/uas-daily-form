@@ -9,21 +9,18 @@
     --primary: #0f2744;
     --primary-light: #1e3a5f;
     --accent: #2563eb;
-    --accent-hover: #1d4ed8;
     --bg-page: #f1f5f9;
     --surface: #ffffff;
     --border: #cbd5e1;
-    --border-dark: #334155;
     --text-main: #0f172a;
     --text-muted: #64748b;
-    --highlight: #fef9c3;
     --success-bg: #ecfdf5;
     --success-text: #065f46;
   }
 
   @page {
     size: letter portrait;
-    margin: 0.20in 0.25in;
+    margin: 0.18in 0.22in;
   }
 
   * {
@@ -34,7 +31,7 @@
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    font-size: 7.5pt;
+    font-size: 6.8pt;
     color: var(--text-main);
     margin: 0;
     padding: 0;
@@ -47,15 +44,15 @@
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(15, 39, 68, 0.95);
+    background: rgba(15, 39, 68, 0.96);
     backdrop-filter: blur(8px);
     color: white;
-    padding: 8px 16px;
+    padding: 6px 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    font-size: 8.5pt;
+    font-size: 8pt;
   }
 
   .status-badge {
@@ -65,7 +62,7 @@
     background: rgba(255,255,255,0.1);
     padding: 3px 8px;
     border-radius: 20px;
-    font-size: 7.5pt;
+    font-size: 7.2pt;
   }
 
   .status-dot {
@@ -73,165 +70,189 @@
     height: 6px;
     border-radius: 50%;
     background: #10b981;
-    box-shadow: 0 0 8px #10b981;
+    box-shadow: 0 0 6px #10b981;
   }
 
-  .btn-group {
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
-  }
+  .btn-group { display: flex; gap: 4px; flex-wrap: wrap; }
 
   .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
     border: none;
-    padding: 5px 10px;
+    padding: 4px 8px;
     font-weight: 600;
     cursor: pointer;
-    border-radius: 4px;
-    font-size: 7.5pt;
+    border-radius: 3px;
+    font-size: 7.2pt;
     transition: all 0.15s ease;
   }
 
   .btn:active { transform: scale(0.97); }
   .btn-save { background: #2563eb; color: white; }
-  .btn-save:hover { background: #1d4ed8; }
   .btn-aux { background: #475569; color: white; }
-  .btn-aux:hover { background: #334155; }
   .btn-clear { background: #dc2626; color: white; }
-  .btn-clear:hover { background: #b91c1c; }
   .btn-print { background: #059669; color: white; }
-  .btn-print:hover { background: #047857; }
 
-  /* MAIN FORM CARD CONTAINER */
+  /* PAGE CONTAINER */
   .page-container {
     max-width: 8.5in;
-    margin: 12px auto;
+    margin: 8px auto;
     background: var(--surface);
-    padding: 10px 14px;
-    border-radius: 6px;
+    padding: 6px 10px;
+    border-radius: 4px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   }
 
-  /* TITLE HEADER */
   .header-banner {
     background: var(--primary);
     color: white;
     text-align: center;
-    padding: 4px;
-    border-radius: 3px;
-    margin-bottom: 4px;
+    padding: 3px;
+    border-radius: 2px;
+    margin-bottom: 3px;
   }
 
   .title-bar {
-    font-size: 10pt;
+    font-size: 8.8pt;
     font-weight: 800;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.6px;
     text-transform: uppercase;
   }
 
   .sub-title-bar {
-    font-size: 6.5pt;
+    font-size: 5.8pt;
     font-weight: 500;
-    letter-spacing: 0.3px;
     opacity: 0.85;
   }
 
-  /* TABLE & FORM STYLING */
+  /* TABLES */
   table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
   }
 
   th, td {
     border: 1px solid var(--border);
-    padding: 2px 4px;
+    padding: 1.5px 3px;
     vertical-align: middle;
   }
 
   .bold { font-weight: 700; }
   .bg-header { background-color: #f8fafc; color: #334155; }
   .bg-sub { background-color: #f1f5f9; }
+  .bg-section { background-color: #e2e8f0; font-weight: 700; }
   .center { text-align: center; }
   .right { text-align: right; }
 
-  /* MODERN INPUT FIELDS */
+  /* INPUTS */
   input[type="text"], input[type="date"], input[type="number"], select {
     width: 100%;
     border: 1px solid #cbd5e1;
     background: #ffffff;
-    padding: 2px 4px;
-    font-size: 7.5pt;
+    padding: 1px 3px;
+    font-size: 6.8pt;
     font-family: inherit;
-    height: 19px;
+    height: 15px;
     border-radius: 2px;
     color: var(--text-main);
-    transition: all 0.15s ease;
   }
 
   input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus, textarea:focus {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 1px var(--accent);
     background-color: #f8faff;
   }
 
   input[type="number"] { text-align: right; }
 
-  .cost-output, #grandTotal {
+  .cost-output {
     font-weight: 700;
     text-align: right;
     background: #f8fafc;
     color: #0f172a;
-    border-color: #e2e8f0;
   }
 
   #grandTotal {
     background: var(--success-bg) !important;
     color: var(--success-text) !important;
-    font-size: 8.5pt;
-  }
-
-  /* TEXTAREAS */
-  textarea {
-    width: 100%;
-    height: 85px;
-    border: 1px solid #cbd5e1;
-    resize: none;
-    font-family: inherit;
-    font-size: 7.2pt;
-    padding: 4px;
-    background: #ffffff;
-    line-height: 1.25;
-    border-radius: 2px;
+    font-size: 7.8pt;
+    font-weight: 800;
+    text-align: right;
   }
 
   .checkbox-label {
-    margin-right: 8px;
+    margin-right: 6px;
     display: inline-flex;
     align-items: center;
-    font-size: 7.2pt;
+    font-size: 6.8pt;
     cursor: pointer;
-    font-weight: 500;
   }
-
-  .checkbox-label input { margin-right: 3px; cursor: pointer; }
+  .checkbox-label input { margin-right: 2px; }
 
   .sub-note {
-    font-size: 6pt;
-    font-weight: normal;
+    font-size: 5.5pt;
     color: var(--text-muted);
     font-style: italic;
+    font-weight: normal;
+  }
+
+  /* 2-COLUMN SPLIT LAYOUT */
+  .layout-split {
+    display: flex;
+    gap: 4px;
+    align-items: stretch;
+    margin-bottom: 2px;
+  }
+
+  .col-left {
+    flex: 1.35;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .col-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .narrative-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: #ffffff;
+    overflow: hidden;
+  }
+
+  .narrative-card-header {
+    background: #f1f5f9;
+    padding: 2px 4px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 700;
+    font-size: 6.8pt;
+    color: #1e293b;
+  }
+
+  .narrative-card textarea {
+    flex: 1;
+    width: 100%;
+    min-height: 180px;
+    border: none;
+    resize: none;
+    font-family: inherit;
+    font-size: 6.8pt;
+    padding: 4px;
+    line-height: 1.25;
+    background: #ffffff;
   }
 
   /* SIGNATURE CANVAS */
   .sig-container {
     position: relative;
     width: 100%;
-    height: 44px;
+    height: 36px;
     background: #ffffff;
     border: 1px dashed #94a3b8;
     border-radius: 2px;
@@ -246,21 +267,19 @@
 
   .sig-clear-btn {
     position: absolute;
-    bottom: 2px;
-    right: 2px;
+    bottom: 1px;
+    right: 1px;
     background: #f1f5f9;
     border: 1px solid #cbd5e1;
     color: #475569;
-    font-size: 6pt;
+    font-size: 5.5pt;
     font-weight: 600;
-    padding: 1px 5px;
+    padding: 1px 4px;
     border-radius: 2px;
     cursor: pointer;
   }
 
-  .sig-clear-btn:hover { background: #e2e8f0; color: #0f172a; }
-
-  /* PRINT PREVIEW RULES - STRICT 1-PAGE OUTPUT */
+  /* STRICT PRINT 1-PAGE RULES */
   @media print {
     body { background: #ffffff !important; }
     .page-container {
@@ -268,18 +287,15 @@
       padding: 0 !important;
       max-width: 100% !important;
       box-shadow: none !important;
-      border-radius: 0 !important;
     }
-    .no-print-bar { display: none !important; }
-    .sig-clear-btn { display: none !important; }
-    
-    th, td { border-color: #000000 !important; }
+    .no-print-bar, .sig-clear-btn { display: none !important; }
+    th, td, .narrative-card { border-color: #000000 !important; }
     .header-banner {
       background: #0f2744 !important;
       color: #ffffff !important;
       border: 1px solid #000000;
     }
-    .bg-header, .bg-sub {
+    .bg-header, .bg-sub, .bg-section, .narrative-card-header {
       background-color: #f1f5f9 !important;
       color: #000000 !important;
     }
@@ -294,25 +310,22 @@
       appearance: auto;
       -webkit-appearance: auto;
     }
-    #grandTotal {
-      background: transparent !important;
-      color: #000000 !important;
-    }
+    #grandTotal { background: transparent !important; color: #000000 !important; }
   }
 </style>
 </head>
 <body>
 
-<!-- STICKY CONTROL TOOLBAR -->
+<!-- TOP CONTROL BAR -->
 <div class="no-print-bar">
   <div class="status-badge">
     <div class="status-dot"></div>
-    <span id="save-status">Auto-Saving Local Engine</span>
+    <span id="save-status">Auto-Saving Engine Active</span>
   </div>
   <div class="btn-group">
     <button class="btn btn-save" onclick="saveJSON()">💾 Save</button>
     <button class="btn btn-aux" onclick="saveAsJSON()">📁 Save As</button>
-    <button class="btn btn-aux" onclick="document.getElementById('fileInput').click()">📂 Open JSON</button>
+    <button class="btn btn-aux" onclick="document.getElementById('fileInput').click()">📂 Open</button>
     <input type="file" id="fileInput" style="display:none" accept=".json,application/json" onchange="openJSON(event)">
     <button class="btn btn-clear" onclick="clearFormData()">🗑️ Clear</button>
     <button class="btn btn-print" onclick="window.print()">🖨️ Print / Save PDF</button>
@@ -321,13 +334,13 @@
 
 <div class="page-container">
 
-  <!-- HEADER BANNER -->
+  <!-- BANNER -->
   <div class="header-banner">
     <div class="title-bar">UAS Daily Operations &amp; Cost Summary</div>
-    <div class="sub-title-bar">Interagency Aviation Operations &bull; UAS Contractor / Resource Log</div>
+    <div class="sub-title-bar">Interagency Aviation Operations &bull; UAS Contractor &amp; Resource Daily Diary</div>
   </div>
 
-  <!-- SECTION 1: MISSION & RESOURCE HEADER -->
+  <!-- HEADER LOGISTICS -->
   <table>
     <tr>
       <td colspan="2" style="width: 48%;">
@@ -377,172 +390,220 @@
       </td>
       <td colspan="2">
         <span class="bold">UAS Manager (UASM) / Govt Rep:</span>
-        <input type="text" id="uasm_name" placeholder="Manager / Representative Name">
+        <input type="text" id="uasm_name" placeholder="Manager Name">
       </td>
     </tr>
   </table>
 
-  <!-- SECTION 2: 4 PILOTS & 4 AIRCRAFT TRACKING -->
-  <table>
-    <tr class="bg-header bold center" style="font-size: 7pt;">
-      <td colspan="2" style="width: 50%;">PILOT FLIGHT TIME TRACKING (UP TO 4 PILOTS)</td>
-      <td colspan="4" style="width: 50%;">UAS AIRCRAFT TRACKING (UP TO 4 AIRFRAMES)</td>
-    </tr>
-    <tr class="bg-sub center bold" style="font-size: 6.5pt;">
-      <td style="width: 34%;">Pilot / Operator Name &amp; Role</td>
-      <td style="width: 16%;">Total Flight Time (Hrs)</td>
-      <td style="width: 16%;">FAA Reg # / Tail #</td>
-      <td style="width: 16%;">Make / Model</td>
-      <td style="width: 9%;">Sorties</td>
-      <td style="width: 9%;">Flt Hrs</td>
-    </tr>
-    <tr>
-      <td><input type="text" id="p1_name" placeholder="Pilot 1 (RPIC)"></td>
-      <td><input type="number" step="0.1" id="p1_flt" placeholder="0.0"></td>
-      <td><input type="text" id="ac1_reg" placeholder="Tail/Reg #1"></td>
-      <td><input type="text" id="ac1_model" placeholder="Make/Model"></td>
-      <td><input type="number" id="ac1_sorties" placeholder="0"></td>
-      <td><input type="number" step="0.1" id="ac1_flt" placeholder="0.0"></td>
-    </tr>
-    <tr>
-      <td><input type="text" id="p2_name" placeholder="Pilot 2"></td>
-      <td><input type="number" step="0.1" id="p2_flt" placeholder="0.0"></td>
-      <td><input type="text" id="ac2_reg" placeholder="Tail/Reg #2"></td>
-      <td><input type="text" id="ac2_model" placeholder="Make/Model"></td>
-      <td><input type="number" id="ac2_sorties" placeholder="0"></td>
-      <td><input type="number" step="0.1" id="ac2_flt" placeholder="0.0"></td>
-    </tr>
-    <tr>
-      <td><input type="text" id="p3_name" placeholder="Pilot 3"></td>
-      <td><input type="number" step="0.1" id="p3_flt" placeholder="0.0"></td>
-      <td><input type="text" id="ac3_reg" placeholder="Tail/Reg #3"></td>
-      <td><input type="text" id="ac3_model" placeholder="Make/Model"></td>
-      <td><input type="number" id="ac3_sorties" placeholder="0"></td>
-      <td><input type="number" step="0.1" id="ac3_flt" placeholder="0.0"></td>
-    </tr>
-    <tr>
-      <td><input type="text" id="p4_name" placeholder="Pilot 4"></td>
-      <td><input type="number" step="0.1" id="p4_flt" placeholder="0.0"></td>
-      <td><input type="text" id="ac4_reg" placeholder="Tail/Reg #4"></td>
-      <td><input type="text" id="ac4_model" placeholder="Make/Model"></td>
-      <td><input type="number" id="ac4_sorties" placeholder="0"></td>
-      <td><input type="number" step="0.1" id="ac4_flt" placeholder="0.0"></td>
-    </tr>
-  </table>
+  <!-- 2-COLUMN BODY: LEFT = LOGS & 5 PERS / 5 VEHICLES; RIGHT = DEDICATED NARRATIVE / STATUS COLUMN -->
+  <div class="layout-split">
+    
+    <!-- LEFT COLUMN -->
+    <div class="col-left">
 
-  <!-- SECTION 3: COST & REIMBURSABLES -->
-  <table>
-    <thead>
-      <tr class="bg-header bold center" style="font-size: 7pt;">
-        <th style="width: 44%; text-align: left; padding-left: 6px;">Daily Pay &amp; Reimbursable Items</th>
-        <th style="width: 18%;">Quantity (Hrs / Days / Mi / Ppl)</th>
-        <th style="width: 18%;">Rate ($)</th>
-        <th style="width: 20%;">Cost ($)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="bold">Revenue Flight / Sortie Hours:</td>
-        <td><input type="number" step="any" id="q1" oninput="doMath()" placeholder="0.0"></td>
-        <td><input type="number" step="any" id="r1" oninput="doMath()" placeholder="0.00"></td>
-        <td><input type="text" class="cost-output" id="c1" readonly placeholder="$ 0.00"></td>
-      </tr>
-      <tr>
-        <td class="bold">*Daily System Availability (Day or Hrs):</td>
-        <td><input type="number" step="any" id="q2" oninput="doMath()" placeholder="0.0"></td>
-        <td><input type="number" step="any" id="r2" oninput="doMath()" placeholder="0.00"></td>
-        <td><input type="text" class="cost-output" id="c2" readonly placeholder="$ 0.00"></td>
-      </tr>
-      <tr>
-        <td>Pilot(s) Extended Standby Hours:</td>
-        <td><input type="number" step="any" id="q3" oninput="doMath()" placeholder="0.0"></td>
-        <td><input type="number" step="any" id="r3" oninput="doMath()" placeholder="0.00"></td>
-        <td><input type="text" class="cost-output" id="c3" readonly placeholder="$ 0.00"></td>
-      </tr>
-      <tr>
-        <td>Crew / Tech / Driver Extended Standby:</td>
-        <td><input type="number" step="any" id="q4" oninput="doMath()" placeholder="0.0"></td>
-        <td><input type="number" step="any" id="r4" oninput="doMath()" placeholder="0.00"></td>
-        <td><input type="text" class="cost-output" id="c4" readonly placeholder="$ 0.00"></td>
-      </tr>
+      <!-- 4 PILOTS & 4 AIRCRAFT TRACKING -->
+      <table>
+        <tr class="bg-header bold center">
+          <td colspan="2" style="width: 50%;">PILOT FLIGHT TIME (UP TO 4)</td>
+          <td colspan="4" style="width: 50%;">UAS AIRFRAME TRACKING (UP TO 4)</td>
+        </tr>
+        <tr class="bg-sub center bold" style="font-size: 6.2pt;">
+          <td style="width: 36%;">Pilot / Operator Name</td>
+          <td style="width: 14%;">Flt Hrs</td>
+          <td style="width: 17%;">FAA Reg / Tail</td>
+          <td style="width: 17%;">Make / Model</td>
+          <td style="width: 8%;">Sort</td>
+          <td style="width: 8%;">Flt</td>
+        </tr>
+        <tr>
+          <td><input type="text" id="p1_name" placeholder="Pilot 1 (RPIC)"></td>
+          <td><input type="number" step="0.1" id="p1_flt" placeholder="0.0"></td>
+          <td><input type="text" id="ac1_reg" placeholder="Tail #1"></td>
+          <td><input type="text" id="ac1_model" placeholder="Model"></td>
+          <td><input type="number" id="ac1_sorties" placeholder="0"></td>
+          <td><input type="number" step="0.1" id="ac1_flt" placeholder="0.0"></td>
+        </tr>
+        <tr>
+          <td><input type="text" id="p2_name" placeholder="Pilot 2"></td>
+          <td><input type="number" step="0.1" id="p2_flt" placeholder="0.0"></td>
+          <td><input type="text" id="ac2_reg" placeholder="Tail #2"></td>
+          <td><input type="text" id="ac2_model" placeholder="Model"></td>
+          <td><input type="number" id="ac2_sorties" placeholder="0"></td>
+          <td><input type="number" step="0.1" id="ac2_flt" placeholder="0.0"></td>
+        </tr>
+        <tr>
+          <td><input type="text" id="p3_name" placeholder="Pilot 3"></td>
+          <td><input type="number" step="0.1" id="p3_flt" placeholder="0.0"></td>
+          <td><input type="text" id="ac3_reg" placeholder="Tail #3"></td>
+          <td><input type="text" id="ac3_model" placeholder="Model"></td>
+          <td><input type="number" id="ac3_sorties" placeholder="0"></td>
+          <td><input type="number" step="0.1" id="ac3_flt" placeholder="0.0"></td>
+        </tr>
+        <tr>
+          <td><input type="text" id="p4_name" placeholder="Pilot 4"></td>
+          <td><input type="number" step="0.1" id="p4_flt" placeholder="0.0"></td>
+          <td><input type="text" id="ac4_reg" placeholder="Tail #4"></td>
+          <td><input type="text" id="ac4_model" placeholder="Model"></td>
+          <td><input type="number" id="ac4_sorties" placeholder="0"></td>
+          <td><input type="number" step="0.1" id="ac4_flt" placeholder="0.0"></td>
+        </tr>
+      </table>
+
+      <!-- COST TABLE (WITH 5 PERSONNEL & 5 VEHICLES) -->
+      <table>
+        <thead>
+          <tr class="bg-header bold center">
+            <th style="width: 44%; text-align: left; padding-left: 4px;">Cost Items &amp; Reimbursables</th>
+            <th style="width: 18%;">Quantity</th>
+            <th style="width: 18%;">Rate ($)</th>
+            <th style="width: 20%;">Cost ($)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- CORE ITEMS -->
+          <tr class="calc-row">
+            <td class="bold">Revenue Flight / Sortie Hours:</td>
+            <td><input type="number" step="any" class="qty" id="q_flt" placeholder="0.0"></td>
+            <td><input type="number" step="any" class="rate" id="r_flt" placeholder="0.00"></td>
+            <td><input type="text" class="cost-output" id="c_flt" readonly placeholder="$ 0.00"></td>
+          </tr>
+          <tr class="calc-row">
+            <td class="bold">*Daily System Availability:</td>
+            <td><input type="number" step="any" class="qty" id="q_avail" placeholder="0.0"></td>
+            <td><input type="number" step="any" class="rate" id="r_avail" placeholder="0.00"></td>
+            <td><input type="text" class="cost-output" id="c_avail" readonly placeholder="$ 0.00"></td>
+          </tr>
+
+          <!-- 5 PERSONNEL ROWS -->
+          <tr class="bg-section"><td colspan="4">PERSONNEL PER DIEM / EXTENDED STANDBY (5 PERSONS)</td></tr>
+          <tr class="calc-row">
+            <td><input type="text" id="p1_desc" placeholder="Person 1: Name / Duty Station"></td>
+            <td><input type="number" step="any" class="qty" id="q_p1" placeholder="Days/Hrs"></td>
+            <td><input type="number" step="any" class="rate" id="r_p1" placeholder="Daily Rate"></td>
+            <td><input type="text" class="cost-output" id="c_p1" readonly placeholder="$ 0.00"></td>
+          </tr>
+          <tr class="calc-row">
+            <td><input type="text" id="p2_desc" placeholder="Person 2: Name / Duty Station"></td>
+            <td><input type="number" step="any" class="qty" id="q_p2" placeholder="Days/Hrs"></td>
+            <td><input type="number" step="any" class="rate" id="r_p2" placeholder="Daily Rate"></td>
+            <td><input type="text" class="cost-output" id="c_p2" readonly placeholder="$ 0.00"></td>
+          </tr>
+          <tr class="calc-row">
+            <td><input type="text" id="p3_desc" placeholder="Person 3: Name / Duty Station"></td>
+            <td><input type="number" step="any" class="qty" id="q_p3" placeholder="Days/Hrs"></td>
+            <td><input type="number" step="any" class="rate" id="r_p3" placeholder="Daily Rate"></td>
+            <td><input type="text" class="cost-output" id="c_p3" readonly placeholder="$ 0.00"></td>
+          </tr>
+          <tr class="calc-row">
+            <td><input type="text" id="p4_desc" placeholder="Person 4: Name / Duty Station"></td>
+            <td><input type="number" step="any" class="qty" id="q_p4" placeholder="Days/Hrs"></td>
+            <td><input type="number" step="any" class="rate" id="r_p4" placeholder="Daily Rate"></td>
+            <td><input type="text" class="cost-output" id="c_p4" readonly placeholder="$ 0.00"></td>
+          </tr>
+          <tr class="calc-row">
+            <td><input type="text" id="p5_desc" placeholder="Person 5: Name / Duty Station"></td>
+            <td><input type="number" step="any" class="qty" id="q_p5" placeholder="Days/Hrs"></td>
+            <td><input type="number" step="any" class="rate" id="r_p5" placeholder="Daily Rate"></td>
+            <td><input type="text" class="cost-output" id="c_p5" readonly placeholder="$ 0.00"></td>
+          </tr>
+
+          <!-- 5 VEHICLE ROWS -->
+          <tr class="bg-section"><td colspan="4">VEHICLE MILEAGE &amp; SUPPORT TRUCKS (5 VEHICLES)</td></tr>
+          <tr class="calc-row">
+            <td><input type="text" id="v1_desc" placeholder="Veh 1: Lic/Make &amp; Route"></td>
+            <td><input type="number" step="any" class="qty" id="q_v1" placeholder="Miles"></td>
+            <td><input type="number" step="any" class="rate" id="r_v1" placeholder="Rate/Mi"></td>
+            <td><input type="text" class="cost-output" id="c_v1" readonly placeholder="$ 0.00"></td>
+          </tr>
+          <tr class="calc-row">
+            <td><input type="text" id="v2_desc" placeholder="Veh 2: Lic/Make &amp; Route"></td>
+            <td><input type="number" step="any" class="qty" id="q_v2" placeholder="Miles"></td>
+            <td><input type="number" step="any" class="rate" id="r_v2" placeholder="Rate/Mi"></td>
+            <td><input type="text" class="cost-output" id="c_v2" readonly placeholder="$ 0.00"></td>
+          </tr>
+          <tr class="calc-row">
+            <td><input type="text" id="v3_desc" placeholder="Veh 3: Lic/Make &amp; Route"></td>
+            <td><input type="number" step="any" class="qty" id="q_v3" placeholder="Miles"></td>
+            <td><input type="number" step="any" class="rate" id="r_v3" placeholder="Rate/Mi"></td>
+            <td><input type="text" class="cost-output" id="c_v3" readonly placeholder="$ 0.00"></td>
+          </tr>
+          <tr class="calc-row">
+            <td><input type="text" id="v4_desc" placeholder="Veh 4: Lic/Make &amp; Route"></td>
+            <td><input type="number" step="any" class="qty" id="q_v4" placeholder="Miles"></td>
+            <td><input type="number" step="any" class="rate" id="r_v4" placeholder="Rate/Mi"></td>
+            <td><input type="text" class="cost-output" id="c_v4" readonly placeholder="$ 0.00"></td>
+          </tr>
+          <tr class="calc-row">
+            <td><input type="text" id="v5_desc" placeholder="Veh 5: Lic/Make &amp; Route"></td>
+            <td><input type="number" step="any" class="qty" id="q_v5" placeholder="Miles"></td>
+            <td><input type="number" step="any" class="rate" id="r_v5" placeholder="Rate/Mi"></td>
+            <td><input type="text" class="cost-output" id="c_v5" readonly placeholder="$ 0.00"></td>
+          </tr>
+
+          <!-- PAYLOAD & REIMBURSABLES -->
+          <tr class="calc-row">
+            <td><input type="text" id="pay_desc" placeholder="Payload Package (EO/IR, PSD, etc.)"></td>
+            <td><input type="number" step="any" class="qty" id="q_pay" placeholder="Qty"></td>
+            <td><input type="number" step="any" class="rate" id="r_pay" placeholder="Rate"></td>
+            <td><input type="text" class="cost-output" id="c_pay" readonly placeholder="$ 0.00"></td>
+          </tr>
+          <tr class="calc-row">
+            <td><input type="text" id="misc_desc" placeholder="Misc Reimbursable (Fuel, Fees, Power)"></td>
+            <td><input type="number" step="any" class="qty" id="q_misc" placeholder="Qty"></td>
+            <td><input type="number" step="any" class="rate" id="r_misc" placeholder="Rate"></td>
+            <td><input type="text" class="cost-output" id="c_misc" readonly placeholder="$ 0.00"></td>
+          </tr>
+
+          <!-- GRAND TOTAL -->
+          <tr class="bg-sub">
+            <td colspan="3" class="right bold" style="font-size: 7.2pt;">DAILY GRAND TOTAL COST:</td>
+            <td><input type="text" id="grandTotal" value="$ 0.00" readonly></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="sub-note">* Do not calculate availability for exclusive use contracts paid from base funds.</div>
+    </div>
+
+    <!-- RIGHT COLUMN: DEDICATED FULL-HEIGHT STATUS & NARRATIVE -->
+    <div class="col-right">
       
-      <!-- PER DIEM ROW -->
-      <tr>
-        <td>
-          <div style="display:flex; align-items:center; gap:4px;">
-            <span class="bold" style="white-space:nowrap;">Per Diem:</span>
-            <input type="text" id="perdiem_loc" placeholder="Location / City / Duty Station" style="flex:1;">
-          </div>
-        </td>
-        <td><input type="number" step="any" id="q5" placeholder="# Persons" oninput="doMath()"></td>
-        <td><input type="number" step="any" id="r5" placeholder="Daily Rate / Person" oninput="doMath()"></td>
-        <td><input type="text" class="cost-output" id="c5" readonly placeholder="$ 0.00"></td>
-      </tr>
+      <!-- AIRCRAFT STATUS -->
+      <div class="narrative-card">
+        <div class="narrative-card-header">
+          15. Aircraft Status <span class="sub-note">(Maintenance, battery cycles, calibrations, downtime)</span>
+        </div>
+        <textarea id="box_ac_status" placeholder="Enter airworthiness logs, power trends, motor/sensor calibrations, maintenance completed, battery cycle records, or reasons for unavailability..."></textarea>
+      </div>
 
-      <!-- VEHICLE MILEAGE ROW -->
-      <tr>
-        <td>
-          <div style="display:flex; align-items:center; gap:4px;">
-            <span class="bold" style="white-space:nowrap;">Vehicle Mileage:</span>
-            <input type="text" id="mileage_loc" placeholder="From — To / Daily Route" style="flex:1;">
-          </div>
-        </td>
-        <td><input type="number" step="any" id="q6" placeholder="Total Miles" oninput="doMath()"></td>
-        <td><input type="number" step="any" id="r6" placeholder="Rate / Mile" oninput="doMath()"></td>
-        <td><input type="text" class="cost-output" id="c6" readonly placeholder="$ 0.00"></td>
-      </tr>
+      <!-- NARRATIVE REPORT -->
+      <div class="narrative-card">
+        <div class="narrative-card-header">
+          16. Narrative Report <span class="sub-note">(Sorties flown, deliverables, SAFECOMs)</span>
+        </div>
+        <textarea id="box_narrative" placeholder="Enter daily operational narrative, mission highlights, airspace / NOTAM coordination, deliverables handed over, failsafe / lost link events, problems encountered, SAFECOM numbers..."></textarea>
+      </div>
 
-      <tr>
-        <td>Payload Package (EO/IR / Thermal Sensor / PSD):</td>
-        <td><input type="number" step="any" id="q7" oninput="doMath()" placeholder="0"></td>
-        <td><input type="number" step="any" id="r7" oninput="doMath()" placeholder="0.00"></td>
-        <td><input type="text" class="cost-output" id="c7" readonly placeholder="$ 0.00"></td>
-      </tr>
-      <tr>
-        <td>Additional Reimbursable Cost (Field Power / Fuel / Fees):</td>
-        <td><input type="number" step="any" id="q8" oninput="doMath()" placeholder="0"></td>
-        <td><input type="number" step="any" id="r8" oninput="doMath()" placeholder="0.00"></td>
-        <td><input type="text" class="cost-output" id="c8" readonly placeholder="$ 0.00"></td>
-      </tr>
-      <tr class="bg-sub">
-        <td colspan="3" class="right bold" style="font-size: 8pt; letter-spacing: 0.3px;">DAILY GRAND TOTAL COST:</td>
-        <td><input type="text" id="grandTotal" value="$ 0.00" readonly style="font-size:8.5pt; font-weight:800; text-align:right;"></td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="sub-note">* Do not calculate availability for exclusive use contracts where availability is paid from base/pre-suppression funds.</div>
+    </div>
 
-  <!-- SECTION 4: EXPANDED AIRCRAFT STATUS & NARRATIVE REPORT -->
-  <table>
-    <tr>
-      <td style="width: 50%; vertical-align: top;">
-        <span class="bold">Aircraft Status:</span> <span class="sub-note">(Maintenance, battery cycles, calibrations, downtime reasons)</span>
-        <textarea id="box_ac_status" placeholder="Detail airworthiness, power trends, motor/sensor calibrations, maintenance actions, or downtime reasons..."></textarea>
-      </td>
-      <td style="width: 50%; vertical-align: top;">
-        <span class="bold">Narrative Report:</span> <span class="sub-note">(Sorties flown, deliverables completed, SAFECOMs submitted)</span>
-        <textarea id="box_narrative" placeholder="Detail daily operational events, airspace coordination, deliverables handed over, failsafe/lost link events, incident highlights..."></textarea>
-      </td>
-    </tr>
-  </table>
+  </div>
 
   <!-- SECTION 5: APPROVAL SIGNATURES -->
   <table>
     <tr>
       <td style="width: 38%; vertical-align: top;">
         <span class="bold">Govt Representative / UASM Name (Print):</span>
-        <input type="text" id="sig_name" placeholder="Printed Full Name / Title" style="margin-top:4px;">
+        <input type="text" id="sig_name" placeholder="Printed Name &amp; Title" style="margin-top:2px;">
       </td>
       <td style="width: 42%; vertical-align: top;">
         <span class="bold">Govt Representative Signature:</span> <span class="sub-note">(Draw signature below)</span>
         <div class="sig-container" id="sig-box">
           <canvas id="sig-canvas"></canvas>
-          <button type="button" class="sig-clear-btn" onclick="clearSignature()">Clear Sig</button>
+          <button type="button" class="sig-clear-btn" onclick="clearSignature()">Clear</button>
         </div>
       </td>
       <td style="width: 20%; vertical-align: top;">
         <span class="bold">Date:</span>
-        <input type="date" id="sig_date" style="margin-top:4px;">
+        <input type="date" id="sig_date" style="margin-top:2px;">
       </td>
     </tr>
   </table>
@@ -550,18 +611,19 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'uas_daily_summary_signature_v1';
+  const STORAGE_KEY = 'uas_daily_summary_5veh_5pers_v1';
   let totalCostGlobal = 0;
   let currentFileHandle = null;
 
-  // --- MATH ENGINE ---
+  // --- BULLETPROOF MATH ENGINE (ALL ROWS) ---
   function doMath() {
     let grandTotal = 0;
+    const rows = document.querySelectorAll('.calc-row');
 
-    for (let i = 1; i <= 8; i++) {
-      const qEl = document.getElementById('q' + i);
-      const rEl = document.getElementById('r' + i);
-      const cEl = document.getElementById('c' + i);
+    rows.forEach(row => {
+      const qEl = row.querySelector('.qty');
+      const rEl = row.querySelector('.rate');
+      const cEl = row.querySelector('.cost-output');
 
       if (qEl && rEl && cEl) {
         const qty = parseFloat(qEl.value) || 0;
@@ -575,7 +637,7 @@
           cEl.value = '';
         }
       }
-    }
+    });
 
     totalCostGlobal = grandTotal;
     const gtEl = document.getElementById('grandTotal');
@@ -586,7 +648,7 @@
     saveFormData();
   }
 
-  // --- SIGNATURE ENGINE ---
+  // --- SIGNATURE CANVAS ENGINE ---
   let canvas, ctx, drawing = false;
 
   function initSignatureCanvas() {
@@ -596,7 +658,7 @@
     canvas.width = canvas.parentElement.clientWidth;
     canvas.height = canvas.parentElement.clientHeight;
     ctx = canvas.getContext('2d');
-    ctx.lineWidth = 1.8;
+    ctx.lineWidth = 1.6;
     ctx.lineCap = 'round';
     ctx.strokeStyle = '#0f2744';
 
@@ -604,10 +666,7 @@
       const rect = canvas.getBoundingClientRect();
       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
       const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      return {
-        x: clientX - rect.left,
-        y: clientY - rect.top
-      };
+      return { x: clientX - rect.left, y: clientY - rect.top };
     }
 
     function startDraw(e) {
@@ -672,7 +731,7 @@
       const json = JSON.stringify(getFormDataObject());
       localStorage.setItem(STORAGE_KEY, json);
       sessionStorage.setItem(STORAGE_KEY, json);
-      updateStatus("💾 Local Auto-Saved: " + new Date().toLocaleTimeString());
+      updateStatus("💾 Saved: " + new Date().toLocaleTimeString());
     } catch (e) {}
   }
 
