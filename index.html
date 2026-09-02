@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>UAS Daily Operations &amp; Cost Summary</title>
+<style>
+  @page {
+    size: letter portrait;
+    margin: 0.20in 0.28in;
+  }
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 7.5pt;
+    color: #000;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f6f9;
+  }
+  .page-container {
+    max-width: 8.5in;
+    margin: 0 auto;
+    background: #fff;
+    padding: 6px 10px;
+  }
+  .no-print-bar {
+    background: #003366;
+    color: white;
+    padding: 6px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    font-size: 8pt;
+  }
+  .btn {
+    border: none;
+    padding: 5px 9px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 7.5pt;
+    margin-left: 3px;
+  }
+  .btn-print { background: #28a745; color: white; }
+  .btn-clear { background: #dc3545; color: white; }
+  .btn-aux { background: #17a2b8; color: white; }
+
+  @media print {
+    body { background: #fff; }
+    .page-container { padding: 0; max-width: 100%; }
+    .no-print-bar { display: none !important; }
+    .sig-clear-btn { display: none !important; }
+    input, textarea, select {
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+    input[type="checkbox"], input[type="radio"] {
+      appearance: auto;
+      -webkit-appearance: auto;
+    }
+  }
+
+  .title-bar {
+    text-align: center;
+    font-weight: bold;
+    font-size: 9.5pt;
+    border-bottom: 2px solid #000;
+    padding-bottom: 1px;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 3px;
+  }
+  th, td {
+    border: 1px solid #000;
+    padding: 1.5px 3px;
+    vertical-align: middle;
+  }
+  .bold { font-weight: bold; }
+  .bg-gray { background-color: #efefef; }
+  .center { text-align: center; }
+  .right { text-align: right; }
+  
+  input[type="text"], input[type="date"], input[type="number"] {
+    width: 100%;
+    border: 1px solid #bbb;
+    background: #fff;
+    padding: 1px 2px;
+    font-size: 7.5pt;
+    font-family: inherit;
+    height: 18px;
+  }
+  input[type="number"] { text-align: right; }
+  .cost-output, #grandTotal {
+    font-weight: bold;
+    text-align: right;
+    background: #fdfdfd;
+  }
+  
+  /* Large Narrative & Status Textareas */
+  textarea {
+    width: 100%;
+    height: 90px;
+    border: 1px solid #bbb;
+    resize: none;
+    font-family: inherit;
+    font-size: 7.2pt;
+    padding: 3px;
+    background: #fff;
+    line-height: 1.2;
+  }
+  
+  .checkbox-label {
+    margin-right: 6px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 7.2pt;
+    cursor: pointer;
+  }
+  .checkbox-label input { margin-right: 2px; }
+  .sub-note {
+    font-size: 6pt;
+    font-style: italic;
+  }
+
+  /* Signature Canvas */
+  .sig-container {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    background: #fafafa;
+    border: 1px dashed #888;
+  }
+  #sig-canvas {
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    cursor: crosshair;
+  }
+  .sig-clear-btn {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    background: #ccc;
+    border: 1px solid #999;
+    font-size: 6pt;
+    padding: 1px 4px;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-container">
+  <div class="no-print-bar">
+    <span id="save-status">💾 <strong>Auto-Saving Active</strong> &bull; Sign below with finger/pen.</span>
+    <div>
+      <button class="btn btn-aux" onclick="exportData()">💾 Backup File</button>
+      <button class="btn btn-aux" onclick="document.getElementById('fileInput').click()">📂 Restore File</button>
+      <input type="file" id="fileInput" style="display:none" onchange="importData(event)">
+      <button class="btn btn-clear" onclick="clearFormData()">🗑️ Clear</button>
+      <button class="btn btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
+    </div>
+  </div>
+
+  <div class="title-bar">UAS Daily Operations &amp; Cost Summary</div>
+
+  <!-- SECTION 1: MISSION HEADER -->
+  <table>
+    <tr>
+      <td colspan="2" style="width: 50%;">
+        <span class="bold">Activity / Mission:</span> &nbsp;
+        <label class="checkbox-label"><input type="checkbox" id="act_largefire"> Large Fire</label>
+        <label class="checkbox-label"><input type="checkbox" id="act_ia"> IA</label>
+        <label class="checkbox-label"><input type="checkbox" id="act_proj"> Project</label>
+        <label class="checkbox-label"><input type="checkbox" id="act_train"> Training</label>
+      </td>
+      <td style="width: 25%;">
+        <span class="bold">FRAT Completed:</span> &nbsp;
+        <label class="checkbox-label"><input type="radio" name="frat" id="frat_yes"> Yes</label>
+        <label class="checkbox-label"><input type="radio" name="frat" id="frat_no"> No</label>
+      </td>
+      <td style="width: 25%;">
+        <div style="display:flex; align-items:center;">
+          <span class="bold" style="white-space:nowrap; margin-right:3px;">Date:</span>
+          <input type="date" id="doc_date">
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td style="width: 25%;">
+        <span class="bold">Launch Base / Helibase:</span>
+        <input type="text" id="base_loc">
+      </td>
+      <td style="width: 25%;">
+        <span class="bold">Incident / Project Name:</span>
+        <input type="text" id="inc_name">
+      </td>
+      <td style="width: 25%;">
+        <span class="bold">Host Agency / Unit:</span>
+        <input type="text" id="agency_name">
+      </td>
+      <td style="width: 25%;">
+        <span class="bold">Resource Order #:</span>
+        <input type="text" id="order_num" placeholder="A-...">
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <span class="bold">Contract Type:</span> &nbsp;
+        <label class="checkbox-label"><input type="radio" name="ctype" id="ct_cwn"> CWN</label>
+        <label class="checkbox-label"><input type="radio" name="ctype" id="ct_exu"> Exclusive Use</label>
+        <label class="checkbox-label"><input type="radio" name="ctype" id="ct_agency"> Agency Owned</label>
+        <label class="checkbox-label"><input type="radio" name="ctype" id="ct_other"> Other</label>
+      </td>
+      <td colspan="2">
+        <span class="bold">UAS Manager (UASM) / Govt Rep:</span>
+        <input type="text" id="uasm_name">
+      </td>
+    </tr>
+  </table>
+
+  <!-- SECTION 2: 4 PILOTS (FLIGHT TIME ONLY) & 4 AIRCRAFT TRACKING -->
+  <table>
+    <tr class="bg-gray bold center" style="font-size: 7pt;">
+      <td colspan="2" style="width: 50%;">PILOT FLIGHT TIME TRACKING (UP TO 4 PILOTS)</td>
+      <td colspan="4" style="width: 50%;">UAS AIRCRAFT TRACKING (UP TO 4 AIRFRAMES)</td>
+    </tr>
+    <tr class="bg-gray center bold" style="font-size: 6.5pt;">
+      <td style="width: 34%;">Pilot / Operator Name &amp; Role</td>
+      <td style="width: 16%;">Total Flight Time (Hrs)</td>
+      <td style="width: 16%;">FAA Reg # / Tail #</td>
+      <td style="width: 16%;">Make / Model</td>
+      <td style="width: 9%;">Sorties</td>
+      <td style="width: 9%;">Flt Hrs</td>
+    </tr>
+    <tr>
+      <td><input type="text" id="p1_name" placeholder="Pilot 1 (RPIC)"></td>
+      <td><input type="number" step="0.1" id="p1_flt" placeholder="0.0"></td>
+      <td><input type="text" id="ac1_reg" placeholder="Tail/Reg #1"></td>
+      <td><input type="text" id="ac1_model" placeholder="Make/Model"></td>
+      <td><input type="number" id="ac1_sorties"></td>
+      <td><input type="number" step="0.1" id="ac1_flt"></td>
+    </tr>
+    <tr>
+      <td><input type="text" id="p2_name" placeholder="Pilot 2"></td>
+      <td><input type="number" step="0.1" id="p2_flt" placeholder="0.0"></td>
+      <td><input type="text" id="ac2_reg" placeholder="Tail/Reg #2"></td>
+      <td><input type="text" id="ac2_model" placeholder="Make/Model"></td>
+      <td><input type="number" id="ac2_sorties"></td>
+      <td><input type="number" step="0.1" id="ac2_flt"></td>
+    </tr>
+    <tr>
+      <td><input type="text" id="p3_name" placeholder="Pilot 3"></td>
+      <td><input type="number" step="0.1" id="p3_flt" placeholder="0.0"></td>
+      <td><input type="text" id="ac3_reg" placeholder="Tail/Reg #3"></td>
+      <td><input type="text" id="ac3_model" placeholder="Make/Model"></td>
+      <td><input type="number" id="ac3_sorties"></td>
+      <td><input type="number" step="0.1" id="ac3_flt"></td>
+    </tr>
+    <tr>
+      <td><input type="text" id="p4_name" placeholder="Pilot 4"></td>
+      <td><input type="number" step="0.1" id="p4_flt" placeholder="0.0"></td>
+      <td><input type="text" id="ac4_reg" placeholder="Tail/Reg #4"></td>
+      <td><input type="text" id="ac4_model" placeholder="Make/Model"></td>
+      <td><input type="number" id="ac4_sorties"></td>
+      <td><input type="number" step="0.1" id="ac4_flt"></td>
+    </tr>
+  </table>
+
+  <!-- SECTION 3: COST & REIMBURSABLES (MATH: QTY x RATE = COST) -->
+  <table>
+    <thead>
+      <tr class="bg-gray bold center" style="font-size: 7pt;">
+        <th style="width: 44%; text-align: left; padding-left: 4px;">Daily Pay &amp; Reimbursable Items</th>
+        <th style="width: 18%;">Quantity (Hrs / Days / Mi / Ppl)</th>
+        <th style="width: 18%;">Rate ($)</th>
+        <th style="width: 20%;">Cost ($)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="bold">Revenue Flight / Sortie Hours:</td>
+        <td><input type="number" step="any" id="q1" oninput="doMath()"></td>
+        <td><input type="number" step="any" id="r1" oninput="doMath()"></td>
+        <td><input type="text" class="cost-output" id="c1" readonly></td>
+      </tr>
+      <tr>
+        <td class="bold">*Daily System Availability (Day or Hrs):</td>
+        <td><input type="number" step="any" id="q2" oninput="doMath()"></td>
+        <td><input type="number" step="any" id="r2" oninput="doMath()"></td>
+        <td><input type="text" class="cost-output" id="c2" readonly></td>
+      </tr>
+      <tr>
+        <td>Pilot(s) Extended Standby Hours:</td>
+        <td><input type="number" step="any" id="q3" oninput="doMath()"></td>
+        <td><input type="number" step="any" id="r3" oninput="doMath()"></td>
+        <td><input type="text" class="cost-output" id="c3" readonly></td>
+      </tr>
+      <tr>
+        <td>Crew / Tech / Driver Extended Standby:</td>
+        <td><input type="number" step="any" id="q4" oninput="doMath()"></td>
+        <td><input type="number" step="any" id="r4" oninput="doMath()"></td>
+        <td><input type="text" class="cost-output" id="c4" readonly></td>
+      </tr>
+      
+      <!-- PER DIEM ROW WITH DEDICATED LOCATION -->
+      <tr>
+        <td>
+          <div style="display:flex; align-items:center; gap:3px;">
+            <span class="bold" style="white-space:nowrap;">Per Diem:</span>
+            <input type="text" id="perdiem_loc" placeholder="Location / City / Duty Station" style="flex:1;">
+          </div>
+        </td>
+        <td><input type="number" step="any" id="q5" placeholder="# Persons" oninput="doMath()"></td>
+        <td><input type="number" step="any" id="r5" placeholder="Daily Rate/Person" oninput="doMath()"></td>
+        <td><input type="text" class="cost-output" id="c5" readonly></td>
+      </tr>
+
+      <!-- VEHICLE MILEAGE WITH DEDICATED ROUTE -->
+      <tr>
+        <td>
+          <div style="display:flex; align-items:center; gap:3px;">
+            <span class="bold" style="white-space:nowrap;">Vehicle Mileage:</span>
+            <input type="text" id="mileage_loc" placeholder="From — To / Daily Route" style="flex:1;">
+          </div>
+        </td>
+        <td><input type="number" step="any" id="q6" placeholder="Total Miles" oninput="doMath()"></td>
+        <td><input type="number" step="any" id="r6" placeholder="Rate / Mile" oninput="doMath()"></td>
+        <td><input type="text" class="cost-output" id="c6" readonly></td>
+      </tr>
+
+      <tr>
+        <td>Payload Package (EO/IR / Thermal Sensor / PSD):</td>
+        <td><input type="number" step="any" id="q7" oninput="doMath()"></td>
+        <td><input type="number" step="any" id="r7" oninput="doMath()"></td>
+        <td><input type="text" class="cost-output" id="c7" readonly></td>
+      </tr>
+      <tr>
+        <td>Additional Reimbursable Cost (Field Power / Fuel / Fees):</td>
+        <td><input type="number" step="any" id="q8" oninput="doMath()"></td>
+        <td><input type="number" step="any" id="r8" oninput="doMath()"></td>
+        <td><input type="text" class="cost-output" id="c8" readonly></td>
+      </tr>
+      <tr class="bg-gray">
+        <td colspan="3" class="right bold" style="font-size: 8pt;">DAILY GRAND TOTAL COST:</td>
+        <td><input type="text" id="grandTotal" value="$0.00" readonly style="font-size:8.5pt; color:#900; font-weight:bold; text-align:right;"></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="sub-note">* Do not calculate availability for exclusive use contracts where availability is paid from base/pre-suppression funds.</div>
+
+  <!-- SECTION 4: EXPANDED AIRCRAFT STATUS & NARRATIVE REPORT -->
+  <table>
+    <tr>
+      <td style="width: 50%; vertical-align: top;">
+        <span class="bold">Aircraft Status:</span> <span class="sub-note">(Maintenance performed, battery cycles, calibrations, downtime)</span>
+        <textarea id="box_ac_status" placeholder="Airworthiness, power trends, motor/sensor calibrations, maintenance actions, downtime reasons..."></textarea>
+      </td>
+      <td style="width: 50%; vertical-align: top;">
+        <span class="bold">Narrative Report:</span> <span class="sub-note">(Sorties flown, deliverables completed, SAFECOMs submitted)</span>
+        <textarea id="box_narrative" placeholder="Detailed daily operational events, airspace coordination, deliverables handed over, failsafe/lost link events, incident highlights..."></textarea>
+      </td>
+    </tr>
+  </table>
+
+  <!-- SECTION 5: APPROVAL SIGNATURES WITH DRAWABLE PAD -->
+  <table>
+    <tr>
+      <td style="width: 38%; vertical-align: top;">
+        <span class="bold">Govt Representative / UASM Name (Print):</span>
+        <input type="text" id="sig_name" style="margin-top:4px;">
+      </td>
+      <td style="width: 42%; vertical-align: top;">
+        <span class="bold">Govt Representative Signature:</span> <span class="sub-note">(Sign below)</span>
+        <div class="sig-container" id="sig-box">
+          <canvas id="sig-canvas"></canvas>
+          <button type="button" class="sig-clear-btn" onclick="clearSignature()">Clear Sig</button>
+        </div>
+      </td>
+      <td style="width: 20%; vertical-align: top;">
+        <span class="bold">Date:</span>
+        <input type="date" id="sig_date" style="margin-top:4px;">
+      </td>
+    </tr>
+  </table>
+</div>
+
+<script>
+  const STORAGE_KEY = 'uas_daily_summary_signature_v1';
+  let totalCostGlobal = 0;
+
+  function doMath() {
+    let grandTotal = 0;
+
+    for (let i = 1; i <= 8; i++) {
+      const qEl = document.getElementById('q' + i);
+      const rEl = document.getElementById('r' + i);
+      const cEl = document.getElementById('c' + i);
+
+      if (qEl && rEl && cEl) {
+        const qty = parseFloat(qEl.value) || 0;
+        const rate = parseFloat(rEl.value) || 0;
+        const cost = qty * rate;
+
+        if (qty > 0 && rate > 0) {
+          cEl.value = '$ ' + cost.toFixed(2);
+          grandTotal += cost;
+        } else {
+          cEl.value = '';
+        }
+      }
+    }
+
+    totalCostGlobal = grandTotal;
+    const gtEl = document.getElementById('grandTotal');
+    if (gtEl) {
+      gtEl.value = '$ ' + grandTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+
+    saveFormData();
+  }
+
+  // --- SIGNATURE CANVAS ENGINE ---
+  let canvas, ctx, drawing = false;
+
+  function initSignatureCanvas() {
+    canvas = document.getElementById('sig-canvas');
+    if (!canvas) return;
+    
+    // Set actual canvas resolution to box size
+    canvas.width = canvas.parentElement.clientWidth;
+    canvas.height = canvas.parentElement.clientHeight;
+    ctx = canvas.getContext('2d');
+    ctx.lineWidth = 1.8;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#000066';
+
+    function getPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: clientX - rect.left,
+        y: clientY - rect.top
+      };
+    }
+
+    function startDraw(e) {
+      drawing = true;
+      const pos = getPos(e);
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+      e.preventDefault();
+    }
+
+    function moveDraw(e) {
+      if (!drawing) return;
+      const pos = getPos(e);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+      e.preventDefault();
+    }
+
+    function endDraw() {
+      if (drawing) {
+        drawing = false;
+        saveFormData();
+      }
+    }
+
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', moveDraw);
+    window.addEventListener('mouseup', endDraw);
+
+    canvas.addEventListener('touchstart', startDraw, {passive: false});
+    canvas.addEventListener('touchmove', moveDraw, {passive: false});
+    window.addEventListener('touchend', endDraw);
+  }
+
+  function clearSignature() {
+    if (ctx && canvas) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      saveFormData();
+    }
+  }
+
+  // --- PERSISTENCE ENGINE ---
+  function getFormDataObject() {
+    const data = {};
+    document.querySelectorAll('input, textarea').forEach(el => {
+      if (el.id) {
+        if (el.type === 'checkbox' || el.type === 'radio') {
+          data[el.id] = el.checked;
+        } else {
+          data[el.id] = el.value;
+        }
+      }
+    });
+    if (canvas) {
+      data['sig_image'] = canvas.toDataURL();
+    }
+    return data;
+  }
+
+  function saveFormData() {
+    try {
+      const json = JSON.stringify(getFormDataObject());
+      localStorage.setItem(STORAGE_KEY, json);
+      sessionStorage.setItem(STORAGE_KEY, json);
+    } catch (e) {}
+  }
+
+  function loadSavedData() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY) || sessionStorage.getItem(STORAGE_KEY);
+      if (!saved) return;
+      const data = JSON.parse(saved);
+      Object.keys(data).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          if (el.type === 'checkbox' || el.type === 'radio') {
+            el.checked = data[id];
+          } else {
+            el.value = data[id];
+          }
+        }
+      });
+      if (data['sig_image'] && ctx && canvas) {
+        const img = new Image();
+        img.onload = () => ctx.drawImage(img, 0, 0);
+        img.src = data['sig_image'];
+      }
+    } catch (e) {}
+  }
+
+  function clearFormData() {
+    if (confirm('Clear all fields to start a new form?')) {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+        sessionStorage.removeItem(STORAGE_KEY);
+      } catch (e) {}
+      document.querySelectorAll('input, textarea').forEach(el => {
+        if (el.type === 'checkbox' || el.type === 'radio') {
+          el.checked = false;
+        } else {
+          el.value = '';
+        }
+      });
+      clearSignature();
+      doMath();
+    }
+  }
+
+  function exportData() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(getFormDataObject(), null, 2));
+    const dlAnchor = document.createElement('a');
+    dlAnchor.setAttribute("href", dataStr);
+    dlAnchor.setAttribute("download", "UAS_Daily_Log_" + (document.getElementById('doc_date').value || "draft") + ".json");
+    dlAnchor.click();
+  }
+
+  function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const data = JSON.parse(e.target.result);
+        Object.keys(data).forEach(id => {
+          const el = document.getElementById(id);
+          if (el) {
+            if (el.type === 'checkbox' || el.type === 'radio') {
+              el.checked = data[id];
+            } else {
+              el.value = data[id];
+            }
+          }
+        });
+        if (data['sig_image'] && ctx && canvas) {
+          const img = new Image();
+          img.onload = () => ctx.drawImage(img, 0, 0);
+          img.src = data['sig_image'];
+        }
+        doMath();
+      } catch (err) {
+        alert("Invalid backup file.");
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    initSignatureCanvas();
+    loadSavedData();
+    document.querySelectorAll('input, textarea').forEach(el => {
+      el.addEventListener('input', () => { doMath(); saveFormData(); });
+      el.addEventListener('change', () => { doMath(); saveFormData(); });
+    });
+    doMath();
+  });
+</script>
+
+</body>
+</html>
