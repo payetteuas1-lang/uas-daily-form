@@ -373,8 +373,8 @@
     </tr>
     <tr>
       <td style="width: 25%;">
-        <span class="bold">Launch Base / Helibase:</span>
-        <input type="text" id="base_loc" placeholder="Base / Staging Location">
+        <span class="bold">Contractor / Vendor:</span>
+        <input type="text" id="vendor_name" placeholder="Vendor / Company Name">
       </td>
       <td style="width: 25%;">
         <span class="bold">Incident / Project Name:</span>
@@ -390,12 +390,15 @@
       </td>
     </tr>
     <tr>
-      <td colspan="2">
+      <td style="width: 25%;">
+        <span class="bold">Launch Base / Helibase:</span>
+        <input type="text" id="base_loc" placeholder="Base / Staging Location">
+      </td>
+      <td style="width: 25%;">
         <span class="bold">Contract Type:</span> &nbsp;
         <label class="checkbox-label"><input type="radio" name="ctype" id="ct_cwn"> CWN</label>
-        <label class="checkbox-label"><input type="radio" name="ctype" id="ct_exu"> Exclusive Use</label>
-        <label class="checkbox-label"><input type="radio" name="ctype" id="ct_agency"> Agency Owned</label>
-        <label class="checkbox-label"><input type="radio" name="ctype" id="ct_other"> Other</label>
+        <label class="checkbox-label"><input type="radio" name="ctype" id="ct_exu"> Ex-Use</label>
+        <label class="checkbox-label"><input type="radio" name="ctype" id="ct_agency"> Agency</label>
       </td>
       <td colspan="2">
         <span class="bold">UAS Manager (UASM) / Govt Rep:</span>
@@ -634,7 +637,7 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'uas_daily_summary_5veh_5pers_wx_v1';
+  const STORAGE_KEY = 'uas_daily_summary_5veh_5pers_vendor_v1';
   let totalCostGlobal = 0;
   let currentFileHandle = null;
 
@@ -806,13 +809,13 @@
     }
   }
 
+  // --- DEFAULT FILE NAME: DATE_VENDOR_INCIDENT.JSON ---
   function buildFileName() {
     const date = document.getElementById('doc_date').value || new Date().toISOString().slice(0, 10);
-    const incident = (document.getElementById('inc_name').value || 'UAS_Log').trim().replace(/[^a-zA-Z0-9_-]/g, '_');
-    const order = (document.getElementById('order_num').value || '').trim().replace(/[^a-zA-Z0-9_-]/g, '_');
-    let name = date + '_' + incident;
-    if (order) name += '_' + order;
-    return name + '.json';
+    const vendor = (document.getElementById('vendor_name').value || 'Vendor').trim().replace(/[^a-zA-Z0-9_-]/g, '_');
+    const incident = (document.getElementById('inc_name').value || 'Incident').trim().replace(/[^a-zA-Z0-9_-]/g, '_');
+    
+    return `${date}_${vendor}_${incident}.json`;
   }
 
   async function saveJSON() {
