@@ -3,198 +3,348 @@
 <head>
 <meta charset="UTF-8">
 <title>UAS Daily Operations &amp; Cost Summary</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
+  :root {
+    --primary: #0f2744;
+    --primary-light: #1e3a5f;
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
+    --bg-page: #f1f5f9;
+    --surface: #ffffff;
+    --border: #cbd5e1;
+    --border-dark: #334155;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --highlight: #fef9c3;
+    --success-bg: #ecfdf5;
+    --success-text: #065f46;
+  }
+
   @page {
     size: letter portrait;
-    margin: 0.20in 0.28in;
+    margin: 0.20in 0.25in;
   }
+
   * {
     box-sizing: border-box;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
+
   body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     font-size: 7.5pt;
-    color: #000;
+    color: var(--text-main);
     margin: 0;
     padding: 0;
-    background-color: #f4f6f9;
+    background-color: var(--bg-page);
+    -webkit-font-smoothing: antialiased;
   }
-  .page-container {
-    max-width: 8.5in;
-    margin: 0 auto;
-    background: #fff;
-    padding: 6px 10px;
-  }
+
+  /* TOP STICKY TOOLBAR */
   .no-print-bar {
-    background: #003366;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(15, 39, 68, 0.95);
+    backdrop-filter: blur(8px);
     color: white;
-    padding: 6px 12px;
+    padding: 8px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 5px;
-    border-radius: 4px;
-    font-size: 8pt;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-size: 8.5pt;
   }
-  .btn {
-    border: none;
-    padding: 5px 9px;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 3px;
-    font-size: 7.5pt;
-    margin-left: 3px;
-  }
-  .btn-print { background: #28a745; color: white; }
-  .btn-clear { background: #dc3545; color: white; }
-  .btn-aux { background: #17a2b8; color: white; }
 
-  @media print {
-    body { background: #fff; }
-    .page-container { padding: 0; max-width: 100%; }
-    .no-print-bar { display: none !important; }
-    .sig-clear-btn { display: none !important; }
-    input, textarea, select {
-      border: none !important;
-      background: transparent !important;
-      box-shadow: none !important;
-    }
-    input[type="checkbox"], input[type="radio"] {
-      appearance: auto;
-      -webkit-appearance: auto;
-    }
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.1);
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 7.5pt;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border: none;
+    padding: 5px 10px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 7.5pt;
+    transition: all 0.15s ease;
+  }
+
+  .btn:active { transform: scale(0.97); }
+  .btn-save { background: #2563eb; color: white; }
+  .btn-save:hover { background: #1d4ed8; }
+  .btn-aux { background: #475569; color: white; }
+  .btn-aux:hover { background: #334155; }
+  .btn-clear { background: #dc2626; color: white; }
+  .btn-clear:hover { background: #b91c1c; }
+  .btn-print { background: #059669; color: white; }
+  .btn-print:hover { background: #047857; }
+
+  /* MAIN FORM CARD CONTAINER */
+  .page-container {
+    max-width: 8.5in;
+    margin: 12px auto;
+    background: var(--surface);
+    padding: 10px 14px;
+    border-radius: 6px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  /* TITLE HEADER */
+  .header-banner {
+    background: var(--primary);
+    color: white;
+    text-align: center;
+    padding: 4px;
+    border-radius: 3px;
+    margin-bottom: 4px;
   }
 
   .title-bar {
-    text-align: center;
-    font-weight: bold;
-    font-size: 9.5pt;
-    border-bottom: 2px solid #000;
-    padding-bottom: 1px;
-    margin-bottom: 3px;
+    font-size: 10pt;
+    font-weight: 800;
+    letter-spacing: 0.8px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
   }
+
+  .sub-title-bar {
+    font-size: 6.5pt;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    opacity: 0.85;
+  }
+
+  /* TABLE & FORM STYLING */
   table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 3px;
   }
+
   th, td {
-    border: 1px solid #000;
-    padding: 1.5px 3px;
+    border: 1px solid var(--border);
+    padding: 2px 4px;
     vertical-align: middle;
   }
-  .bold { font-weight: bold; }
-  .bg-gray { background-color: #efefef; }
+
+  .bold { font-weight: 700; }
+  .bg-header { background-color: #f8fafc; color: #334155; }
+  .bg-sub { background-color: #f1f5f9; }
   .center { text-align: center; }
   .right { text-align: right; }
-  
-  input[type="text"], input[type="date"], input[type="number"] {
+
+  /* MODERN INPUT FIELDS */
+  input[type="text"], input[type="date"], input[type="number"], select {
     width: 100%;
-    border: 1px solid #bbb;
-    background: #fff;
-    padding: 1px 2px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    padding: 2px 4px;
     font-size: 7.5pt;
     font-family: inherit;
-    height: 18px;
+    height: 19px;
+    border-radius: 2px;
+    color: var(--text-main);
+    transition: all 0.15s ease;
   }
+
+  input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+    background-color: #f8faff;
+  }
+
   input[type="number"] { text-align: right; }
+
   .cost-output, #grandTotal {
-    font-weight: bold;
+    font-weight: 700;
     text-align: right;
-    background: #fdfdfd;
+    background: #f8fafc;
+    color: #0f172a;
+    border-color: #e2e8f0;
   }
-  
-  /* Large Narrative & Status Textareas */
+
+  #grandTotal {
+    background: var(--success-bg) !important;
+    color: var(--success-text) !important;
+    font-size: 8.5pt;
+  }
+
+  /* TEXTAREAS */
   textarea {
     width: 100%;
-    height: 90px;
-    border: 1px solid #bbb;
+    height: 85px;
+    border: 1px solid #cbd5e1;
     resize: none;
     font-family: inherit;
     font-size: 7.2pt;
-    padding: 3px;
-    background: #fff;
-    line-height: 1.2;
+    padding: 4px;
+    background: #ffffff;
+    line-height: 1.25;
+    border-radius: 2px;
   }
-  
+
   .checkbox-label {
-    margin-right: 6px;
+    margin-right: 8px;
     display: inline-flex;
     align-items: center;
     font-size: 7.2pt;
     cursor: pointer;
+    font-weight: 500;
   }
-  .checkbox-label input { margin-right: 2px; }
+
+  .checkbox-label input { margin-right: 3px; cursor: pointer; }
+
   .sub-note {
     font-size: 6pt;
+    font-weight: normal;
+    color: var(--text-muted);
     font-style: italic;
   }
 
-  /* Signature Canvas */
+  /* SIGNATURE CANVAS */
   .sig-container {
     position: relative;
     width: 100%;
-    height: 40px;
-    background: #fafafa;
-    border: 1px dashed #888;
+    height: 44px;
+    background: #ffffff;
+    border: 1px dashed #94a3b8;
+    border-radius: 2px;
   }
+
   #sig-canvas {
     width: 100%;
     height: 100%;
     touch-action: none;
     cursor: crosshair;
   }
+
   .sig-clear-btn {
     position: absolute;
     bottom: 2px;
     right: 2px;
-    background: #ccc;
-    border: 1px solid #999;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    color: #475569;
     font-size: 6pt;
-    padding: 1px 4px;
+    font-weight: 600;
+    padding: 1px 5px;
     border-radius: 2px;
     cursor: pointer;
+  }
+
+  .sig-clear-btn:hover { background: #e2e8f0; color: #0f172a; }
+
+  /* PRINT PREVIEW RULES - STRICT 1-PAGE OUTPUT */
+  @media print {
+    body { background: #ffffff !important; }
+    .page-container {
+      margin: 0 !important;
+      padding: 0 !important;
+      max-width: 100% !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+    }
+    .no-print-bar { display: none !important; }
+    .sig-clear-btn { display: none !important; }
+    
+    th, td { border-color: #000000 !important; }
+    .header-banner {
+      background: #0f2744 !important;
+      color: #ffffff !important;
+      border: 1px solid #000000;
+    }
+    .bg-header, .bg-sub {
+      background-color: #f1f5f9 !important;
+      color: #000000 !important;
+    }
+    input, textarea, select {
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      color: #000000 !important;
+      padding: 0 !important;
+    }
+    input[type="checkbox"], input[type="radio"] {
+      appearance: auto;
+      -webkit-appearance: auto;
+    }
+    #grandTotal {
+      background: transparent !important;
+      color: #000000 !important;
+    }
   }
 </style>
 </head>
 <body>
 
+<!-- STICKY CONTROL TOOLBAR -->
+<div class="no-print-bar">
+  <div class="status-badge">
+    <div class="status-dot"></div>
+    <span id="save-status">Auto-Saving Local Engine</span>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-save" onclick="saveJSON()">💾 Save</button>
+    <button class="btn btn-aux" onclick="saveAsJSON()">📁 Save As</button>
+    <button class="btn btn-aux" onclick="document.getElementById('fileInput').click()">📂 Open JSON</button>
+    <input type="file" id="fileInput" style="display:none" accept=".json,application/json" onchange="openJSON(event)">
+    <button class="btn btn-clear" onclick="clearFormData()">🗑️ Clear</button>
+    <button class="btn btn-print" onclick="window.print()">🖨️ Print / Save PDF</button>
+  </div>
+</div>
+
 <div class="page-container">
-  <div class="no-print-bar">
-    <span id="save-status">💾 <strong>Auto-Saving Active</strong> &bull; Sign below with finger/pen.</span>
-    <div>
-      <button class="btn btn-aux" onclick="exportData()">💾 Backup File</button>
-      <button class="btn btn-aux" onclick="document.getElementById('fileInput').click()">📂 Restore File</button>
-      <input type="file" id="fileInput" style="display:none" onchange="importData(event)">
-      <button class="btn btn-clear" onclick="clearFormData()">🗑️ Clear</button>
-      <button class="btn btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
-    </div>
+
+  <!-- HEADER BANNER -->
+  <div class="header-banner">
+    <div class="title-bar">UAS Daily Operations &amp; Cost Summary</div>
+    <div class="sub-title-bar">Interagency Aviation Operations &bull; UAS Contractor / Resource Log</div>
   </div>
 
-  <div class="title-bar">UAS Daily Operations &amp; Cost Summary</div>
-
-  <!-- SECTION 1: MISSION HEADER -->
+  <!-- SECTION 1: MISSION & RESOURCE HEADER -->
   <table>
     <tr>
-      <td colspan="2" style="width: 50%;">
+      <td colspan="2" style="width: 48%;">
         <span class="bold">Activity / Mission:</span> &nbsp;
         <label class="checkbox-label"><input type="checkbox" id="act_largefire"> Large Fire</label>
         <label class="checkbox-label"><input type="checkbox" id="act_ia"> IA</label>
         <label class="checkbox-label"><input type="checkbox" id="act_proj"> Project</label>
         <label class="checkbox-label"><input type="checkbox" id="act_train"> Training</label>
       </td>
-      <td style="width: 25%;">
+      <td style="width: 24%;">
         <span class="bold">FRAT Completed:</span> &nbsp;
         <label class="checkbox-label"><input type="radio" name="frat" id="frat_yes"> Yes</label>
         <label class="checkbox-label"><input type="radio" name="frat" id="frat_no"> No</label>
       </td>
-      <td style="width: 25%;">
+      <td style="width: 28%;">
         <div style="display:flex; align-items:center;">
-          <span class="bold" style="white-space:nowrap; margin-right:3px;">Date:</span>
+          <span class="bold" style="white-space:nowrap; margin-right:4px;">Date:</span>
           <input type="date" id="doc_date">
         </div>
       </td>
@@ -202,15 +352,15 @@
     <tr>
       <td style="width: 25%;">
         <span class="bold">Launch Base / Helibase:</span>
-        <input type="text" id="base_loc">
+        <input type="text" id="base_loc" placeholder="Base / Staging Location">
       </td>
       <td style="width: 25%;">
         <span class="bold">Incident / Project Name:</span>
-        <input type="text" id="inc_name">
+        <input type="text" id="inc_name" placeholder="Incident / Project">
       </td>
       <td style="width: 25%;">
         <span class="bold">Host Agency / Unit:</span>
-        <input type="text" id="agency_name">
+        <input type="text" id="agency_name" placeholder="Host Agency">
       </td>
       <td style="width: 25%;">
         <span class="bold">Resource Order #:</span>
@@ -227,18 +377,18 @@
       </td>
       <td colspan="2">
         <span class="bold">UAS Manager (UASM) / Govt Rep:</span>
-        <input type="text" id="uasm_name">
+        <input type="text" id="uasm_name" placeholder="Manager / Representative Name">
       </td>
     </tr>
   </table>
 
-  <!-- SECTION 2: 4 PILOTS (FLIGHT TIME ONLY) & 4 AIRCRAFT TRACKING -->
+  <!-- SECTION 2: 4 PILOTS & 4 AIRCRAFT TRACKING -->
   <table>
-    <tr class="bg-gray bold center" style="font-size: 7pt;">
+    <tr class="bg-header bold center" style="font-size: 7pt;">
       <td colspan="2" style="width: 50%;">PILOT FLIGHT TIME TRACKING (UP TO 4 PILOTS)</td>
       <td colspan="4" style="width: 50%;">UAS AIRCRAFT TRACKING (UP TO 4 AIRFRAMES)</td>
     </tr>
-    <tr class="bg-gray center bold" style="font-size: 6.5pt;">
+    <tr class="bg-sub center bold" style="font-size: 6.5pt;">
       <td style="width: 34%;">Pilot / Operator Name &amp; Role</td>
       <td style="width: 16%;">Total Flight Time (Hrs)</td>
       <td style="width: 16%;">FAA Reg # / Tail #</td>
@@ -251,40 +401,40 @@
       <td><input type="number" step="0.1" id="p1_flt" placeholder="0.0"></td>
       <td><input type="text" id="ac1_reg" placeholder="Tail/Reg #1"></td>
       <td><input type="text" id="ac1_model" placeholder="Make/Model"></td>
-      <td><input type="number" id="ac1_sorties"></td>
-      <td><input type="number" step="0.1" id="ac1_flt"></td>
+      <td><input type="number" id="ac1_sorties" placeholder="0"></td>
+      <td><input type="number" step="0.1" id="ac1_flt" placeholder="0.0"></td>
     </tr>
     <tr>
       <td><input type="text" id="p2_name" placeholder="Pilot 2"></td>
       <td><input type="number" step="0.1" id="p2_flt" placeholder="0.0"></td>
       <td><input type="text" id="ac2_reg" placeholder="Tail/Reg #2"></td>
       <td><input type="text" id="ac2_model" placeholder="Make/Model"></td>
-      <td><input type="number" id="ac2_sorties"></td>
-      <td><input type="number" step="0.1" id="ac2_flt"></td>
+      <td><input type="number" id="ac2_sorties" placeholder="0"></td>
+      <td><input type="number" step="0.1" id="ac2_flt" placeholder="0.0"></td>
     </tr>
     <tr>
       <td><input type="text" id="p3_name" placeholder="Pilot 3"></td>
       <td><input type="number" step="0.1" id="p3_flt" placeholder="0.0"></td>
       <td><input type="text" id="ac3_reg" placeholder="Tail/Reg #3"></td>
       <td><input type="text" id="ac3_model" placeholder="Make/Model"></td>
-      <td><input type="number" id="ac3_sorties"></td>
-      <td><input type="number" step="0.1" id="ac3_flt"></td>
+      <td><input type="number" id="ac3_sorties" placeholder="0"></td>
+      <td><input type="number" step="0.1" id="ac3_flt" placeholder="0.0"></td>
     </tr>
     <tr>
       <td><input type="text" id="p4_name" placeholder="Pilot 4"></td>
       <td><input type="number" step="0.1" id="p4_flt" placeholder="0.0"></td>
       <td><input type="text" id="ac4_reg" placeholder="Tail/Reg #4"></td>
       <td><input type="text" id="ac4_model" placeholder="Make/Model"></td>
-      <td><input type="number" id="ac4_sorties"></td>
-      <td><input type="number" step="0.1" id="ac4_flt"></td>
+      <td><input type="number" id="ac4_sorties" placeholder="0"></td>
+      <td><input type="number" step="0.1" id="ac4_flt" placeholder="0.0"></td>
     </tr>
   </table>
 
-  <!-- SECTION 3: COST & REIMBURSABLES (MATH: QTY x RATE = COST) -->
+  <!-- SECTION 3: COST & REIMBURSABLES -->
   <table>
     <thead>
-      <tr class="bg-gray bold center" style="font-size: 7pt;">
-        <th style="width: 44%; text-align: left; padding-left: 4px;">Daily Pay &amp; Reimbursable Items</th>
+      <tr class="bg-header bold center" style="font-size: 7pt;">
+        <th style="width: 44%; text-align: left; padding-left: 6px;">Daily Pay &amp; Reimbursable Items</th>
         <th style="width: 18%;">Quantity (Hrs / Days / Mi / Ppl)</th>
         <th style="width: 18%;">Rate ($)</th>
         <th style="width: 20%;">Cost ($)</th>
@@ -293,70 +443,70 @@
     <tbody>
       <tr>
         <td class="bold">Revenue Flight / Sortie Hours:</td>
-        <td><input type="number" step="any" id="q1" oninput="doMath()"></td>
-        <td><input type="number" step="any" id="r1" oninput="doMath()"></td>
-        <td><input type="text" class="cost-output" id="c1" readonly></td>
+        <td><input type="number" step="any" id="q1" oninput="doMath()" placeholder="0.0"></td>
+        <td><input type="number" step="any" id="r1" oninput="doMath()" placeholder="0.00"></td>
+        <td><input type="text" class="cost-output" id="c1" readonly placeholder="$ 0.00"></td>
       </tr>
       <tr>
         <td class="bold">*Daily System Availability (Day or Hrs):</td>
-        <td><input type="number" step="any" id="q2" oninput="doMath()"></td>
-        <td><input type="number" step="any" id="r2" oninput="doMath()"></td>
-        <td><input type="text" class="cost-output" id="c2" readonly></td>
+        <td><input type="number" step="any" id="q2" oninput="doMath()" placeholder="0.0"></td>
+        <td><input type="number" step="any" id="r2" oninput="doMath()" placeholder="0.00"></td>
+        <td><input type="text" class="cost-output" id="c2" readonly placeholder="$ 0.00"></td>
       </tr>
       <tr>
         <td>Pilot(s) Extended Standby Hours:</td>
-        <td><input type="number" step="any" id="q3" oninput="doMath()"></td>
-        <td><input type="number" step="any" id="r3" oninput="doMath()"></td>
-        <td><input type="text" class="cost-output" id="c3" readonly></td>
+        <td><input type="number" step="any" id="q3" oninput="doMath()" placeholder="0.0"></td>
+        <td><input type="number" step="any" id="r3" oninput="doMath()" placeholder="0.00"></td>
+        <td><input type="text" class="cost-output" id="c3" readonly placeholder="$ 0.00"></td>
       </tr>
       <tr>
         <td>Crew / Tech / Driver Extended Standby:</td>
-        <td><input type="number" step="any" id="q4" oninput="doMath()"></td>
-        <td><input type="number" step="any" id="r4" oninput="doMath()"></td>
-        <td><input type="text" class="cost-output" id="c4" readonly></td>
+        <td><input type="number" step="any" id="q4" oninput="doMath()" placeholder="0.0"></td>
+        <td><input type="number" step="any" id="r4" oninput="doMath()" placeholder="0.00"></td>
+        <td><input type="text" class="cost-output" id="c4" readonly placeholder="$ 0.00"></td>
       </tr>
       
-      <!-- PER DIEM ROW WITH DEDICATED LOCATION -->
+      <!-- PER DIEM ROW -->
       <tr>
         <td>
-          <div style="display:flex; align-items:center; gap:3px;">
+          <div style="display:flex; align-items:center; gap:4px;">
             <span class="bold" style="white-space:nowrap;">Per Diem:</span>
             <input type="text" id="perdiem_loc" placeholder="Location / City / Duty Station" style="flex:1;">
           </div>
         </td>
         <td><input type="number" step="any" id="q5" placeholder="# Persons" oninput="doMath()"></td>
-        <td><input type="number" step="any" id="r5" placeholder="Daily Rate/Person" oninput="doMath()"></td>
-        <td><input type="text" class="cost-output" id="c5" readonly></td>
+        <td><input type="number" step="any" id="r5" placeholder="Daily Rate / Person" oninput="doMath()"></td>
+        <td><input type="text" class="cost-output" id="c5" readonly placeholder="$ 0.00"></td>
       </tr>
 
-      <!-- VEHICLE MILEAGE WITH DEDICATED ROUTE -->
+      <!-- VEHICLE MILEAGE ROW -->
       <tr>
         <td>
-          <div style="display:flex; align-items:center; gap:3px;">
+          <div style="display:flex; align-items:center; gap:4px;">
             <span class="bold" style="white-space:nowrap;">Vehicle Mileage:</span>
             <input type="text" id="mileage_loc" placeholder="From — To / Daily Route" style="flex:1;">
           </div>
         </td>
         <td><input type="number" step="any" id="q6" placeholder="Total Miles" oninput="doMath()"></td>
         <td><input type="number" step="any" id="r6" placeholder="Rate / Mile" oninput="doMath()"></td>
-        <td><input type="text" class="cost-output" id="c6" readonly></td>
+        <td><input type="text" class="cost-output" id="c6" readonly placeholder="$ 0.00"></td>
       </tr>
 
       <tr>
         <td>Payload Package (EO/IR / Thermal Sensor / PSD):</td>
-        <td><input type="number" step="any" id="q7" oninput="doMath()"></td>
-        <td><input type="number" step="any" id="r7" oninput="doMath()"></td>
-        <td><input type="text" class="cost-output" id="c7" readonly></td>
+        <td><input type="number" step="any" id="q7" oninput="doMath()" placeholder="0"></td>
+        <td><input type="number" step="any" id="r7" oninput="doMath()" placeholder="0.00"></td>
+        <td><input type="text" class="cost-output" id="c7" readonly placeholder="$ 0.00"></td>
       </tr>
       <tr>
         <td>Additional Reimbursable Cost (Field Power / Fuel / Fees):</td>
-        <td><input type="number" step="any" id="q8" oninput="doMath()"></td>
-        <td><input type="number" step="any" id="r8" oninput="doMath()"></td>
-        <td><input type="text" class="cost-output" id="c8" readonly></td>
+        <td><input type="number" step="any" id="q8" oninput="doMath()" placeholder="0"></td>
+        <td><input type="number" step="any" id="r8" oninput="doMath()" placeholder="0.00"></td>
+        <td><input type="text" class="cost-output" id="c8" readonly placeholder="$ 0.00"></td>
       </tr>
-      <tr class="bg-gray">
-        <td colspan="3" class="right bold" style="font-size: 8pt;">DAILY GRAND TOTAL COST:</td>
-        <td><input type="text" id="grandTotal" value="$0.00" readonly style="font-size:8.5pt; color:#900; font-weight:bold; text-align:right;"></td>
+      <tr class="bg-sub">
+        <td colspan="3" class="right bold" style="font-size: 8pt; letter-spacing: 0.3px;">DAILY GRAND TOTAL COST:</td>
+        <td><input type="text" id="grandTotal" value="$ 0.00" readonly style="font-size:8.5pt; font-weight:800; text-align:right;"></td>
       </tr>
     </tbody>
   </table>
@@ -366,25 +516,25 @@
   <table>
     <tr>
       <td style="width: 50%; vertical-align: top;">
-        <span class="bold">Aircraft Status:</span> <span class="sub-note">(Maintenance performed, battery cycles, calibrations, downtime)</span>
-        <textarea id="box_ac_status" placeholder="Airworthiness, power trends, motor/sensor calibrations, maintenance actions, downtime reasons..."></textarea>
+        <span class="bold">Aircraft Status:</span> <span class="sub-note">(Maintenance, battery cycles, calibrations, downtime reasons)</span>
+        <textarea id="box_ac_status" placeholder="Detail airworthiness, power trends, motor/sensor calibrations, maintenance actions, or downtime reasons..."></textarea>
       </td>
       <td style="width: 50%; vertical-align: top;">
         <span class="bold">Narrative Report:</span> <span class="sub-note">(Sorties flown, deliverables completed, SAFECOMs submitted)</span>
-        <textarea id="box_narrative" placeholder="Detailed daily operational events, airspace coordination, deliverables handed over, failsafe/lost link events, incident highlights..."></textarea>
+        <textarea id="box_narrative" placeholder="Detail daily operational events, airspace coordination, deliverables handed over, failsafe/lost link events, incident highlights..."></textarea>
       </td>
     </tr>
   </table>
 
-  <!-- SECTION 5: APPROVAL SIGNATURES WITH DRAWABLE PAD -->
+  <!-- SECTION 5: APPROVAL SIGNATURES -->
   <table>
     <tr>
       <td style="width: 38%; vertical-align: top;">
         <span class="bold">Govt Representative / UASM Name (Print):</span>
-        <input type="text" id="sig_name" style="margin-top:4px;">
+        <input type="text" id="sig_name" placeholder="Printed Full Name / Title" style="margin-top:4px;">
       </td>
       <td style="width: 42%; vertical-align: top;">
-        <span class="bold">Govt Representative Signature:</span> <span class="sub-note">(Sign below)</span>
+        <span class="bold">Govt Representative Signature:</span> <span class="sub-note">(Draw signature below)</span>
         <div class="sig-container" id="sig-box">
           <canvas id="sig-canvas"></canvas>
           <button type="button" class="sig-clear-btn" onclick="clearSignature()">Clear Sig</button>
@@ -396,12 +546,15 @@
       </td>
     </tr>
   </table>
+
 </div>
 
 <script>
   const STORAGE_KEY = 'uas_daily_summary_signature_v1';
   let totalCostGlobal = 0;
+  let currentFileHandle = null;
 
+  // --- MATH ENGINE ---
   function doMath() {
     let grandTotal = 0;
 
@@ -416,7 +569,7 @@
         const cost = qty * rate;
 
         if (qty > 0 && rate > 0) {
-          cEl.value = '$ ' + cost.toFixed(2);
+          cEl.value = '$ ' + cost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
           grandTotal += cost;
         } else {
           cEl.value = '';
@@ -433,20 +586,19 @@
     saveFormData();
   }
 
-  // --- SIGNATURE CANVAS ENGINE ---
+  // --- SIGNATURE ENGINE ---
   let canvas, ctx, drawing = false;
 
   function initSignatureCanvas() {
     canvas = document.getElementById('sig-canvas');
     if (!canvas) return;
     
-    // Set actual canvas resolution to box size
     canvas.width = canvas.parentElement.clientWidth;
     canvas.height = canvas.parentElement.clientHeight;
     ctx = canvas.getContext('2d');
     ctx.lineWidth = 1.8;
     ctx.lineCap = 'round';
-    ctx.strokeStyle = '#000066';
+    ctx.strokeStyle = '#0f2744';
 
     function getPos(e) {
       const rect = canvas.getBoundingClientRect();
@@ -497,7 +649,7 @@
     }
   }
 
-  // --- PERSISTENCE ENGINE ---
+  // --- PERSISTENCE & JSON HANDLERS ---
   function getFormDataObject() {
     const data = {};
     document.querySelectorAll('input, textarea').forEach(el => {
@@ -520,6 +672,7 @@
       const json = JSON.stringify(getFormDataObject());
       localStorage.setItem(STORAGE_KEY, json);
       sessionStorage.setItem(STORAGE_KEY, json);
+      updateStatus("💾 Local Auto-Saved: " + new Date().toLocaleTimeString());
     } catch (e) {}
   }
 
@@ -528,26 +681,31 @@
       const saved = localStorage.getItem(STORAGE_KEY) || sessionStorage.getItem(STORAGE_KEY);
       if (!saved) return;
       const data = JSON.parse(saved);
-      Object.keys(data).forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-          if (el.type === 'checkbox' || el.type === 'radio') {
-            el.checked = data[id];
-          } else {
-            el.value = data[id];
-          }
-        }
-      });
-      if (data['sig_image'] && ctx && canvas) {
-        const img = new Image();
-        img.onload = () => ctx.drawImage(img, 0, 0);
-        img.src = data['sig_image'];
-      }
+      applyDataToForm(data);
     } catch (e) {}
   }
 
+  function applyDataToForm(data) {
+    Object.keys(data).forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        if (el.type === 'checkbox' || el.type === 'radio') {
+          el.checked = data[id];
+        } else {
+          el.value = data[id];
+        }
+      }
+    });
+    if (data['sig_image'] && ctx && canvas) {
+      const img = new Image();
+      img.onload = () => ctx.drawImage(img, 0, 0);
+      img.src = data['sig_image'];
+    }
+    doMath();
+  }
+
   function clearFormData() {
-    if (confirm('Clear all fields to start a new form?')) {
+    if (confirm('Clear all form fields to start a new record?')) {
       try {
         localStorage.removeItem(STORAGE_KEY);
         sessionStorage.removeItem(STORAGE_KEY);
@@ -561,45 +719,100 @@
       });
       clearSignature();
       doMath();
+      currentFileHandle = null;
+      updateStatus("Form cleared.");
     }
   }
 
-  function exportData() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(getFormDataObject(), null, 2));
-    const dlAnchor = document.createElement('a');
-    dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", "UAS_Daily_Log_" + (document.getElementById('doc_date').value || "draft") + ".json");
-    dlAnchor.click();
+  function buildFileName() {
+    const date = document.getElementById('doc_date').value || new Date().toISOString().slice(0, 10);
+    const incident = (document.getElementById('inc_name').value || 'UAS_Log').trim().replace(/[^a-zA-Z0-9_-]/g, '_');
+    const order = (document.getElementById('order_num').value || '').trim().replace(/[^a-zA-Z0-9_-]/g, '_');
+    let name = date + '_' + incident;
+    if (order) name += '_' + order;
+    return name + '.json';
   }
 
-  function importData(event) {
+  async function saveJSON() {
+    doMath();
+    if (currentFileHandle && window.showSaveFilePicker) {
+      try {
+        const json = JSON.stringify(getFormDataObject(), null, 2);
+        const writable = await currentFileHandle.createWritable();
+        await writable.write(json);
+        await writable.close();
+        updateStatus("Saved to existing file.");
+        return;
+      } catch (e) {}
+    }
+    await saveAsJSON();
+  }
+
+  async function saveAsJSON() {
+    doMath();
+    const json = JSON.stringify(getFormDataObject(), null, 2);
+    const suggestedName = buildFileName();
+    const blob = new Blob([json], { type: "application/json" });
+    const file = new File([blob], suggestedName, { type: "application/json" });
+
+    if (window.showSaveFilePicker) {
+      try {
+        currentFileHandle = await window.showSaveFilePicker({
+          suggestedName: suggestedName,
+          types: [{ description: 'JSON File', accept: { 'application/json': ['.json'] } }]
+        });
+        const writable = await currentFileHandle.createWritable();
+        await writable.write(json);
+        await writable.close();
+        updateStatus("Saved As: " + suggestedName);
+        return;
+      } catch (e) {
+        return;
+      }
+    }
+
+    try {
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: "UAS Daily Form JSON",
+          text: "UAS Daily Operations Data"
+        });
+        updateStatus("Draft shared/saved.");
+        return;
+      }
+    } catch (e) {}
+
+    const dlAnchor = document.createElement('a');
+    dlAnchor.href = URL.createObjectURL(blob);
+    dlAnchor.download = suggestedName;
+    document.body.appendChild(dlAnchor);
+    dlAnchor.click();
+    dlAnchor.remove();
+    updateStatus("Downloaded: " + suggestedName);
+  }
+
+  function openJSON(event) {
     const file = event.target.files[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = function(e) {
       try {
         const data = JSON.parse(e.target.result);
-        Object.keys(data).forEach(id => {
-          const el = document.getElementById(id);
-          if (el) {
-            if (el.type === 'checkbox' || el.type === 'radio') {
-              el.checked = data[id];
-            } else {
-              el.value = data[id];
-            }
-          }
-        });
-        if (data['sig_image'] && ctx && canvas) {
-          const img = new Image();
-          img.onload = () => ctx.drawImage(img, 0, 0);
-          img.src = data['sig_image'];
-        }
-        doMath();
+        applyDataToForm(data);
+        saveFormData();
+        updateStatus("Loaded: " + file.name);
       } catch (err) {
-        alert("Invalid backup file.");
+        alert("Invalid JSON file.");
       }
     };
     reader.readAsText(file);
+    event.target.value = '';
+  }
+
+  function updateStatus(msg) {
+    const el = document.getElementById('save-status');
+    if (el) el.innerHTML = msg;
   }
 
   window.addEventListener('DOMContentLoaded', () => {
