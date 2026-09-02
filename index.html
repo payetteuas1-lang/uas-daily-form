@@ -339,7 +339,7 @@
     <button class="btn btn-aux" onclick="document.getElementById('fileInput').click()">📂 Open</button>
     <input type="file" id="fileInput" style="display:none" accept=".json,application/json" onchange="openJSON(event)">
     <button class="btn btn-clear" onclick="clearFormData()">🗑️ Clear</button>
-    <button class="btn btn-print" onclick="window.print()">🖨️ Print / Save PDF</button>
+    <button class="btn btn-print" onclick="printPDF()">🖨️ Print / Save PDF</button>
   </div>
 </div>
 
@@ -409,7 +409,7 @@
     </tr>
   </table>
 
-  <!-- 2-COLUMN BODY: LEFT = LOGS & 5 PERS / 5 VEHICLES; RIGHT = DEDICATED NARRATIVE, WEATHER & STATUS -->
+  <!-- 2-COLUMN BODY -->
   <div class="layout-split">
     
     <!-- LEFT COLUMN -->
@@ -578,7 +578,7 @@
       <div class="sub-note">* Do not calculate availability for exclusive use contracts paid from base funds.</div>
     </div>
 
-    <!-- RIGHT COLUMN: DEDICATED FULL-HEIGHT STATUS, WEATHER & NARRATIVE -->
+    <!-- RIGHT COLUMN -->
     <div class="col-right">
       
       <!-- 15. AIRCRAFT STATUS -->
@@ -639,11 +639,33 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'uas_daily_summary_5veh_5pers_vendor_v2';
+  const STORAGE_KEY = 'uas_daily_summary_5veh_5pers_vendor_v3';
   let totalCostGlobal = 0;
   let currentFileHandle = null;
 
-  // --- BULLETPROOF MATH ENGINE (ALL ROWS) ---
+  // --- AUTO-UPDATE PAGE TITLE TO MATCH JSON FILE NAME ---
+  function updateDocumentTitle() {
+    const baseName = buildBaseName();
+    document.title = baseName;
+  }
+
+  function buildBaseName() {
+    const date = document.getElementById('doc_date').value || new Date().toISOString().slice(0, 10);
+    const vendor = (document.getElementById('vendor_name').value || 'Vendor').trim().replace(/[^a-zA-Z0-9_-]/g, '_');
+    const incident = (document.getElementById('inc_name').value || 'Incident').trim().replace(/[^a-zA-Z0-9_-]/g, '_');
+    return `${date}_${vendor}_${incident}`;
+  }
+
+  function buildFileName(extension) {
+    return `${buildBaseName()}.${extension}`;
+  }
+
+  function printPDF() {
+    updateDocumentTitle();
+    window.print();
+  }
+
+  // --- MATH ENGINE ---
   function doMath() {
     let grandTotal = 0;
     const rows = document.querySelectorAll('.calc-row');
@@ -673,6 +695,7 @@
       gtEl.value = '$ ' + grandTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
     }
 
+    updateDocumentTitle();
     saveFormData();
   }
 
@@ -811,15 +834,6 @@
     }
   }
 
-  // --- DEFAULT FILE NAME: DATE_VENDOR_INCIDENT.JSON ---
-  function buildFileName() {
-    const date = document.getElementById('doc_date').value || new Date().toISOString().slice(0, 10);
-    const vendor = (document.getElementById('vendor_name').value || 'Vendor').trim().replace(/[^a-zA-Z0-9_-]/g, '_');
-    const incident = (document.getElementById('inc_name').value || 'Incident').trim().replace(/[^a-zA-Z0-9_-]/g, '_');
-    
-    return `${date}_${vendor}_${incident}.json`;
-  }
-
   async function saveJSON() {
     doMath();
     if (currentFileHandle && window.showSaveFilePicker) {
@@ -838,7 +852,7 @@
   async function saveAsJSON() {
     doMath();
     const json = JSON.stringify(getFormDataObject(), null, 2);
-    const suggestedName = buildFileName();
+    const suggestedName = buildFileName('json');
     const blob = new Blob([json], { type: "application/json" });
     const file = new File([blob], suggestedName, { type: "application/json" });
 
