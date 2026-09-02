@@ -20,7 +20,7 @@
 
   @page {
     size: letter portrait;
-    margin: 0.16in 0.20in;
+    margin: 0.20in 0.22in;
   }
 
   * {
@@ -31,7 +31,7 @@
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    font-size: 6.6pt;
+    font-size: 7.6pt;
     color: var(--text-main);
     margin: 0;
     padding: 0;
@@ -47,12 +47,12 @@
     background: rgba(15, 39, 68, 0.96);
     backdrop-filter: blur(8px);
     color: white;
-    padding: 6px 14px;
+    padding: 8px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    font-size: 8pt;
+    font-size: 8.5pt;
   }
 
   .status-badge {
@@ -60,28 +60,28 @@
     align-items: center;
     gap: 6px;
     background: rgba(255,255,255,0.1);
-    padding: 3px 8px;
+    padding: 4px 10px;
     border-radius: 20px;
-    font-size: 7.2pt;
+    font-size: 7.6pt;
   }
 
   .status-dot {
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: #10b981;
     box-shadow: 0 0 6px #10b981;
   }
 
-  .btn-group { display: flex; gap: 4px; flex-wrap: wrap; }
+  .btn-group { display: flex; gap: 5px; flex-wrap: wrap; }
 
   .btn {
     border: none;
-    padding: 4px 8px;
+    padding: 5px 10px;
     font-weight: 600;
     cursor: pointer;
     border-radius: 3px;
-    font-size: 7.2pt;
+    font-size: 7.8pt;
     transition: all 0.15s ease;
   }
 
@@ -94,9 +94,9 @@
   /* PAGE CONTAINER */
   .page-container {
     max-width: 8.5in;
-    margin: 6px auto;
+    margin: 10px auto;
     background: var(--surface);
-    padding: 6px 10px;
+    padding: 10px 14px;
     border-radius: 4px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   }
@@ -105,41 +105,42 @@
     background: var(--primary);
     color: white;
     text-align: center;
-    padding: 3px;
+    padding: 5px;
     border-radius: 2px;
-    margin-bottom: 3px;
+    margin-bottom: 5px;
   }
 
   .title-bar {
-    font-size: 8.6pt;
+    font-size: 10pt;
     font-weight: 800;
-    letter-spacing: 0.6px;
+    letter-spacing: 0.8px;
     text-transform: uppercase;
   }
 
   .sub-title-bar {
-    font-size: 5.6pt;
+    font-size: 6.8pt;
     font-weight: 500;
-    opacity: 0.85;
+    opacity: 0.88;
+    margin-top: 1px;
   }
 
   /* TABLES */
   table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
   }
 
   th, td {
     border: 1px solid var(--border);
-    padding: 1.2px 3px;
+    padding: 2.2px 4px;
     vertical-align: middle;
   }
 
   .bold { font-weight: 700; }
   .bg-header { background-color: #f8fafc; color: #334155; }
   .bg-sub { background-color: #f1f5f9; }
-  .bg-section { background-color: #e2e8f0; font-weight: 700; font-size: 6.2pt; }
+  .bg-section { background-color: #e2e8f0; font-weight: 700; font-size: 7pt; }
   .center { text-align: center; }
   .right { text-align: right; }
 
@@ -148,10 +149,10 @@
     width: 100%;
     border: 1px solid #cbd5e1;
     background: #ffffff;
-    padding: 1px 3px;
-    font-size: 6.6pt;
+    padding: 2px 4px;
+    font-size: 7.5pt;
     font-family: inherit;
-    height: 14.5px;
+    height: 18px;
     border-radius: 2px;
     color: var(--text-main);
   }
@@ -174,22 +175,23 @@
   #grandTotal {
     background: var(--success-bg) !important;
     color: var(--success-text) !important;
-    font-size: 7.5pt;
+    font-size: 8.5pt;
     font-weight: 800;
     text-align: right;
+    height: 20px;
   }
 
   .checkbox-label {
-    margin-right: 6px;
+    margin-right: 8px;
     display: inline-flex;
     align-items: center;
-    font-size: 6.6pt;
+    font-size: 7.5pt;
     cursor: pointer;
   }
-  .checkbox-label input { margin-right: 2px; }
+  .checkbox-label input { margin-right: 3px; }
 
   .sub-note {
-    font-size: 5.4pt;
+    font-size: 6.2pt;
     color: var(--text-muted);
     font-style: italic;
     font-weight: normal;
@@ -198,9 +200,9 @@
   /* 2-COLUMN SPLIT LAYOUT */
   .layout-split {
     display: flex;
-    gap: 4px;
+    gap: 6px;
     align-items: stretch;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
   }
 
   .col-left {
@@ -213,7 +215,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 2.5px;
+    gap: 4px;
   }
 
   .narrative-card {
@@ -228,31 +230,31 @@
 
   .narrative-card-header {
     background: #f1f5f9;
-    padding: 1.5px 4px;
+    padding: 3px 5px;
     border-bottom: 1px solid var(--border);
     font-weight: 700;
-    font-size: 6.5pt;
+    font-size: 7.4pt;
     color: #1e293b;
   }
 
   .narrative-card textarea {
     flex: 1;
     width: 100%;
-    min-height: 52px;
+    min-height: 75px;
     border: none;
     resize: none;
     font-family: inherit;
-    font-size: 6.5pt;
-    padding: 3px;
-    line-height: 1.2;
+    font-size: 7.3pt;
+    padding: 5px;
+    line-height: 1.3;
     background: #ffffff;
   }
 
   .weather-quick-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 2px;
-    padding: 2px 4px;
+    gap: 3px;
+    padding: 3px 5px;
     background: #fafafa;
     border-bottom: 1px solid #e2e8f0;
   }
@@ -261,7 +263,7 @@
   .sig-container {
     position: relative;
     width: 100%;
-    height: 34px;
+    height: 42px;
     background: #ffffff;
     border: 1px dashed #94a3b8;
     border-radius: 2px;
@@ -276,14 +278,14 @@
 
   .sig-clear-btn {
     position: absolute;
-    bottom: 1px;
-    right: 1px;
+    bottom: 2px;
+    right: 2px;
     background: #f1f5f9;
     border: 1px solid #cbd5e1;
     color: #475569;
-    font-size: 5.5pt;
+    font-size: 6.2pt;
     font-weight: 600;
-    padding: 1px 4px;
+    padding: 2px 6px;
     border-radius: 2px;
     cursor: pointer;
   }
@@ -419,7 +421,7 @@
           <td colspan="2" style="width: 50%;">PILOT FLIGHT TIME (UP TO 4)</td>
           <td colspan="4" style="width: 50%;">UAS AIRFRAME TRACKING (UP TO 4)</td>
         </tr>
-        <tr class="bg-sub center bold" style="font-size: 6.2pt;">
+        <tr class="bg-sub center bold" style="font-size: 7pt;">
           <td style="width: 36%;">Pilot / Operator Name</td>
           <td style="width: 14%;">Flt Hrs</td>
           <td style="width: 17%;">FAA Reg / Tail</td>
@@ -465,7 +467,7 @@
       <table>
         <thead>
           <tr class="bg-header bold center">
-            <th style="width: 44%; text-align: left; padding-left: 4px;">Cost Items &amp; Reimbursables</th>
+            <th style="width: 44%; text-align: left; padding-left: 5px;">Cost Items &amp; Reimbursables</th>
             <th style="width: 18%;">Quantity</th>
             <th style="width: 18%;">Rate ($)</th>
             <th style="width: 20%;">Cost ($)</th>
@@ -568,7 +570,7 @@
 
           <!-- GRAND TOTAL -->
           <tr class="bg-sub">
-            <td colspan="3" class="right bold" style="font-size: 7.2pt;">DAILY GRAND TOTAL COST:</td>
+            <td colspan="3" class="right bold" style="font-size: 8pt;">DAILY GRAND TOTAL COST:</td>
             <td><input type="text" id="grandTotal" value="$ 0.00" readonly></td>
           </tr>
         </tbody>
@@ -590,7 +592,7 @@
       <!-- 16. WEATHER OBSERVATIONS & NARRATIVE -->
       <div class="narrative-card">
         <div class="narrative-card-header">
-          16. Weather Report &amp; Observations <span class="sub-note">(Wind, temperature, visibility, micro-trends)</span>
+          16. Weather Report &amp; Observations <span class="sub-note">(Wind, temp, visibility, micro-trends)</span>
         </div>
         <div class="weather-quick-grid">
           <input type="text" id="wx_wind" placeholder="Wind / Gusts (kts)">
@@ -637,7 +639,7 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'uas_daily_summary_5veh_5pers_vendor_v1';
+  const STORAGE_KEY = 'uas_daily_summary_5veh_5pers_vendor_v2';
   let totalCostGlobal = 0;
   let currentFileHandle = null;
 
@@ -684,7 +686,7 @@
     canvas.width = canvas.parentElement.clientWidth;
     canvas.height = canvas.parentElement.clientHeight;
     ctx = canvas.getContext('2d');
-    ctx.lineWidth = 1.6;
+    ctx.lineWidth = 1.8;
     ctx.lineCap = 'round';
     ctx.strokeStyle = '#0f2744';
 
