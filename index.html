@@ -20,7 +20,7 @@
 
   @page {
     size: letter portrait;
-    margin: 0.18in 0.22in;
+    margin: 0.16in 0.20in;
   }
 
   * {
@@ -31,7 +31,7 @@
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    font-size: 6.8pt;
+    font-size: 6.6pt;
     color: var(--text-main);
     margin: 0;
     padding: 0;
@@ -94,7 +94,7 @@
   /* PAGE CONTAINER */
   .page-container {
     max-width: 8.5in;
-    margin: 8px auto;
+    margin: 6px auto;
     background: var(--surface);
     padding: 6px 10px;
     border-radius: 4px;
@@ -111,14 +111,14 @@
   }
 
   .title-bar {
-    font-size: 8.8pt;
+    font-size: 8.6pt;
     font-weight: 800;
     letter-spacing: 0.6px;
     text-transform: uppercase;
   }
 
   .sub-title-bar {
-    font-size: 5.8pt;
+    font-size: 5.6pt;
     font-weight: 500;
     opacity: 0.85;
   }
@@ -132,14 +132,14 @@
 
   th, td {
     border: 1px solid var(--border);
-    padding: 1.5px 3px;
+    padding: 1.2px 3px;
     vertical-align: middle;
   }
 
   .bold { font-weight: 700; }
   .bg-header { background-color: #f8fafc; color: #334155; }
   .bg-sub { background-color: #f1f5f9; }
-  .bg-section { background-color: #e2e8f0; font-weight: 700; }
+  .bg-section { background-color: #e2e8f0; font-weight: 700; font-size: 6.2pt; }
   .center { text-align: center; }
   .right { text-align: right; }
 
@@ -149,9 +149,9 @@
     border: 1px solid #cbd5e1;
     background: #ffffff;
     padding: 1px 3px;
-    font-size: 6.8pt;
+    font-size: 6.6pt;
     font-family: inherit;
-    height: 15px;
+    height: 14.5px;
     border-radius: 2px;
     color: var(--text-main);
   }
@@ -174,7 +174,7 @@
   #grandTotal {
     background: var(--success-bg) !important;
     color: var(--success-text) !important;
-    font-size: 7.8pt;
+    font-size: 7.5pt;
     font-weight: 800;
     text-align: right;
   }
@@ -183,13 +183,13 @@
     margin-right: 6px;
     display: inline-flex;
     align-items: center;
-    font-size: 6.8pt;
+    font-size: 6.6pt;
     cursor: pointer;
   }
   .checkbox-label input { margin-right: 2px; }
 
   .sub-note {
-    font-size: 5.5pt;
+    font-size: 5.4pt;
     color: var(--text-muted);
     font-style: italic;
     font-weight: normal;
@@ -213,7 +213,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 2.5px;
   }
 
   .narrative-card {
@@ -228,31 +228,40 @@
 
   .narrative-card-header {
     background: #f1f5f9;
-    padding: 2px 4px;
+    padding: 1.5px 4px;
     border-bottom: 1px solid var(--border);
     font-weight: 700;
-    font-size: 6.8pt;
+    font-size: 6.5pt;
     color: #1e293b;
   }
 
   .narrative-card textarea {
     flex: 1;
     width: 100%;
-    min-height: 180px;
+    min-height: 52px;
     border: none;
     resize: none;
     font-family: inherit;
-    font-size: 6.8pt;
-    padding: 4px;
-    line-height: 1.25;
+    font-size: 6.5pt;
+    padding: 3px;
+    line-height: 1.2;
     background: #ffffff;
+  }
+
+  .weather-quick-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 2px;
+    padding: 2px 4px;
+    background: #fafafa;
+    border-bottom: 1px solid #e2e8f0;
   }
 
   /* SIGNATURE CANVAS */
   .sig-container {
     position: relative;
     width: 100%;
-    height: 36px;
+    height: 34px;
     background: #ffffff;
     border: 1px dashed #94a3b8;
     border-radius: 2px;
@@ -395,7 +404,7 @@
     </tr>
   </table>
 
-  <!-- 2-COLUMN BODY: LEFT = LOGS & 5 PERS / 5 VEHICLES; RIGHT = DEDICATED NARRATIVE / STATUS COLUMN -->
+  <!-- 2-COLUMN BODY: LEFT = LOGS & 5 PERS / 5 VEHICLES; RIGHT = DEDICATED NARRATIVE, WEATHER & STATUS -->
   <div class="layout-split">
     
     <!-- LEFT COLUMN -->
@@ -564,23 +573,37 @@
       <div class="sub-note">* Do not calculate availability for exclusive use contracts paid from base funds.</div>
     </div>
 
-    <!-- RIGHT COLUMN: DEDICATED FULL-HEIGHT STATUS & NARRATIVE -->
+    <!-- RIGHT COLUMN: DEDICATED FULL-HEIGHT STATUS, WEATHER & NARRATIVE -->
     <div class="col-right">
       
-      <!-- AIRCRAFT STATUS -->
+      <!-- 15. AIRCRAFT STATUS -->
       <div class="narrative-card">
         <div class="narrative-card-header">
           15. Aircraft Status <span class="sub-note">(Maintenance, battery cycles, calibrations, downtime)</span>
         </div>
-        <textarea id="box_ac_status" placeholder="Enter airworthiness logs, power trends, motor/sensor calibrations, maintenance completed, battery cycle records, or reasons for unavailability..."></textarea>
+        <textarea id="box_ac_status" placeholder="Detail airworthiness logs, power trends, motor/sensor calibrations, maintenance actions, battery cycle records, or reasons for unavailability..."></textarea>
       </div>
 
-      <!-- NARRATIVE REPORT -->
+      <!-- 16. WEATHER OBSERVATIONS & NARRATIVE -->
       <div class="narrative-card">
         <div class="narrative-card-header">
-          16. Narrative Report <span class="sub-note">(Sorties flown, deliverables, SAFECOMs)</span>
+          16. Weather Report &amp; Observations <span class="sub-note">(Wind, temperature, visibility, micro-trends)</span>
         </div>
-        <textarea id="box_narrative" placeholder="Enter daily operational narrative, mission highlights, airspace / NOTAM coordination, deliverables handed over, failsafe / lost link events, problems encountered, SAFECOM numbers..."></textarea>
+        <div class="weather-quick-grid">
+          <input type="text" id="wx_wind" placeholder="Wind / Gusts (kts)">
+          <input type="text" id="wx_temp" placeholder="Temp (°F/°C)">
+          <input type="text" id="wx_vis" placeholder="Ceiling / Vis">
+          <input type="text" id="wx_solar" placeholder="KP Index / Sats">
+        </div>
+        <textarea id="box_weather" placeholder="Detail local weather conditions, turbulence/inversion layers, thermal activity, wind shifts, or weather-induced delays/abort reasons..."></textarea>
+      </div>
+
+      <!-- 17. NARRATIVE REPORT -->
+      <div class="narrative-card">
+        <div class="narrative-card-header">
+          17. Narrative Report <span class="sub-note">(Sorties flown, deliverables, SAFECOMs)</span>
+        </div>
+        <textarea id="box_narrative" placeholder="Detail daily operational narrative, mission highlights, airspace / NOTAM coordination, deliverables handed over, failsafe / lost link events, problems encountered, SAFECOM numbers..."></textarea>
       </div>
 
     </div>
@@ -611,7 +634,7 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'uas_daily_summary_5veh_5pers_v1';
+  const STORAGE_KEY = 'uas_daily_summary_5veh_5pers_wx_v1';
   let totalCostGlobal = 0;
   let currentFileHandle = null;
 
