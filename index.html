@@ -112,7 +112,7 @@
   .btn-csv { background: #0284c7; color: white; }
   .btn-print { background: #059669; color: white; }
 
-  .btn-gps, .btn-wx {
+  .btn-gps {
     background: #e2e8f0;
     border: 1px solid #cbd5e1;
     color: #0f2744;
@@ -123,7 +123,7 @@
     font-weight: 700;
     white-space: nowrap;
   }
-  .btn-gps:hover, .btn-wx:hover { background: #cbd5e1; }
+  .btn-gps:hover { background: #cbd5e1; }
 
   /* PAGE CONTAINER */
   .page-container {
@@ -256,7 +256,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 4px;
   }
 
   .narrative-card {
@@ -271,10 +271,10 @@
 
   .narrative-card-header {
     background: #f1f5f9;
-    padding: 2.2px 4px;
+    padding: 2.5px 4px;
     border-bottom: 1px solid var(--border);
     font-weight: 700;
-    font-size: 7.1pt;
+    font-size: 7.2pt;
     color: #1e293b;
     display: flex;
     justify-content: space-between;
@@ -284,13 +284,13 @@
   .narrative-card textarea {
     flex: 1;
     width: 100%;
-    min-height: 65px;
+    min-height: 100px;
     border: none;
     resize: none;
     font-family: inherit;
-    font-size: 7.0pt;
+    font-size: 7.1pt;
     padding: 4px;
-    line-height: 1.25;
+    line-height: 1.3;
     background: #ffffff;
   }
 
@@ -402,7 +402,7 @@
       max-width: 100% !important;
       box-shadow: none !important;
     }
-    .no-print-bar, .sig-clear-btn, .btn-gps, .btn-wx, .modal-overlay, .veh-rate-select { display: none !important; }
+    .no-print-bar, .sig-clear-btn, .btn-gps, .modal-overlay, .veh-rate-select { display: none !important; }
     th, td, .narrative-card { border-color: #000000 !important; }
     .header-banner {
       background: #0f2744 !important;
@@ -714,7 +714,7 @@
       <div class="sub-note">* Do not calculate availability for exclusive use contracts paid from base funds.</div>
     </div>
 
-    <!-- RIGHT COLUMN -->
+    <!-- RIGHT COLUMN (CLEAN 50/50 SPLIT FOR AIRCRAFT STATUS & NARRATIVE) -->
     <div class="col-right">
       
       <!-- 15. AIRCRAFT STATUS -->
@@ -725,19 +725,10 @@
         <textarea id="box_ac_status" placeholder="Detail airworthiness logs, power trends, motor/sensor calibrations, maintenance actions, battery cycle records, or reasons for unavailability..."></textarea>
       </div>
 
-      <!-- 16. WEATHER NARRATIVE -->
+      <!-- 16. DAILY NARRATIVE REPORT -->
       <div class="narrative-card">
         <div class="narrative-card-header">
-          <span>16. Weather Observations <span class="sub-note">(Wind, temp, visibility, delays)</span></span>
-          <button type="button" class="btn-wx no-print-bar" onclick="fetchLiveWeather()" title="Query live aviation weather observation for location">🌤️ Live Wx</button>
-        </div>
-        <textarea id="box_weather" placeholder="Detail local on-site weather, surface wind/gusts, temperature, turbulence/inversion layers, thermal activity, wind shifts, or weather-induced aborts/delays..."></textarea>
-      </div>
-
-      <!-- 17. NARRATIVE REPORT -->
-      <div class="narrative-card">
-        <div class="narrative-card-header">
-          <span>17. Narrative Report <span class="sub-note">(Sorties flown, deliverables, SAFECOMs)</span></span>
+          <span>16. Daily Narrative Report <span class="sub-note">(Sorties flown, deliverables, SAFECOMs)</span></span>
         </div>
         <textarea id="box_narrative" placeholder="Detail daily operational narrative, mission highlights, airspace / NOTAM coordination, deliverables handed over, failsafe / lost link events, problems encountered, SAFECOM numbers..."></textarea>
       </div>
@@ -770,9 +761,9 @@
 </div>
 
 <script>
-  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v10';
-  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v10';
-  const RATE_PROFILES_KEY = 'uas_vendor_rate_preset_profiles_v8';
+  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v11';
+  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v11';
+  const RATE_PROFILES_KEY = 'uas_vendor_rate_preset_profiles_v9';
   let totalCostGlobal = 0;
 
   if ('serviceWorker' in navigator) {
@@ -977,111 +968,6 @@
     }
   }
 
-  // --- 🌤️ ROBUST MULTI-STAGE LIVE WEATHER ENGINE ---
-  async function fetchLiveWeather() {
-    const wxBox = document.getElementById('box_weather');
-    const baseVal = document.getElementById('base_loc').value;
-    let lat = null, lon = null;
-
-    // Stage 1: Parse coordinates from LRZ box (e.g. 44.123, -115.456 or 44.123° N, 115.456° W)
-    const matches = baseVal.match(/(-?\d+\.\d+)[^\d-]+(-?\d+\.\d+)/);
-    if (matches) {
-      lat = parseFloat(matches[1]);
-      lon = parseFloat(matches[2]);
-      if (baseVal.toUpperCase().includes('S')) lat = -Math.abs(lat);
-      if (baseVal.toUpperCase().includes('W') || (lon > 0 && !baseVal.toUpperCase().includes('E'))) lon = -Math.abs(lon);
-    }
-
-    // Stage 2: Query Device GPS
-    if (!lat || !lon) {
-      if (navigator.geolocation) {
-        updateStatus('📍 Acquiring GPS coordinates...');
-        navigator.geolocation.getCurrentPosition(
-          pos => {
-            queryWeatherAPI(pos.coords.latitude, pos.coords.longitude);
-          },
-          async err => {
-            // Stage 3: Fallback to IP Network Location if GPS timed out or was blocked
-            updateStatus('📍 GPS timed out, using Network Location...');
-            await fetchIPLocationAndWeather();
-          },
-          { enableHighAccuracy: false, timeout: 6000 }
-        );
-      } else {
-        await fetchIPLocationAndWeather();
-      }
-    } else {
-      queryWeatherAPI(lat, lon);
-    }
-  }
-
-  async function fetchIPLocationAndWeather() {
-    try {
-      const res = await fetch('https://ipapi.co/json/');
-      if (!res.ok) throw new Error('IP service error');
-      const data = await res.json();
-      if (data.latitude && data.longitude) {
-        queryWeatherAPI(data.latitude, data.longitude, `${data.city || 'Regional'}, ${data.region_code || ''}`);
-      } else {
-        throw new Error('No coordinates returned');
-      }
-    } catch (e) {
-      alert('Unable to determine location. Please click the "📍 GPS" button on the LRZ box first or enter coordinates manually.');
-      updateStatus('Location unavailable for weather.', true);
-    }
-  }
-
-  async function queryWeatherAPI(lat, lon, locLabel = '') {
-    updateStatus('🌤️ Fetching live meteorological data...');
-    try {
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m,weather_code&temperature_unit=fahrenheit&wind_speed_unit=knots&precipitation_unit=inch`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`Weather Server Error (${res.status})`);
-      const data = await res.json();
-      const cur = data.current;
-
-      const temp = Math.round(cur.temperature_2m);
-      const windKts = Math.round(cur.wind_speed_10m);
-      const gustsKts = Math.round(cur.wind_gusts_10m);
-      const windDir = degToCardinal(cur.wind_direction_10m);
-      const rh = Math.round(cur.relative_humidity_2m);
-      const pressureInHg = (cur.surface_pressure * 0.02953).toFixed(2);
-      const sky = wmoCodeToCondition(cur.weather_code);
-      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-      let wxObs = `[Obs ${timeStr}${locLabel ? ' - ' + locLabel : ''}]: ${temp}°F | Wind: ${windKts} kts (Gusts: ${gustsKts} kts) from ${cur.wind_direction_10m}° ${windDir} | RH: ${rh}% | Sky: ${sky} | Alt: ${pressureInHg} inHg`;
-
-      const wxBox = document.getElementById('box_weather');
-      if (wxBox.value.trim() !== '') {
-        wxBox.value += `\n${wxObs}`;
-      } else {
-        wxBox.value = wxObs;
-      }
-
-      updateStatus(`🌤️ Weather Updated @ ${timeStr}`);
-      autoSaveActive();
-    } catch (e) {
-      alert(`Weather fetch failed: ${e.message}. Please verify internet access or enter observations manually.`);
-      updateStatus(`Weather error: ${e.message}`, true);
-    }
-  }
-
-  function degToCardinal(deg) {
-    const val = Math.floor((deg / 22.5) + 0.5);
-    const arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
-    return arr[(val % 16)];
-  }
-
-  function wmoCodeToCondition(code) {
-    if (code === 0) return 'Clear Sky';
-    if (code <= 3) return 'Part Cloudy';
-    if (code <= 48) return 'Fog / Haze';
-    if (code <= 65) return 'Rain / Showers';
-    if (code <= 75) return 'Snow';
-    if (code <= 99) return 'Thunderstorm';
-    return 'Observed';
-  }
-
   // --- 📍 GPS CAPTURE ---
   function captureGPSLocation() {
     const baseField = document.getElementById('base_loc');
@@ -1186,7 +1072,6 @@
     rows.push(['DAILY GRAND TOTAL COST', '', '', document.getElementById('grandTotal').value]);
     rows.push([], ['--- NARRATIVES ---']);
     rows.push(['Aircraft Status', `"${(document.getElementById('box_ac_status').value || '').replace(/"/g, '""')}"`]);
-    rows.push(['Weather Observations', `"${(document.getElementById('box_weather').value || '').replace(/"/g, '""')}"`]);
     rows.push(['Daily Narrative Report', `"${(document.getElementById('box_narrative').value || '').replace(/"/g, '""')}"`]);
     rows.push(['Govt Representative Name', document.getElementById('sig_name').value]);
     rows.push(['Signature Date', document.getElementById('sig_date').value]);
