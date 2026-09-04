@@ -91,7 +91,7 @@
     font-size: 7.2pt;
     border-radius: 3px;
     max-width: 135px;
-    display: none; /* Hidden by default until a draft exists */
+    display: none;
   }
 
   .btn {
@@ -112,7 +112,7 @@
   .btn-csv { background: #0284c7; color: white; }
   .btn-print { background: #059669; color: white; }
 
-  .btn-gps {
+  .btn-gps, .btn-wx {
     background: #e2e8f0;
     border: 1px solid #cbd5e1;
     color: #0f2744;
@@ -123,6 +123,7 @@
     font-weight: 700;
     white-space: nowrap;
   }
+  .btn-gps:hover, .btn-wx:hover { background: #cbd5e1; }
 
   /* CONFIGURATION BAR */
   .config-bar {
@@ -141,11 +142,7 @@
     gap: 4px;
   }
 
-  .config-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-  }
+  .config-item { display: inline-flex; align-items: center; gap: 4px; }
 
   .config-select {
     width: auto !important;
@@ -310,6 +307,9 @@
     font-weight: 700;
     font-size: 7.1pt;
     color: #1e293b;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .narrative-card textarea {
@@ -422,7 +422,7 @@
       max-width: 100% !important;
       box-shadow: none !important;
     }
-    .no-print-bar, .sig-clear-btn, .btn-gps, .modal-overlay, .veh-rate-select, .config-bar { display: none !important; }
+    .no-print-bar, .sig-clear-btn, .btn-gps, .btn-wx, .modal-overlay, .veh-rate-select, .config-bar { display: none !important; }
     th, td, .narrative-card { border-color: #000000 !important; }
     .header-banner {
       background: #0f2744 !important;
@@ -458,7 +458,6 @@
   </div>
 
   <div class="btn-group">
-    <!-- HIDDEN UNTIL AT LEAST ONE LOG IS SAVED -->
     <select id="saved_drafts_select" class="draft-select" onchange="loadSelectedDraft()">
       <option value="">📂 Load Log...</option>
     </select>
@@ -527,7 +526,7 @@
     <div class="sub-title-bar">Interagency Aviation Operations &bull; UAS Contractor &amp; Resource Daily Diary</div>
   </div>
 
-  <!-- CONFIGURATION BAR (ROW COUNT STEPPERS) -->
+  <!-- CONFIGURATION BAR -->
   <div class="config-bar no-print-bar">
     <span>📐 Active Resource Counts:</span>
     <div class="config-item">
@@ -727,15 +726,16 @@
       <!-- 15. AIRCRAFT STATUS -->
       <div class="narrative-card">
         <div class="narrative-card-header">
-          15. Aircraft Status <span class="sub-note">(Maintenance, battery cycles, calibrations, downtime)</span>
+          <span>15. Aircraft Status <span class="sub-note">(Maintenance, battery cycles, downtime)</span></span>
         </div>
         <textarea id="box_ac_status" placeholder="Detail airworthiness logs, power trends, motor/sensor calibrations, maintenance actions, battery cycle records, or reasons for unavailability..."></textarea>
       </div>
 
-      <!-- 16. WEATHER NARRATIVE -->
+      <!-- 16. WEATHER NARRATIVE WITH LIVE WEATHER PULL -->
       <div class="narrative-card">
         <div class="narrative-card-header">
-          16. Weather Observations &amp; Narrative <span class="sub-note">(Wind, temp, visibility, micro-trends, delays)</span>
+          <span>16. Weather Observations <span class="sub-note">(Wind, temp, visibility, delays)</span></span>
+          <button type="button" class="btn-wx no-print-bar" onclick="fetchLiveWeather()" title="Query live aviation weather observation for location">🌤️ Live Wx</button>
         </div>
         <textarea id="box_weather" placeholder="Detail local on-site weather, surface wind/gusts, temperature, turbulence/inversion layers, thermal activity, wind shifts, or weather-induced aborts/delays..."></textarea>
       </div>
@@ -743,7 +743,7 @@
       <!-- 17. NARRATIVE REPORT -->
       <div class="narrative-card">
         <div class="narrative-card-header">
-          17. Narrative Report <span class="sub-note">(Sorties flown, deliverables, SAFECOMs)</span>
+          <span>17. Narrative Report <span class="sub-note">(Sorties flown, deliverables, SAFECOMs)</span></span>
         </div>
         <textarea id="box_narrative" placeholder="Detail daily operational narrative, mission highlights, airspace / NOTAM coordination, deliverables handed over, failsafe / lost link events, problems encountered, SAFECOM numbers..."></textarea>
       </div>
@@ -776,9 +776,9 @@
 </div>
 
 <script>
-  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v7';
-  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v7';
-  const RATE_PROFILES_KEY = 'uas_vendor_rate_preset_profiles_v5';
+  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v8';
+  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v8';
+  const RATE_PROFILES_KEY = 'uas_vendor_rate_preset_profiles_v6';
   let totalCostGlobal = 0;
 
   if ('serviceWorker' in navigator) {
@@ -893,6 +893,93 @@
   function printPDF() {
     updateDocumentTitle();
     window.print();
+  }
+
+  // --- 🌤️ LIVE AVIATION WEATHER FETCH ENGINE (OPEN-METEO) ---
+  async function fetchLiveWeather() {
+    const wxBox = document.getElementById('box_weather');
+    const baseVal = document.getElementById('base_loc').value;
+    let lat = null, lon = null;
+
+    // Check if coordinates already exist in LRZ box (e.g. 44.1234, -115.5678)
+    const coordMatch = baseVal.match(/(-?\d+\.\d+)°?\s*[NS]?\s*,\s*(-?\d+\.\d+)°?\s*[EW]?/i);
+    if (coordMatch) {
+      lat = parseFloat(coordMatch[1]);
+      lon = parseFloat(coordMatch[2]);
+      if (baseVal.toUpperCase().includes('S')) lat = -Math.abs(lat);
+      if (baseVal.toUpperCase().includes('W') || (lon > 0 && !baseVal.toUpperCase().includes('E'))) lon = -Math.abs(lon);
+    }
+
+    if (!lat || !lon) {
+      if (!navigator.geolocation) {
+        alert('Location not found. Use GPS button on LRZ first.');
+        return;
+      }
+      updateStatus('📍 Getting GPS for weather...');
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          queryWeatherAPI(pos.coords.latitude, pos.coords.longitude);
+        },
+        err => {
+          alert('GPS required for weather: ' + err.message);
+          updateStatus('Weather fetch failed.', true);
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    } else {
+      queryWeatherAPI(lat, lon);
+    }
+  }
+
+  async function queryWeatherAPI(lat, lon) {
+    updateStatus('🌤️ Querying live meteorological data...');
+    try {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m,weather_code&temperature_unit=fahrenheit&wind_speed_unit=knots&precipitation_unit=inch`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Network error');
+      const data = await res.json();
+      const cur = data.current;
+
+      const temp = Math.round(cur.temperature_2m);
+      const windKts = Math.round(cur.wind_speed_10m);
+      const gustsKts = Math.round(cur.wind_gusts_10m);
+      const windDir = degToCardinal(cur.wind_direction_10m);
+      const rh = Math.round(cur.relative_humidity_2m);
+      const pressureInHg = (cur.surface_pressure * 0.02953).toFixed(2);
+      const sky = wmoCodeToCondition(cur.weather_code);
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      const wxObs = `[Obs ${timeStr}]: ${temp}°F | Wind: ${windKts} kts (Gusts: ${gustsKts} kts) from ${cur.wind_direction_10m}° ${windDir} | RH: ${rh}% | Sky: ${sky} | Alt: ${pressureInHg} inHg`;
+
+      const wxBox = document.getElementById('box_weather');
+      if (wxBox.value.trim() !== '') {
+        wxBox.value += `\n${wxObs}`;
+      } else {
+        wxBox.value = wxObs;
+      }
+
+      updateStatus(`🌤️ Weather Updated @ ${timeStr}`);
+      autoSaveActive();
+    } catch (e) {
+      alert('Unable to fetch online weather. Enter observations manually.');
+      updateStatus('Offline: Weather not fetched.', true);
+    }
+  }
+
+  function degToCardinal(deg) {
+    const val = Math.floor((deg / 22.5) + 0.5);
+    const arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+    return arr[(val % 16)];
+  }
+
+  function wmoCodeToCondition(code) {
+    if (code === 0) return 'Clear Sky';
+    if (code <= 3) return 'Part Cloudy';
+    if (code <= 48) return 'Fog / Haze';
+    if (code <= 65) return 'Rain / Showers';
+    if (code <= 75) return 'Snow';
+    if (code <= 99) return 'Thunderstorm';
+    return 'Observed';
   }
 
   // --- ⚙️ VENDOR RATE PROFILE & PRESET ENGINE ---
@@ -1249,7 +1336,7 @@
     }
   }
 
-  // --- IN-APP DRAFT MANAGER (AUTO-HIDES IF NO DRAFTS) ---
+  // --- IN-APP DRAFT MANAGER ---
   function autoSaveActive() {
     try {
       const json = JSON.stringify(getFormDataObject());
@@ -1277,7 +1364,6 @@
     const select = document.getElementById('saved_drafts_select');
     const index = JSON.parse(localStorage.getItem(DRAFTS_INDEX_KEY) || '[]');
     
-    // Auto-hide if no saved drafts exist
     if (index.length === 0) {
       select.style.display = 'none';
       return;
