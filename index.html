@@ -117,12 +117,13 @@
     border: 1px solid #cbd5e1;
     color: #0f2744;
     font-size: 6.2pt;
-    padding: 1px 4px;
+    padding: 1px 3px;
     border-radius: 2px;
     cursor: pointer;
     font-weight: 700;
     white-space: nowrap;
-    height: 16.5px;
+    height: 17px;
+    flex-shrink: 0;
   }
   .btn-gps:hover, .btn-tally:hover { background: #cbd5e1; }
 
@@ -168,7 +169,7 @@
 
   th, td {
     border: 1px solid var(--border);
-    padding: 1.8px 3.5px;
+    padding: 1.8px 3px;
     vertical-align: middle;
   }
 
@@ -179,17 +180,25 @@
   .center { text-align: center; }
   .right { text-align: right; }
 
-  /* INPUTS */
+  /* INPUTS WITH EXPANDED NUMBER ROOM */
   input[type="text"], input[type="date"], input[type="number"], select {
     width: 100%;
     border: 1px solid #cbd5e1;
     background: #ffffff;
     padding: 2px 3px;
-    font-size: 7.2pt;
+    font-size: 7.3pt;
     font-family: inherit;
-    height: 16.5px;
+    height: 17px;
     border-radius: 2px;
     color: var(--text-main);
+  }
+
+  input[type="number"] {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    padding-right: 2px;
+    font-size: 7.6pt;
   }
 
   input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
@@ -198,28 +207,30 @@
     background-color: #f8faff;
   }
 
-  input[type="number"] { text-align: right; }
-
   .cost-output {
-    font-weight: 700;
+    font-weight: 700 !important;
     text-align: right;
     background: #f8fafc;
     color: #0f172a;
+    font-size: 7.6pt !important;
+    font-variant-numeric: tabular-nums;
+    padding-right: 3px;
   }
 
   #grandTotal {
     background: var(--success-bg) !important;
     color: var(--success-text) !important;
-    font-size: 8.2pt;
+    font-size: 8.5pt !important;
     font-weight: 800;
     text-align: right;
-    height: 18.5px;
+    height: 19px;
+    font-variant-numeric: tabular-nums;
   }
 
   .flex-align {
     display: flex;
     align-items: center;
-    gap: 3px;
+    gap: 2px;
     flex-wrap: nowrap;
   }
 
@@ -248,7 +259,7 @@
   }
 
   .col-left {
-    flex: 1.38;
+    flex: 1.45;
     display: flex;
     flex-direction: column;
   }
@@ -387,11 +398,12 @@
   }
 
   .veh-rate-select {
-    width: 48px !important;
+    width: 44px !important;
     font-size: 6.2pt !important;
-    height: 16.5px !important;
-    padding: 0 1px !important;
+    height: 17px !important;
+    padding: 0 !important;
     background: #f1f5f9 !important;
+    flex-shrink: 0;
   }
 
   /* TALLY MODAL STYLES */
@@ -488,9 +500,7 @@
       Enter duration for each flight leg. The total will automatically sum and update the form.
     </div>
 
-    <div id="tallyRowsContainer" style="max-height: 220px; overflow-y:auto; margin-bottom:10px;">
-      <!-- Dynamic flight duration rows -->
-    </div>
+    <div id="tallyRowsContainer" style="max-height: 220px; overflow-y:auto; margin-bottom:10px;"></div>
 
     <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:6px 8px; border:1px solid #e2e8f0; border-radius:4px; margin-bottom:10px;">
       <button type="button" class="btn btn-aux" onclick="addTallyLegRow(0)">➕ Add Flight Leg</button>
@@ -694,31 +704,31 @@
     <!-- LEFT COLUMN -->
     <div class="col-left">
 
-      <!-- DYNAMIC PILOTS & AIRCRAFT TRACKING TABLE WITH TALLY BUTTONS -->
+      <!-- DYNAMIC PILOTS & AIRCRAFT TRACKING TABLE (EXPANDED FLIGHT HOURS VIEWPORT) -->
       <table>
         <tr class="bg-header bold center">
-          <td colspan="2" style="width: 42%;">PILOT FLIGHT TIME (<span id="lbl_pilot_count">4</span> CREW)</td>
-          <td colspan="4" style="width: 58%;">UAS AIRFRAME TRACKING (<span id="lbl_ac_count">4</span> A/C)</td>
+          <td colspan="2" style="width: 40%;">PILOT FLIGHT TIME (<span id="lbl_pilot_count">4</span> CREW)</td>
+          <td colspan="4" style="width: 60%;">UAS AIRFRAME TRACKING (<span id="lbl_ac_count">4</span> A/C)</td>
         </tr>
         <tr class="bg-sub center bold" style="font-size: 6.8pt;">
-          <td style="width: 29%;">Pilot / Operator Name</td>
-          <td style="width: 13%;">Flt Hrs</td>
-          <td style="width: 13%;">Tail / Reg #</td>
+          <td style="width: 24%;">Pilot / Operator</td>
+          <td style="width: 16%;">Flt Hrs</td>
+          <td style="width: 14%;">Tail / Reg #</td>
           <td style="width: 23%;">Make / Model</td>
-          <td style="width: 9%;">Sort</td>
-          <td style="width: 13%;">Flt Hrs</td>
+          <td style="width: 8%;">Sort</td>
+          <td style="width: 15%;">Flt Hrs</td>
         </tr>
         <tbody id="pilot_aircraft_tbody"></tbody>
       </table>
 
-      <!-- COST TABLE -->
+      <!-- COST TABLE (EXPANDED RATE & COST ROOM) -->
       <table>
         <thead>
           <tr class="bg-header bold center">
-            <th style="width: 44%; text-align: left; padding-left: 5px;">Cost Items &amp; Reimbursables</th>
+            <th style="width: 39%; text-align: left; padding-left: 5px;">Cost Items &amp; Reimbursables</th>
             <th style="width: 18%;">Quantity</th>
-            <th style="width: 18%;">Rate ($)</th>
-            <th style="width: 20%;">Cost ($)</th>
+            <th style="width: 19%;">Rate ($)</th>
+            <th style="width: 24%;">Cost ($)</th>
           </tr>
         </thead>
         <tbody>
@@ -823,12 +833,11 @@
 </div>
 
 <script>
-  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v13';
-  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v13';
-  const RATE_PROFILES_KEY = 'uas_vendor_rate_preset_profiles_v11';
+  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v14';
+  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v14';
+  const RATE_PROFILES_KEY = 'uas_vendor_rate_preset_profiles_v12';
   let totalCostGlobal = 0;
   
-  // Tally Store for storing multiple flight durations
   let tallyStore = {};
   let currentTallyTarget = { type: null, id: null, sortiesId: null };
 
@@ -836,7 +845,7 @@
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
 
-  // --- DYNAMIC ROW GENERATION WITH TALLY BUTTONS ---
+  // --- DYNAMIC ROW GENERATION ENGINE ---
   function updateDynamicRowCounts() {
     const numPilots = parseInt(document.getElementById('cfg_pilots').value) || 4;
     const numAircraft = parseInt(document.getElementById('cfg_aircraft').value) || 4;
@@ -860,7 +869,7 @@
           <td><input type="text" id="p${i}_name" placeholder="Pilot ${i} ${i===1?'(RPIC)':''}"></td>
           <td>
             <div class="flex-align">
-              <input type="number" step="0.1" id="p${i}_flt" placeholder="0.0" style="flex:1;">
+              <input type="number" step="0.1" id="p${i}_flt" placeholder="0.0" style="flex:1; min-width:32px;">
               <button type="button" class="btn-tally no-print-bar" onclick="openTallyModal('pilot', 'p${i}_flt', null, 'Pilot ${i}')" title="Tally multiple flights">🧮</button>
             </div>
           </td>
@@ -873,10 +882,10 @@
         paHtml += `
           <td><input type="text" id="ac${i}_reg" placeholder="Tail #${i}"></td>
           <td><input type="text" id="ac${i}_model" placeholder="Make / Model"></td>
-          <td><input type="number" id="ac${i}_sorties" placeholder="0"></td>
+          <td><input type="number" id="ac${i}_sorties" placeholder="0" style="padding:1px 2px;"></td>
           <td>
             <div class="flex-align">
-              <input type="number" step="0.1" id="ac${i}_flt" placeholder="0.0" style="flex:1;">
+              <input type="number" step="0.1" id="ac${i}_flt" placeholder="0.0" style="flex:1; min-width:32px;">
               <button type="button" class="btn-tally no-print-bar" onclick="openTallyModal('aircraft', 'ac${i}_flt', 'ac${i}_sorties', 'Aircraft ${i}')" title="Tally sorties and flight hours">🧮</button>
             </div>
           </td>
@@ -970,7 +979,6 @@
 
     const existingLegs = tallyStore[targetId] || [];
     if (existingLegs.length === 0) {
-      // If target already has a number, seed it as first leg
       const existingVal = parseFloat(document.getElementById(targetId).value) || 0;
       if (existingVal > 0) {
         addTallyLegRow(existingVal);
@@ -1367,7 +1375,7 @@
     }
   }
 
-  // --- FORM SERIALIZATION (INCLUDES TALLY STORE) ---
+  // --- FORM SERIALIZATION ---
   function getFormDataObject() {
     const data = {
       tallies: tallyStore
