@@ -45,72 +45,102 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* TOP STICKY TOOLBAR */
+  /* ENLARGED PROMINENT STICKY TOOLBAR */
   .no-print-bar {
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(15, 39, 68, 0.96);
-    backdrop-filter: blur(8px);
+    background: rgba(15, 39, 68, 0.98);
+    backdrop-filter: blur(10px);
     color: white;
-    padding: 6px 14px;
+    padding: 10px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    font-size: 8.5pt;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    font-size: 9.0pt;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 8px;
   }
 
   .status-badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    background: rgba(255,255,255,0.1);
-    padding: 3px 8px;
+    gap: 8px;
+    background: rgba(255,255,255,0.12);
+    padding: 5px 12px;
     border-radius: 20px;
-    font-size: 7.4pt;
+    font-size: 8.2pt;
+    font-weight: 600;
+    letter-spacing: 0.2px;
   }
 
   .status-dot {
-    width: 7px;
-    height: 7px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: #10b981;
-    box-shadow: 0 0 6px #10b981;
+    box-shadow: 0 0 8px #10b981;
   }
 
-  .btn-group { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+  .btn-group { 
+    display: flex; 
+    gap: 6px; 
+    align-items: center; 
+    flex-wrap: wrap; 
+  }
 
+  /* PROMINENT, LARGE SAVED LOGS DROPDOWN */
   .draft-select {
-    background: #1e3a5f;
-    color: white;
-    border: 1px solid #3b82f6;
-    padding: 3px 6px;
-    font-size: 7.2pt;
-    border-radius: 3px;
-    max-width: 135px;
+    background: #1e3a5f !important;
+    color: #ffffff !important;
+    border: 1.5px solid #60a5fa !important;
+    padding: 6px 10px !important;
+    font-size: 8.4pt !important;
+    font-weight: 700 !important;
+    border-radius: 4px !important;
+    max-width: 240px !important;
+    height: 32px !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     display: none;
+    cursor: pointer;
+  }
+  .draft-select:focus {
+    outline: none;
+    border-color: #93c5fd !important;
+    box-shadow: 0 0 0 2px rgba(96,165,250,0.4);
   }
 
+  /* ENLARGED BUTTONS */
   .btn {
     border: none;
-    padding: 4px 8px;
-    font-weight: 600;
+    padding: 6px 11px;
+    font-weight: 700;
     cursor: pointer;
-    border-radius: 3px;
-    font-size: 7.4pt;
+    border-radius: 4px;
+    font-size: 8.2pt;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
     transition: all 0.15s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
   }
 
-  .btn:active { transform: scale(0.97); }
+  .btn:active { transform: scale(0.96); }
   .btn-save { background: #2563eb; color: white; }
+  .btn-save:hover { background: #1d4ed8; }
   .btn-aux { background: #475569; color: white; }
-  .btn-settings { background: #8b5cf6; color: white; }
+  .btn-aux:hover { background: #334155; }
+  .btn-settings { background: #7c3aed; color: white; }
+  .btn-settings:hover { background: #6d28d9; }
   .btn-clear { background: #dc2626; color: white; }
+  .btn-clear:hover { background: #b91c1c; }
   .btn-csv { background: #0284c7; color: white; }
+  .btn-csv:hover { background: #0369a1; }
   .btn-print { background: #059669; color: white; }
+  .btn-print:hover { background: #047857; }
 
   .btn-gps, .btn-action {
     background: #e2e8f0;
@@ -315,7 +345,6 @@
     align-items: center;
   }
 
-  /* DRAGGABLE ON-SCREEN TEXTAREAS */
   .narrative-card textarea {
     width: 100%;
     min-height: 52px;
@@ -329,7 +358,7 @@
     box-sizing: border-box;
   }
 
-  /* PRINT-MIRROR CONTAINERS (HIDDEN ON SCREEN, REPLACES TEXTAREA DURING PRINT) */
+  /* PRINT-MIRROR CONTAINERS */
   .print-mirror-text {
     display: none;
     white-space: pre-wrap;
@@ -462,7 +491,7 @@
   .alloc-valid { background: #dcfce7; color: #166534; }
   .alloc-invalid { background: #fee2e2; color: #b91c1c; }
 
-  /* STRICT PRINT 1-PAGE RULES & FULL TEXT EXPANSION */
+  /* STRICT PRINT 1-PAGE RULES */
   @media print {
     body { background: #ffffff !important; }
     .page-container {
@@ -489,7 +518,6 @@
       color: #000000 !important;
       padding: 0 !important;
     }
-    /* HIDE TEXTAREA, SHOW AUTO-EXPANDING PRINT MIRROR */
     .narrative-card textarea {
       display: none !important;
     }
@@ -506,7 +534,7 @@
 </head>
 <body>
 
-<!-- TOP CONTROL BAR -->
+<!-- ENLARGED TOP CONTROL BAR -->
 <div class="no-print-bar">
   <div class="status-badge">
     <div class="status-dot"></div>
@@ -514,8 +542,9 @@
   </div>
 
   <div class="btn-group">
+    <!-- PROMINENT HIGH-VISIBILITY SAVED LOGS SELECTOR -->
     <select id="saved_drafts_select" class="draft-select" onchange="loadSelectedDraft()">
-      <option value="">📂 Load Log...</option>
+      <option value="">📂 Load Saved Log...</option>
     </select>
     
     <button class="btn btn-save" onclick="saveInAppDraft()">💾 Save</button>
@@ -543,13 +572,13 @@
         <label style="flex:1; font-weight:bold; font-size:7.0pt; color:#0f2744;">Select Airframe:
           <select id="pop_sortie_aircraft" style="height:20px; font-weight:600;"></select>
         </label>
-        <label style="width:90px; font-weight:bold; font-size:7.0pt; color:#0f2744;">Aircraft Flight Time:
-          <input type="number" step="0.1" id="pop_sortie_duration" placeholder="0.0 hrs" oninput="onPopoutDurationChange(this.value)" style="height:20px; font-weight:bold; text-align:right;">
+        <label style="width:95px; font-weight:bold; font-size:7.0pt; color:#0f2744;">Sortie Flight Time:
+          <input type="number" step="any" id="pop_sortie_duration" placeholder="0.0 hrs" oninput="onPopoutDurationChange(this.value)" style="height:20px; font-weight:bold; text-align:right;">
         </label>
       </div>
 
       <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px dashed #cbd5e1; padding-top:4px;">
-        <span class="alloc-badge" id="pop_alloc_badge">Allocated: 0.0 / 0.0 hrs</span>
+        <span class="alloc-badge" id="pop_alloc_badge">Allocated: 0 / 0 hrs</span>
         <button type="button" class="btn btn-aux" onclick="splitEvenlyPopoutPilots()" style="padding:2px 6px; font-size:6.4pt;">➗ Split Evenly</button>
       </div>
     </div>
@@ -867,7 +896,7 @@
 
   </div>
 
-  <!-- FULL-WIDTH EXPANDED LOWER NARRATIVES SECTION (WITH AUTO-EXPANDING PRINT MIRRORS) -->
+  <!-- FULL-WIDTH DRAGGABLE LOWER NARRATIVES SECTION -->
   <div class="narrative-fullwidth-stack">
     
     <!-- 15. AIRCRAFT STATUS -->
@@ -923,9 +952,9 @@
 </div>
 
 <script>
-  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v22';
-  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v22';
-  const SETTINGS_PROFILE_KEY = 'uas_unified_settings_profile_v7';
+  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v24';
+  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v24';
+  const SETTINGS_PROFILE_KEY = 'uas_unified_settings_profile_v9';
   let totalCostGlobal = 0;
   
   let sortiesList = [];
@@ -936,7 +965,6 @@
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
 
-  // --- PRINT-MIRROR SYNC (ENSURES 100% OF TEXT IS PRINTED) ---
   function syncPrintMirrors() {
     document.getElementById('print_mirror_ac_status').textContent = document.getElementById('box_ac_status').value || '';
     document.getElementById('print_mirror_weather').textContent = document.getElementById('box_weather').value || '';
@@ -945,7 +973,7 @@
 
   window.addEventListener('beforeprint', syncPrintMirrors);
 
-  // --- POPOUT MODAL SORTIE ENGINE ---
+  // --- POPOUT MODAL SORTIE ENGINE (EXACT UNROUNDED DECIMALS) ---
   function openSortieModal(index = -1) {
     currentEditingSortieIndex = index;
     const roster = getRosterData();
@@ -980,7 +1008,7 @@
     }
 
     acSelect.value = tempSortieData.aircraftIndex || 0;
-    document.getElementById('pop_sortie_duration').value = tempSortieData.duration || '';
+    document.getElementById('pop_sortie_duration').value = tempSortieData.duration !== '' ? tempSortieData.duration : '';
 
     renderPopoutCrewAllocations();
     document.getElementById('sortieModal').style.display = 'flex';
@@ -1017,9 +1045,9 @@
             ${isAssigned ? `
               <div style="display:flex; align-items:center; gap:2px;">
                 <span style="font-size:6.4pt; color:#64748b;">Flt:</span>
-                <input type="number" step="0.1" class="pop-pilot-input" data-pidx="${pIdx}" value="${assignedHours}" placeholder="0.0" 
+                <input type="number" step="any" class="pop-pilot-input" data-pidx="${pIdx}" value="${assignedHours}" placeholder="0.0" 
                   oninput="onPopoutPilotHourChange(${pIdx}, this.value)" 
-                  style="width:50px; height:18px; font-size:7.2pt; font-weight:bold; text-align:right;">
+                  style="width:55px; height:18px; font-size:7.2pt; font-weight:bold; text-align:right;">
                 <span style="font-size:6.4pt; color:#64748b;">hrs</span>
               </div>
             ` : ''}
@@ -1036,7 +1064,7 @@
 
   function onPopoutDurationChange(val) {
     const dur = parseFloat(val) || 0;
-    tempSortieData.duration = dur > 0 ? dur : '';
+    tempSortieData.duration = val !== '' ? dur : '';
 
     if (tempSortieData.pilotAllocations) {
       const pKeys = Object.keys(tempSortieData.pilotAllocations);
@@ -1062,16 +1090,16 @@
         const otherIdx = assignedKeys[0];
         const currentOther = parseFloat(tempSortieData.pilotAllocations[otherIdx]) || 0;
         if (currentOther >= dur) {
-          const split = parseFloat((dur / 2).toFixed(1));
+          const split = Number((dur / 2).toFixed(2));
           tempSortieData.pilotAllocations[otherIdx] = split;
-          tempSortieData.pilotAllocations[pIdx] = parseFloat((dur - split).toFixed(1));
+          tempSortieData.pilotAllocations[pIdx] = Number((dur - split).toFixed(2));
         } else {
-          tempSortieData.pilotAllocations[pIdx] = parseFloat((dur - currentOther).toFixed(1));
+          tempSortieData.pilotAllocations[pIdx] = Number((dur - currentOther).toFixed(2));
         }
       } else {
         let currentAllocated = 0;
         assignedKeys.forEach(k => currentAllocated += (parseFloat(tempSortieData.pilotAllocations[k]) || 0));
-        tempSortieData.pilotAllocations[pIdx] = Math.max(0, parseFloat((dur - currentAllocated).toFixed(1)));
+        tempSortieData.pilotAllocations[pIdx] = Math.max(0, Number((dur - currentAllocated).toFixed(2)));
       }
     } else {
       delete tempSortieData.pilotAllocations[pIdx];
@@ -1096,7 +1124,7 @@
     if (totalSortieHours > 0 && assignedKeys.length === 2) {
       const otherPIdx = assignedKeys.find(k => parseInt(k) !== parseInt(changedPIdx));
       if (otherPIdx !== undefined) {
-        const balanced = Math.max(0, parseFloat((totalSortieHours - newHrs).toFixed(1)));
+        const balanced = Math.max(0, Number((totalSortieHours - newHrs).toFixed(2)));
         tempSortieData.pilotAllocations[otherPIdx] = balanced;
         const otherInput = document.querySelector(`.pop-pilot-input[data-pidx="${otherPIdx}"]`);
         if (otherInput) otherInput.value = balanced;
@@ -1108,7 +1136,7 @@
         otherSum += (parseFloat(tempSortieData.pilotAllocations[otherKeys[i]]) || 0);
       }
       const lastOtherKey = otherKeys[otherKeys.length - 1];
-      const remainingForLast = Math.max(0, parseFloat((totalSortieHours - newHrs - otherSum).toFixed(1)));
+      const remainingForLast = Math.max(0, Number((totalSortieHours - newHrs - otherSum).toFixed(2)));
       tempSortieData.pilotAllocations[lastOtherKey] = remainingForLast;
 
       const lastInput = document.querySelector(`.pop-pilot-input[data-pidx="${lastOtherKey}"]`);
@@ -1128,10 +1156,10 @@
     const count = pKeys.length;
     if (count <= 1) return;
 
-    const splitHrs = parseFloat((dur / count).toFixed(1));
+    const splitHrs = Number((dur / count).toFixed(2));
     pKeys.forEach((pIdx, idx) => {
       if (idx === 0) {
-        tempSortieData.pilotAllocations[pIdx] = parseFloat((dur - (splitHrs * (count - 1))).toFixed(1));
+        tempSortieData.pilotAllocations[pIdx] = Number((dur - (splitHrs * (count - 1))).toFixed(2));
       } else {
         tempSortieData.pilotAllocations[pIdx] = splitHrs;
       }
@@ -1142,17 +1170,19 @@
 
   function updatePopoutBadge(allocated, total) {
     const badge = document.getElementById('pop_alloc_badge');
-    const allocFixed = parseFloat(allocated.toFixed(2));
-    const isOver = total > 0 && allocFixed > (total + 0.01);
-    const isComplete = total > 0 && Math.abs(allocFixed - total) < 0.01;
+    const allocFixed = Number(allocated.toFixed(2));
+    const totalFixed = Number(total.toFixed(2));
+    const isOver = totalFixed > 0 && allocFixed > (totalFixed + 0.001);
+    const isComplete = totalFixed > 0 && Math.abs(allocFixed - totalFixed) < 0.001;
 
-    badge.textContent = `Allocated: ${allocFixed} / ${total > 0 ? total : '0.0'} hrs`;
+    badge.textContent = `Allocated: ${allocFixed} / ${totalFixed > 0 ? totalFixed : 0} hrs`;
     badge.className = `alloc-badge ${isOver ? 'alloc-invalid' : (isComplete ? 'alloc-valid' : '')}`;
   }
 
   function savePopoutSortie() {
     tempSortieData.aircraftIndex = parseInt(document.getElementById('pop_sortie_aircraft').value) || 0;
-    tempSortieData.duration = parseFloat(document.getElementById('pop_sortie_duration').value) || 0;
+    const durRaw = document.getElementById('pop_sortie_duration').value;
+    tempSortieData.duration = durRaw !== '' ? (parseFloat(durRaw) || 0) : '';
 
     if (currentEditingSortieIndex >= 0) {
       sortiesList[currentEditingSortieIndex] = tempSortieData;
@@ -1192,16 +1222,18 @@
         Object.keys(st.pilotAllocations).forEach(pIdx => {
           const pName = roster.pilots[pIdx] || `P${parseInt(pIdx)+1}`;
           const hrs = parseFloat(st.pilotAllocations[pIdx]) || 0;
-          crewBadges.push(`${pName} (${hrs.toFixed(1)}h)`);
+          crewBadges.push(`${pName} (${Number(hrs.toFixed(2))}h)`);
         });
       }
+
+      const durVal = parseFloat(st.duration || 0);
 
       html += `
         <div class="sortie-min-row">
           <div class="sortie-min-info">
             <strong style="color:#0f2744;">#${idx + 1}</strong>
             <span style="color:#1e3a5f; font-weight:600;">${ac.tail} ${ac.model ? '(' + ac.model + ')' : ''}</span>
-            <span style="background:#e0f2fe; color:#0369a1; padding:0 3px; border-radius:2px; font-weight:bold;">${parseFloat(st.duration || 0).toFixed(1)} hrs</span>
+            <span style="background:#e0f2fe; color:#0369a1; padding:0 3px; border-radius:2px; font-weight:bold;">${Number(durVal.toFixed(2))} hrs</span>
             <span style="color:#64748b;">Crew: ${crewBadges.length > 0 ? crewBadges.join(', ') : 'None'}</span>
           </div>
           <div style="display:flex; gap:2px; flex-shrink:0;">
@@ -1254,10 +1286,11 @@
     let pSummaryHtml = '';
     roster.pilots.forEach((pName, pIdx) => {
       if (pName.trim()) {
+        const pHrTotal = pilotHours[pIdx] || 0;
         pSummaryHtml += `
           <tr style="border-bottom:1px solid #cbd5e1;">
             <td style="padding:1.5px 3px; border-right:1px solid #cbd5e1;">${pName}</td>
-            <td class="bold right" style="padding:1.5px 3px; font-variant-numeric:tabular-nums;">${pilotHours[pIdx] > 0 ? pilotHours[pIdx].toFixed(1) : '0.0'}</td>
+            <td class="bold right" style="padding:1.5px 3px; font-variant-numeric:tabular-nums;">${pHrTotal > 0 ? Number(pHrTotal.toFixed(2)) : '0.0'}</td>
           </tr>
         `;
       }
@@ -1274,7 +1307,7 @@
             <td style="padding:1.5px 3px; border-right:1px solid #cbd5e1;">${ac.tail}</td>
             <td style="padding:1.5px 3px; border-right:1px solid #cbd5e1;">${ac.model}</td>
             <td class="center bold" style="padding:1.5px 3px; border-right:1px solid #cbd5e1;">${stats.sorties}</td>
-            <td class="right bold" style="padding:1.5px 3px; font-variant-numeric:tabular-nums;">${stats.hours > 0 ? stats.hours.toFixed(1) : '0.0'}</td>
+            <td class="right bold" style="padding:1.5px 3px; font-variant-numeric:tabular-nums;">${stats.hours > 0 ? Number(stats.hours.toFixed(2)) : '0.0'}</td>
           </tr>
         `;
       }
@@ -1284,7 +1317,7 @@
 
     const qFlt = document.getElementById('q_flt');
     if (qFlt) {
-      qFlt.value = totalAircraftHours > 0 ? totalAircraftHours.toFixed(1) : '';
+      qFlt.value = totalAircraftHours > 0 ? Number(totalAircraftHours.toFixed(2)) : '';
     }
 
     doMath();
