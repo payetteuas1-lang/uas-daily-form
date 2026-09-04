@@ -26,7 +26,7 @@
 
   @page {
     size: letter portrait;
-    margin: 0.20in 0.22in;
+    margin: 0.16in 0.20in;
   }
 
   * {
@@ -37,7 +37,7 @@
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    font-size: 7.6pt;
+    font-size: 7.3pt;
     color: var(--text-main);
     margin: 0;
     padding: 0;
@@ -70,7 +70,7 @@
     background: rgba(255,255,255,0.1);
     padding: 3px 8px;
     border-radius: 20px;
-    font-size: 7.6pt;
+    font-size: 7.4pt;
   }
 
   .status-dot {
@@ -88,9 +88,9 @@
     color: white;
     border: 1px solid #3b82f6;
     padding: 3px 6px;
-    font-size: 7.4pt;
+    font-size: 7.2pt;
     border-radius: 3px;
-    max-width: 140px;
+    max-width: 135px;
   }
 
   .btn {
@@ -99,7 +99,7 @@
     font-weight: 600;
     cursor: pointer;
     border-radius: 3px;
-    font-size: 7.6pt;
+    font-size: 7.4pt;
     transition: all 0.15s ease;
   }
 
@@ -126,9 +126,9 @@
   /* PAGE CONTAINER */
   .page-container {
     max-width: 8.5in;
-    margin: 8px auto;
+    margin: 6px auto;
     background: var(--surface);
-    padding: 10px 14px;
+    padding: 8px 12px;
     border-radius: 4px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   }
@@ -137,20 +137,20 @@
     background: var(--primary);
     color: white;
     text-align: center;
-    padding: 5px;
+    padding: 4px;
     border-radius: 2px;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
   }
 
   .title-bar {
-    font-size: 10pt;
+    font-size: 9.6pt;
     font-weight: 800;
     letter-spacing: 0.8px;
     text-transform: uppercase;
   }
 
   .sub-title-bar {
-    font-size: 6.8pt;
+    font-size: 6.5pt;
     font-weight: 500;
     opacity: 0.88;
     margin-top: 1px;
@@ -160,19 +160,19 @@
   table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
 
   th, td {
     border: 1px solid var(--border);
-    padding: 2.2px 4px;
+    padding: 1.8px 3.5px;
     vertical-align: middle;
   }
 
   .bold { font-weight: 700; }
   .bg-header { background-color: #f8fafc; color: #334155; }
   .bg-sub { background-color: #f1f5f9; }
-  .bg-section { background-color: #e2e8f0; font-weight: 700; font-size: 7pt; }
+  .bg-section { background-color: #e2e8f0; font-weight: 700; font-size: 6.8pt; }
   .center { text-align: center; }
   .right { text-align: right; }
 
@@ -181,15 +181,15 @@
     width: 100%;
     border: 1px solid #cbd5e1;
     background: #ffffff;
-    padding: 2px 4px;
-    font-size: 7.5pt;
+    padding: 2px 3px;
+    font-size: 7.2pt;
     font-family: inherit;
-    height: 18px;
+    height: 16.5px;
     border-radius: 2px;
     color: var(--text-main);
   }
 
-  input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus, textarea:focus {
+  input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
     outline: none;
     border-color: var(--accent);
     background-color: #f8faff;
@@ -207,30 +207,30 @@
   #grandTotal {
     background: var(--success-bg) !important;
     color: var(--success-text) !important;
-    font-size: 8.5pt;
+    font-size: 8.2pt;
     font-weight: 800;
     text-align: right;
-    height: 20px;
+    height: 18.5px;
   }
 
   .flex-align {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     flex-wrap: nowrap;
   }
 
   .checkbox-label {
     display: inline-flex;
     align-items: center;
-    gap: 3px;
-    font-size: 7.5pt;
+    gap: 2px;
+    font-size: 7.2pt;
     cursor: pointer;
     white-space: nowrap;
   }
 
   .sub-note {
-    font-size: 6.2pt;
+    font-size: 5.8pt;
     color: var(--text-muted);
     font-style: italic;
     font-weight: normal;
@@ -239,13 +239,13 @@
   /* 2-COLUMN SPLIT LAYOUT */
   .layout-split {
     display: flex;
-    gap: 6px;
+    gap: 5px;
     align-items: stretch;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
 
   .col-left {
-    flex: 1.35;
+    flex: 1.38;
     display: flex;
     flex-direction: column;
   }
@@ -254,7 +254,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
   }
 
   .narrative-card {
@@ -269,31 +269,31 @@
 
   .narrative-card-header {
     background: #f1f5f9;
-    padding: 3px 5px;
+    padding: 2.2px 4px;
     border-bottom: 1px solid var(--border);
     font-weight: 700;
-    font-size: 7.4pt;
+    font-size: 7.1pt;
     color: #1e293b;
   }
 
   .narrative-card textarea {
     flex: 1;
     width: 100%;
-    min-height: 80px;
+    min-height: 68px;
     border: none;
     resize: none;
     font-family: inherit;
-    font-size: 7.3pt;
-    padding: 5px;
-    line-height: 1.3;
+    font-size: 7.0pt;
+    padding: 4px;
+    line-height: 1.25;
     background: #ffffff;
   }
 
-  /* SIGNATURE CANVAS */
+  /* ENLARGED SIGNATURE CANVAS (OVER 50% TALLER) */
   .sig-container {
     position: relative;
     width: 100%;
-    height: 42px;
+    height: 60px;
     background: #ffffff;
     border: 1px dashed #94a3b8;
     border-radius: 2px;
@@ -313,7 +313,7 @@
     background: #f1f5f9;
     border: 1px solid #cbd5e1;
     color: #475569;
-    font-size: 6.2pt;
+    font-size: 6.0pt;
     font-weight: 600;
     padding: 2px 6px;
     border-radius: 2px;
@@ -335,9 +335,9 @@
   .modal-content {
     background: white;
     width: 90%;
-    max-width: 480px;
+    max-width: 500px;
     border-radius: 6px;
-    padding: 16px;
+    padding: 14px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.3);
   }
 
@@ -346,9 +346,9 @@
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 8px;
-    margin-bottom: 12px;
-    font-size: 10pt;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+    font-size: 9.5pt;
     font-weight: 700;
     color: #0f2744;
   }
@@ -369,6 +369,14 @@
     gap: 2px;
   }
 
+  .veh-rate-select {
+    width: 48px !important;
+    font-size: 6.2pt !important;
+    height: 16.5px !important;
+    padding: 0 1px !important;
+    background: #f1f5f9 !important;
+  }
+
   /* STRICT PRINT 1-PAGE RULES */
   @media print {
     body { background: #ffffff !important; }
@@ -378,7 +386,7 @@
       max-width: 100% !important;
       box-shadow: none !important;
     }
-    .no-print-bar, .sig-clear-btn, .btn-gps, .modal-overlay { display: none !important; }
+    .no-print-bar, .sig-clear-btn, .btn-gps, .modal-overlay, .veh-rate-select { display: none !important; }
     th, td, .narrative-card { border-color: #000000 !important; }
     .header-banner {
       background: #0f2744 !important;
@@ -429,16 +437,16 @@
   </div>
 </div>
 
-<!-- PRESET RATES MODAL -->
+<!-- ⚙️ VENDOR-SPECIFIC RATES PROFILE MODAL (3 MILEAGE RATES) -->
 <div class="modal-overlay" id="ratesModal">
   <div class="modal-content">
     <div class="modal-header">
-      <span>⚙️ Contract Rate Preset Profile</span>
+      <span>⚙️ Vendor Contract Rates &amp; Mileage Presets</span>
       <button style="border:none; background:none; font-size:12pt; cursor:pointer;" onclick="closeRatesModal()">✕</button>
     </div>
     <div class="modal-grid">
-      <label>Profile Name:
-        <input type="text" id="rate_profile_name" placeholder="e.g. CWN 2026 Contract">
+      <label style="grid-column: span 2;">Contractor / Vendor Name:
+        <input type="text" id="preset_vendor_name" placeholder="e.g. Drone Aviation Services LLC">
       </label>
       <label>Flight Hourly Rate ($):
         <input type="number" step="0.01" id="preset_r_flt" placeholder="e.g. 1850.00">
@@ -449,17 +457,25 @@
       <label>Per Diem Daily Rate ($):
         <input type="number" step="0.01" id="preset_r_perdiem" placeholder="e.g. 155.00">
       </label>
-      <label>Vehicle Mileage Rate ($/mi):
-        <input type="number" step="0.001" id="preset_r_mileage" placeholder="e.g. 0.670">
-      </label>
       <label>Payload Daily Rate ($):
         <input type="number" step="0.01" id="preset_r_payload" placeholder="e.g. 950.00">
       </label>
+      
+      <!-- 3 DISTINCT MILEAGE RATES -->
+      <label>Mileage Rate 1 - Standard ($/mi):
+        <input type="number" step="0.001" id="preset_r_mi1" placeholder="e.g. 0.670 (POV / Standard)">
+      </label>
+      <label>Mileage Rate 2 - 4x4/Truck ($/mi):
+        <input type="number" step="0.001" id="preset_r_mi2" placeholder="e.g. 0.850 (4x4 Utility)">
+      </label>
+      <label style="grid-column: span 2;">Mileage Rate 3 - Heavy/GCS Van ($/mi):
+        <input type="number" step="0.001" id="preset_r_mi3" placeholder="e.g. 1.150 (GCS Mobile Command)">
+      </label>
     </div>
     <div style="display:flex; justify-content:space-between; gap:6px;">
-      <button class="btn btn-clear" onclick="deleteActiveRateProfile()">Delete Profile</button>
+      <button class="btn btn-clear" onclick="deleteActiveRateProfile()">Clear Profile</button>
       <div style="display:flex; gap:4px;">
-        <button class="btn btn-save" onclick="saveRateProfile()">Save Profile</button>
+        <button class="btn btn-save" onclick="saveRateProfile()">Save Local Profile</button>
         <button class="btn btn-print" onclick="applyRateProfileToForm()">Apply to Form</button>
       </div>
     </div>
@@ -503,13 +519,13 @@
     <tr>
       <td style="width: 50%;">
         <div class="flex-align">
-          <span class="bold" style="white-space:nowrap; width:130px;">Contractor / Vendor:</span>
+          <span class="bold" style="white-space:nowrap; width:125px;">Contractor / Vendor:</span>
           <input type="text" id="vendor_name" placeholder="Vendor / Company Name">
         </div>
       </td>
       <td colspan="2" style="width: 50%;">
         <div class="flex-align">
-          <span class="bold" style="white-space:nowrap; width:130px;">Incident / Project:</span>
+          <span class="bold" style="white-space:nowrap; width:125px;">Incident / Project:</span>
           <input type="text" id="inc_name" placeholder="Incident or Project Name">
         </div>
       </td>
@@ -517,8 +533,8 @@
     <tr>
       <td style="width: 50%;">
         <div class="flex-align">
-          <span class="bold" style="white-space:nowrap; width:130px;">LRZ / Staging Base:</span>
-          <input type="text" id="base_loc" placeholder="Base, Staging, or Lat/Long">
+          <span class="bold" style="white-space:nowrap; width:125px;">LRZ:</span>
+          <input type="text" id="base_loc" placeholder="LRZ Location or GPS Coordinates">
           <button type="button" class="btn-gps" onclick="captureGPSLocation()" title="Capture GPS Lat/Long and Elevation">📍 GPS</button>
         </div>
       </td>
@@ -546,7 +562,7 @@
       </td>
       <td colspan="2" style="width: 50%;">
         <div class="flex-align">
-          <span class="bold" style="white-space:nowrap; width:130px;">UAS Manager / Gov Rep:</span>
+          <span class="bold" style="white-space:nowrap; width:125px;">UAS Manager / Gov Rep:</span>
           <input type="text" id="uasm_name" placeholder="Manager Name">
         </div>
       </td>
@@ -562,16 +578,16 @@
       <!-- 4 PILOTS & 4 AIRCRAFT TRACKING -->
       <table>
         <tr class="bg-header bold center">
-          <td colspan="2" style="width: 44%;">PILOT FLIGHT TIME (UP TO 4)</td>
-          <td colspan="4" style="width: 56%;">UAS AIRFRAME TRACKING (UP TO 4)</td>
+          <td colspan="2" style="width: 42%;">PILOT FLIGHT TIME (UP TO 4)</td>
+          <td colspan="4" style="width: 58%;">UAS AIRFRAME TRACKING (UP TO 4)</td>
         </tr>
-        <tr class="bg-sub center bold" style="font-size: 7pt;">
-          <td style="width: 32%;">Pilot / Operator Name</td>
+        <tr class="bg-sub center bold" style="font-size: 6.8pt;">
+          <td style="width: 30%;">Pilot / Operator Name</td>
           <td style="width: 12%;">Flt Hrs</td>
           <td style="width: 14%;">Tail / Reg #</td>
-          <td style="width: 26%;">Make / Model</td>
-          <td style="width: 8%;">Sort</td>
-          <td style="width: 8%;">Flt</td>
+          <td style="width: 22%;">Make / Model</td>
+          <td style="width: 10%;">Sorties</td>
+          <td style="width: 12%;">Flt Hrs</td>
         </tr>
         <tr>
           <td><input type="text" id="p1_name" placeholder="Pilot 1 (RPIC)"></td>
@@ -665,34 +681,84 @@
             <td><input type="text" class="cost-output" id="c_p5" readonly placeholder="$ 0.00"></td>
           </tr>
 
-          <!-- 5 VEHICLE ROWS -->
+          <!-- 5 VEHICLE ROWS WITH MILEAGE RATE PRESET SELECTORS (OVERRIDABLE) -->
           <tr class="bg-section"><td colspan="4">VEHICLE MILEAGE &amp; SUPPORT TRUCKS (5 VEHICLES)</td></tr>
           <tr class="calc-row">
-            <td><input type="text" id="v1_desc" placeholder="Veh 1: Lic/Make &amp; Route"></td>
+            <td>
+              <div style="display:flex; gap:2px;">
+                <input type="text" id="v1_desc" placeholder="Veh 1: Lic/Make &amp; Route" style="flex:1;">
+                <select class="veh-rate-select" onchange="applyVehiclePresetRate(this, 'r_v1')" title="Select preset rate or type directly">
+                  <option value="">Rate</option>
+                  <option value="1">Rate 1</option>
+                  <option value="2">Rate 2</option>
+                  <option value="3">Rate 3</option>
+                </select>
+              </div>
+            </td>
             <td><input type="number" step="any" class="qty" id="q_v1" placeholder="Miles"></td>
             <td><input type="number" step="any" class="rate" id="r_v1" placeholder="Rate/Mi"></td>
             <td><input type="text" class="cost-output" id="c_v1" readonly placeholder="$ 0.00"></td>
           </tr>
           <tr class="calc-row">
-            <td><input type="text" id="v2_desc" placeholder="Veh 2: Lic/Make &amp; Route"></td>
+            <td>
+              <div style="display:flex; gap:2px;">
+                <input type="text" id="v2_desc" placeholder="Veh 2: Lic/Make &amp; Route" style="flex:1;">
+                <select class="veh-rate-select" onchange="applyVehiclePresetRate(this, 'r_v2')" title="Select preset rate or type directly">
+                  <option value="">Rate</option>
+                  <option value="1">Rate 1</option>
+                  <option value="2">Rate 2</option>
+                  <option value="3">Rate 3</option>
+                </select>
+              </div>
+            </td>
             <td><input type="number" step="any" class="qty" id="q_v2" placeholder="Miles"></td>
             <td><input type="number" step="any" class="rate" id="r_v2" placeholder="Rate/Mi"></td>
             <td><input type="text" class="cost-output" id="c_v2" readonly placeholder="$ 0.00"></td>
           </tr>
           <tr class="calc-row">
-            <td><input type="text" id="v3_desc" placeholder="Veh 3: Lic/Make &amp; Route"></td>
+            <td>
+              <div style="display:flex; gap:2px;">
+                <input type="text" id="v3_desc" placeholder="Veh 3: Lic/Make &amp; Route" style="flex:1;">
+                <select class="veh-rate-select" onchange="applyVehiclePresetRate(this, 'r_v3')" title="Select preset rate or type directly">
+                  <option value="">Rate</option>
+                  <option value="1">Rate 1</option>
+                  <option value="2">Rate 2</option>
+                  <option value="3">Rate 3</option>
+                </select>
+              </div>
+            </td>
             <td><input type="number" step="any" class="qty" id="q_v3" placeholder="Miles"></td>
             <td><input type="number" step="any" class="rate" id="r_v3" placeholder="Rate/Mi"></td>
             <td><input type="text" class="cost-output" id="c_v3" readonly placeholder="$ 0.00"></td>
           </tr>
           <tr class="calc-row">
-            <td><input type="text" id="v4_desc" placeholder="Veh 4: Lic/Make &amp; Route"></td>
+            <td>
+              <div style="display:flex; gap:2px;">
+                <input type="text" id="v4_desc" placeholder="Veh 4: Lic/Make &amp; Route" style="flex:1;">
+                <select class="veh-rate-select" onchange="applyVehiclePresetRate(this, 'r_v4')" title="Select preset rate or type directly">
+                  <option value="">Rate</option>
+                  <option value="1">Rate 1</option>
+                  <option value="2">Rate 2</option>
+                  <option value="3">Rate 3</option>
+                </select>
+              </div>
+            </td>
             <td><input type="number" step="any" class="qty" id="q_v4" placeholder="Miles"></td>
             <td><input type="number" step="any" class="rate" id="r_v4" placeholder="Rate/Mi"></td>
             <td><input type="text" class="cost-output" id="c_v4" readonly placeholder="$ 0.00"></td>
           </tr>
           <tr class="calc-row">
-            <td><input type="text" id="v5_desc" placeholder="Veh 5: Lic/Make &amp; Route"></td>
+            <td>
+              <div style="display:flex; gap:2px;">
+                <input type="text" id="v5_desc" placeholder="Veh 5: Lic/Make &amp; Route" style="flex:1;">
+                <select class="veh-rate-select" onchange="applyVehiclePresetRate(this, 'r_v5')" title="Select preset rate or type directly">
+                  <option value="">Rate</option>
+                  <option value="1">Rate 1</option>
+                  <option value="2">Rate 2</option>
+                  <option value="3">Rate 3</option>
+                </select>
+              </div>
+            </td>
             <td><input type="number" step="any" class="qty" id="q_v5" placeholder="Miles"></td>
             <td><input type="number" step="any" class="rate" id="r_v5" placeholder="Rate/Mi"></td>
             <td><input type="text" class="cost-output" id="c_v5" readonly placeholder="$ 0.00"></td>
@@ -714,7 +780,7 @@
 
           <!-- GRAND TOTAL -->
           <tr class="bg-sub">
-            <td colspan="3" class="right bold" style="font-size: 8pt;">DAILY GRAND TOTAL COST:</td>
+            <td colspan="3" class="right bold" style="font-size: 7.6pt;">DAILY GRAND TOTAL COST:</td>
             <td><input type="text" id="grandTotal" value="$ 0.00" readonly></td>
           </tr>
         </tbody>
@@ -753,21 +819,21 @@
 
   </div>
 
-  <!-- SECTION 5: APPROVAL SIGNATURES -->
+  <!-- SECTION 5: APPROVAL SIGNATURES (EXPANDED SIGNATURE CANVAS BOX) -->
   <table>
     <tr>
-      <td style="width: 40%; vertical-align: bottom; padding-bottom: 5px;">
+      <td style="width: 38%; vertical-align: bottom; padding-bottom: 6px;">
         <div class="bold" style="margin-bottom: 4px;">Govt Representative / UASM Name (Print):</div>
         <input type="text" id="sig_name" placeholder="Printed Full Name &amp; Title">
       </td>
-      <td style="width: 40%; vertical-align: top;">
+      <td style="width: 44%; vertical-align: top;">
         <div class="bold" style="margin-bottom: 2px;">Govt Representative Signature: <span class="sub-note">(Draw signature below)</span></div>
         <div class="sig-container" id="sig-box">
           <canvas id="sig-canvas"></canvas>
           <button type="button" class="sig-clear-btn" onclick="clearSignature()">Clear</button>
         </div>
       </td>
-      <td style="width: 20%; vertical-align: bottom; padding-bottom: 5px;">
+      <td style="width: 18%; vertical-align: bottom; padding-bottom: 6px;">
         <div class="bold" style="margin-bottom: 4px;">Date:</div>
         <input type="date" id="sig_date">
       </td>
@@ -777,12 +843,11 @@
 </div>
 
 <script>
-  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v3';
-  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v3';
-  const RATE_PROFILES_KEY = 'uas_rate_preset_profiles_v1';
+  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v5';
+  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v5';
+  const RATE_PROFILES_KEY = 'uas_vendor_rate_preset_profiles_v3';
   let totalCostGlobal = 0;
 
-  // --- REGISTER SERVICE WORKER (PWA OFFLINE CAPABILITY) ---
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
@@ -803,7 +868,7 @@
     window.print();
   }
 
-  // --- ⚙️ PRESET RATES PROFILE MANAGER ---
+  // --- ⚙️ VENDOR RATE PROFILE & 3-MILEAGE PRESET ENGINE ---
   function openRatesModal() {
     loadSavedRateProfile();
     document.getElementById('ratesModal').style.display = 'flex';
@@ -815,15 +880,17 @@
 
   function saveRateProfile() {
     const profile = {
-      name: document.getElementById('rate_profile_name').value || 'Default Profile',
-      r_flt: document.getElementById('preset_r_flt').value,
-      r_avail: document.getElementById('preset_r_avail').value,
-      r_perdiem: document.getElementById('preset_r_perdiem').value,
-      r_mileage: document.getElementById('preset_r_mileage').value,
-      r_payload: document.getElementById('preset_r_payload').value
+      vendor: document.getElementById('preset_vendor_name').value || '',
+      r_flt: document.getElementById('preset_r_flt').value || '',
+      r_avail: document.getElementById('preset_r_avail').value || '',
+      r_perdiem: document.getElementById('preset_r_perdiem').value || '',
+      r_payload: document.getElementById('preset_r_payload').value || '',
+      r_mi1: document.getElementById('preset_r_mi1').value || '',
+      r_mi2: document.getElementById('preset_r_mi2').value || '',
+      r_mi3: document.getElementById('preset_r_mi3').value || ''
     };
     localStorage.setItem(RATE_PROFILES_KEY, JSON.stringify(profile));
-    updateStatus(`Saved Rate Profile: ${profile.name}`);
+    updateStatus(`Saved Vendor Rates: ${profile.vendor || 'Default'}`);
     closeRatesModal();
   }
 
@@ -831,12 +898,16 @@
     const saved = localStorage.getItem(RATE_PROFILES_KEY);
     if (saved) {
       const profile = JSON.parse(saved);
-      document.getElementById('rate_profile_name').value = profile.name || '';
+      document.getElementById('preset_vendor_name').value = profile.vendor || document.getElementById('vendor_name').value || '';
       document.getElementById('preset_r_flt').value = profile.r_flt || '';
       document.getElementById('preset_r_avail').value = profile.r_avail || '';
       document.getElementById('preset_r_perdiem').value = profile.r_perdiem || '';
-      document.getElementById('preset_r_mileage').value = profile.r_mileage || '';
       document.getElementById('preset_r_payload').value = profile.r_payload || '';
+      document.getElementById('preset_r_mi1').value = profile.r_mi1 || '';
+      document.getElementById('preset_r_mi2').value = profile.r_mi2 || '';
+      document.getElementById('preset_r_mi3').value = profile.r_mi3 || '';
+    } else {
+      document.getElementById('preset_vendor_name').value = document.getElementById('vendor_name').value || '';
     }
   }
 
@@ -847,10 +918,15 @@
     }
     const profile = JSON.parse(localStorage.getItem(RATE_PROFILES_KEY));
 
+    // Auto-populate Vendor Name
+    if (profile.vendor) {
+      document.getElementById('vendor_name').value = profile.vendor;
+    }
+
     if (profile.r_flt) document.getElementById('r_flt').value = profile.r_flt;
     if (profile.r_avail) document.getElementById('r_avail').value = profile.r_avail;
     
-    // Apply Per Diem to all 5 personnel rows
+    // Apply Per Diem to 5 Personnel Rows
     if (profile.r_perdiem) {
       for (let i = 1; i <= 5; i++) {
         const el = document.getElementById(`r_p${i}`);
@@ -858,11 +934,11 @@
       }
     }
 
-    // Apply Mileage rate to all 5 vehicle rows
-    if (profile.r_mileage) {
+    // Default Mileage Rate 1 to all vehicles if empty
+    if (profile.r_mi1) {
       for (let i = 1; i <= 5; i++) {
         const el = document.getElementById(`r_v${i}`);
-        if (el) el.value = profile.r_mileage;
+        if (el && !el.value) el.value = profile.r_mi1;
       }
     }
 
@@ -870,18 +946,35 @@
 
     doMath();
     closeRatesModal();
-    updateStatus(`Applied Preset: ${profile.name}`);
+    updateStatus(`Applied Vendor Rates: ${profile.vendor || 'Active Profile'}`);
+  }
+
+  function applyVehiclePresetRate(selectEl, rateInputId) {
+    const val = selectEl.value;
+    const profile = JSON.parse(localStorage.getItem(RATE_PROFILES_KEY) || '{}');
+    const inputEl = document.getElementById(rateInputId);
+
+    if (val === '1' && profile.r_mi1) {
+      inputEl.value = profile.r_mi1;
+    } else if (val === '2' && profile.r_mi2) {
+      inputEl.value = profile.r_mi2;
+    } else if (val === '3' && profile.r_mi3) {
+      inputEl.value = profile.r_mi3;
+    }
+    doMath();
   }
 
   function deleteActiveRateProfile() {
     if (confirm('Delete saved rate profile?')) {
       localStorage.removeItem(RATE_PROFILES_KEY);
-      document.getElementById('rate_profile_name').value = '';
+      document.getElementById('preset_vendor_name').value = '';
       document.getElementById('preset_r_flt').value = '';
       document.getElementById('preset_r_avail').value = '';
       document.getElementById('preset_r_perdiem').value = '';
-      document.getElementById('preset_r_mileage').value = '';
       document.getElementById('preset_r_payload').value = '';
+      document.getElementById('preset_r_mi1').value = '';
+      document.getElementById('preset_r_mi2').value = '';
+      document.getElementById('preset_r_mi3').value = '';
       updateStatus('Rate profile cleared.');
     }
   }
@@ -934,7 +1027,7 @@
       ['Date', document.getElementById('doc_date').value],
       ['Contractor / Vendor', document.getElementById('vendor_name').value],
       ['Incident / Project', document.getElementById('inc_name').value],
-      ['LRZ / Staging Base', document.getElementById('base_loc').value],
+      ['LRZ', document.getElementById('base_loc').value],
       ['Host Agency / Unit', document.getElementById('agency_name').value],
       ['Resource Order #', document.getElementById('order_num').value],
       ['Contract Type', document.querySelector('input[name="ctype"]:checked')?.id?.replace('ct_', '') || ''],
@@ -1035,7 +1128,7 @@
     autoSaveActive();
   }
 
-  // --- SIGNATURE CANVAS ENGINE ---
+  // --- SIGNATURE CANVAS ENGINE (AUTO-RESIZED TO LARGER BOX) ---
   let canvas, ctx, drawing = false;
 
   function initSignatureCanvas() {
