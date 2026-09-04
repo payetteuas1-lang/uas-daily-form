@@ -37,7 +37,7 @@
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    font-size: 7.3pt;
+    font-size: 7.2pt;
     color: var(--text-main);
     margin: 0;
     padding: 0;
@@ -117,12 +117,12 @@
     border: 1px solid #cbd5e1;
     color: #0f2744;
     font-size: 6.2pt;
-    padding: 1px 3px;
+    padding: 1px 4px;
     border-radius: 2px;
     cursor: pointer;
     font-weight: 700;
     white-space: nowrap;
-    height: 17px;
+    height: 16px;
     flex-shrink: 0;
   }
   .btn-gps:hover, .btn-tally:hover { background: #cbd5e1; }
@@ -169,26 +169,26 @@
 
   th, td {
     border: 1px solid var(--border);
-    padding: 1.8px 3px;
+    padding: 1.6px 3px;
     vertical-align: middle;
   }
 
   .bold { font-weight: 700; }
   .bg-header { background-color: #f8fafc; color: #334155; }
   .bg-sub { background-color: #f1f5f9; }
-  .bg-section { background-color: #e2e8f0; font-weight: 700; font-size: 6.8pt; }
+  .bg-section { background-color: #e2e8f0; font-weight: 700; font-size: 6.6pt; }
   .center { text-align: center; }
   .right { text-align: right; }
 
-  /* INPUTS WITH EXPANDED NUMBER ROOM */
+  /* INPUTS */
   input[type="text"], input[type="date"], input[type="number"], select {
     width: 100%;
     border: 1px solid #cbd5e1;
     background: #ffffff;
-    padding: 2px 3px;
-    font-size: 7.3pt;
+    padding: 1.5px 3px;
+    font-size: 7.2pt;
     font-family: inherit;
-    height: 17px;
+    height: 16px;
     border-radius: 2px;
     color: var(--text-main);
   }
@@ -197,8 +197,6 @@
     text-align: right;
     font-variant-numeric: tabular-nums;
     font-weight: 600;
-    padding-right: 2px;
-    font-size: 7.6pt;
   }
 
   input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
@@ -212,25 +210,23 @@
     text-align: right;
     background: #f8fafc;
     color: #0f172a;
-    font-size: 7.6pt !important;
     font-variant-numeric: tabular-nums;
-    padding-right: 3px;
   }
 
   #grandTotal {
     background: var(--success-bg) !important;
     color: var(--success-text) !important;
-    font-size: 8.5pt !important;
+    font-size: 8.2pt !important;
     font-weight: 800;
     text-align: right;
-    height: 19px;
+    height: 18px;
     font-variant-numeric: tabular-nums;
   }
 
   .flex-align {
     display: flex;
     align-items: center;
-    gap: 2px;
+    gap: 3px;
     flex-wrap: nowrap;
   }
 
@@ -244,35 +240,41 @@
   }
 
   .sub-note {
-    font-size: 5.8pt;
+    font-size: 5.6pt;
     color: var(--text-muted);
     font-style: italic;
     font-weight: normal;
   }
 
-  /* 2-COLUMN SPLIT LAYOUT */
-  .layout-split {
+  /* SIDE-BY-SIDE UPPER SECTION */
+  .layout-split-top {
     display: flex;
     gap: 5px;
-    align-items: stretch;
+    align-items: flex-start;
     margin-bottom: 3px;
   }
 
-  .col-left {
-    flex: 1.45;
+  .col-top-left {
+    flex: 1;
     display: flex;
     flex-direction: column;
   }
 
-  .col-right {
-    flex: 1;
+  .col-top-right {
+    flex: 1.15;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* FULL-WIDTH LOWER NARRATIVES SECTION */
+  .narrative-fullwidth-stack {
     display: flex;
     flex-direction: column;
     gap: 3px;
+    margin-bottom: 3px;
   }
 
   .narrative-card {
-    flex: 1;
     display: flex;
     flex-direction: column;
     border: 1px solid var(--border);
@@ -283,10 +285,10 @@
 
   .narrative-card-header {
     background: #f1f5f9;
-    padding: 2.2px 4px;
+    padding: 2px 5px;
     border-bottom: 1px solid var(--border);
     font-weight: 700;
-    font-size: 7.1pt;
+    font-size: 7.0pt;
     color: #1e293b;
     display: flex;
     justify-content: space-between;
@@ -294,14 +296,13 @@
   }
 
   .narrative-card textarea {
-    flex: 1;
     width: 100%;
-    min-height: 65px;
+    min-height: 42px;
     border: none;
     resize: none;
     font-family: inherit;
     font-size: 7.0pt;
-    padding: 4px;
+    padding: 3.5px 5px;
     line-height: 1.25;
     background: #ffffff;
   }
@@ -310,7 +311,7 @@
   .sig-container {
     position: relative;
     width: 100%;
-    height: 55px;
+    height: 48px;
     background: #ffffff;
     border: 1px dashed #94a3b8;
     border-radius: 2px;
@@ -400,7 +401,7 @@
   .veh-rate-select {
     width: 44px !important;
     font-size: 6.2pt !important;
-    height: 17px !important;
+    height: 16px !important;
     padding: 0 !important;
     background: #f1f5f9 !important;
     flex-shrink: 0;
@@ -698,37 +699,37 @@
     </tr>
   </table>
 
-  <!-- 2-COLUMN BODY -->
-  <div class="layout-split">
+  <!-- SIDE-BY-SIDE UPPER SECTION -->
+  <div class="layout-split-top">
     
-    <!-- LEFT COLUMN -->
-    <div class="col-left">
-
-      <!-- DYNAMIC PILOTS & AIRCRAFT TRACKING TABLE (EXPANDED FLIGHT HOURS VIEWPORT) -->
+    <!-- LEFT SIDE: DYNAMIC PILOTS & AIRCRAFT TRACKING -->
+    <div class="col-top-left">
       <table>
         <tr class="bg-header bold center">
-          <td colspan="2" style="width: 40%;">PILOT FLIGHT TIME (<span id="lbl_pilot_count">4</span> CREW)</td>
-          <td colspan="4" style="width: 60%;">UAS AIRFRAME TRACKING (<span id="lbl_ac_count">4</span> A/C)</td>
+          <td colspan="2" style="width: 38%;">PILOT FLIGHT TIME (<span id="lbl_pilot_count">4</span> CREW)</td>
+          <td colspan="4" style="width: 62%;">UAS AIRFRAME TRACKING (<span id="lbl_ac_count">4</span> A/C)</td>
         </tr>
-        <tr class="bg-sub center bold" style="font-size: 6.8pt;">
-          <td style="width: 24%;">Pilot / Operator</td>
-          <td style="width: 16%;">Flt Hrs</td>
-          <td style="width: 14%;">Tail / Reg #</td>
-          <td style="width: 23%;">Make / Model</td>
+        <tr class="bg-sub center bold" style="font-size: 6.6pt;">
+          <td style="width: 23%;">Pilot / Role</td>
+          <td style="width: 15%;">Flt Hrs</td>
+          <td style="width: 14%;">Tail / Reg</td>
+          <td style="width: 25%;">Make / Model</td>
           <td style="width: 8%;">Sort</td>
           <td style="width: 15%;">Flt Hrs</td>
         </tr>
         <tbody id="pilot_aircraft_tbody"></tbody>
       </table>
+    </div>
 
-      <!-- COST TABLE (EXPANDED RATE & COST ROOM) -->
+    <!-- RIGHT SIDE: COST TABLE -->
+    <div class="col-top-right">
       <table>
         <thead>
           <tr class="bg-header bold center">
-            <th style="width: 39%; text-align: left; padding-left: 5px;">Cost Items &amp; Reimbursables</th>
-            <th style="width: 18%;">Quantity</th>
-            <th style="width: 19%;">Rate ($)</th>
-            <th style="width: 24%;">Cost ($)</th>
+            <th style="width: 44%; text-align: left; padding-left: 5px;">Cost Items &amp; Reimbursables</th>
+            <th style="width: 16%;">Qty</th>
+            <th style="width: 18%;">Rate ($)</th>
+            <th style="width: 22%;">Cost ($)</th>
           </tr>
         </thead>
         <tbody>
@@ -770,41 +771,41 @@
 
           <!-- GRAND TOTAL -->
           <tr class="bg-sub">
-            <td colspan="3" class="right bold" style="font-size: 7.6pt;">DAILY GRAND TOTAL COST:</td>
+            <td colspan="3" class="right bold" style="font-size: 7.4pt;">DAILY GRAND TOTAL COST:</td>
             <td><input type="text" id="grandTotal" value="$ 0.00" readonly></td>
           </tr>
         </tbody>
       </table>
-      <div class="sub-note">* Do not calculate availability for exclusive use contracts paid from base funds.</div>
+      <div class="sub-note" style="margin-top:-2px; margin-bottom:2px;">* Do not calculate availability for exclusive use contracts paid from base funds.</div>
     </div>
 
-    <!-- RIGHT COLUMN -->
-    <div class="col-right">
-      
-      <!-- 15. AIRCRAFT STATUS -->
-      <div class="narrative-card">
-        <div class="narrative-card-header">
-          <span>15. Aircraft Status <span class="sub-note">(Maintenance, battery cycles, downtime)</span></span>
-        </div>
-        <textarea id="box_ac_status" placeholder="Detail airworthiness logs, power trends, motor/sensor calibrations, maintenance actions, battery cycle records, or reasons for unavailability..."></textarea>
-      </div>
+  </div>
 
-      <!-- 16. WEATHER OBSERVATIONS & NARRATIVE -->
-      <div class="narrative-card">
-        <div class="narrative-card-header">
-          <span>16. Weather Observations &amp; Narrative <span class="sub-note">(Wind, temp, visibility, delays)</span></span>
-        </div>
-        <textarea id="box_weather" placeholder="Detail on-site weather observations, surface wind/gusts, temperature, turbulence/inversion layers, thermal activity, wind shifts, or weather-induced delays/aborts..."></textarea>
+  <!-- FULL-WIDTH LOWER NARRATIVES SECTION (100% WIDTH SPAN) -->
+  <div class="narrative-fullwidth-stack">
+    
+    <!-- 15. AIRCRAFT STATUS -->
+    <div class="narrative-card">
+      <div class="narrative-card-header">
+        <span>15. Aircraft Status <span class="sub-note">(Maintenance, battery cycles, calibrations, downtime)</span></span>
       </div>
+      <textarea id="box_ac_status" placeholder="Detail airworthiness logs, power trends, motor/sensor calibrations, maintenance actions, battery cycle records, or reasons for unavailability..."></textarea>
+    </div>
 
-      <!-- 17. DAILY NARRATIVE REPORT -->
-      <div class="narrative-card">
-        <div class="narrative-card-header">
-          <span>17. Daily Narrative Report <span class="sub-note">(Sorties flown, deliverables, SAFECOMs)</span></span>
-        </div>
-        <textarea id="box_narrative" placeholder="Detail daily operational narrative, mission highlights, airspace / NOTAM coordination, deliverables handed over, failsafe / lost link events, problems encountered, SAFECOM numbers..."></textarea>
+    <!-- 16. WEATHER OBSERVATIONS & NARRATIVE -->
+    <div class="narrative-card">
+      <div class="narrative-card-header">
+        <span>16. Weather Observations &amp; Narrative <span class="sub-note">(Wind, temp, visibility, delays)</span></span>
       </div>
+      <textarea id="box_weather" placeholder="Detail on-site weather observations, surface wind/gusts, temperature, turbulence/inversion layers, thermal activity, wind shifts, or weather-induced delays/aborts..."></textarea>
+    </div>
 
+    <!-- 17. DAILY NARRATIVE REPORT -->
+    <div class="narrative-card">
+      <div class="narrative-card-header">
+        <span>17. Daily Narrative Report <span class="sub-note">(Sorties flown, deliverables, SAFECOMs)</span></span>
+      </div>
+      <textarea id="box_narrative" placeholder="Detail daily operational narrative, mission highlights, airspace / NOTAM coordination, deliverables handed over, failsafe / lost link events, problems encountered, SAFECOM numbers..."></textarea>
     </div>
 
   </div>
@@ -812,8 +813,8 @@
   <!-- SECTION 5: APPROVAL SIGNATURES -->
   <table>
     <tr>
-      <td style="width: 38%; vertical-align: bottom; padding-bottom: 6px;">
-        <div class="bold" style="margin-bottom: 4px;">Govt Representative / UASM Name (Print):</div>
+      <td style="width: 38%; vertical-align: bottom; padding-bottom: 4px;">
+        <div class="bold" style="margin-bottom: 3px;">Govt Representative / UASM Name (Print):</div>
         <input type="text" id="sig_name" placeholder="Printed Full Name &amp; Title">
       </td>
       <td style="width: 44%; vertical-align: top;">
@@ -823,8 +824,8 @@
           <button type="button" class="sig-clear-btn" onclick="clearSignature()">Clear</button>
         </div>
       </td>
-      <td style="width: 18%; vertical-align: bottom; padding-bottom: 6px;">
-        <div class="bold" style="margin-bottom: 4px;">Date:</div>
+      <td style="width: 18%; vertical-align: bottom; padding-bottom: 4px;">
+        <div class="bold" style="margin-bottom: 3px;">Date:</div>
         <input type="date" id="sig_date">
       </td>
     </tr>
@@ -833,9 +834,9 @@
 </div>
 
 <script>
-  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v14';
-  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v14';
-  const RATE_PROFILES_KEY = 'uas_vendor_rate_preset_profiles_v12';
+  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v15';
+  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v15';
+  const RATE_PROFILES_KEY = 'uas_vendor_rate_preset_profiles_v13';
   let totalCostGlobal = 0;
   
   let tallyStore = {};
@@ -869,7 +870,7 @@
           <td><input type="text" id="p${i}_name" placeholder="Pilot ${i} ${i===1?'(RPIC)':''}"></td>
           <td>
             <div class="flex-align">
-              <input type="number" step="0.1" id="p${i}_flt" placeholder="0.0" style="flex:1; min-width:32px;">
+              <input type="number" step="0.1" id="p${i}_flt" placeholder="0.0" style="flex:1; min-width:28px;">
               <button type="button" class="btn-tally no-print-bar" onclick="openTallyModal('pilot', 'p${i}_flt', null, 'Pilot ${i}')" title="Tally multiple flights">🧮</button>
             </div>
           </td>
@@ -885,7 +886,7 @@
           <td><input type="number" id="ac${i}_sorties" placeholder="0" style="padding:1px 2px;"></td>
           <td>
             <div class="flex-align">
-              <input type="number" step="0.1" id="ac${i}_flt" placeholder="0.0" style="flex:1; min-width:32px;">
+              <input type="number" step="0.1" id="ac${i}_flt" placeholder="0.0" style="flex:1; min-width:28px;">
               <button type="button" class="btn-tally no-print-bar" onclick="openTallyModal('aircraft', 'ac${i}_flt', 'ac${i}_sorties', 'Aircraft ${i}')" title="Tally sorties and flight hours">🧮</button>
             </div>
           </td>
@@ -1375,7 +1376,7 @@
     }
   }
 
-  // --- FORM SERIALIZATION ---
+  // --- FORM SERIALIZATION (INCLUDES TALLY STORE) ---
   function getFormDataObject() {
     const data = {
       tallies: tallyStore
