@@ -1,18 +1,11 @@
-const CACHE_NAME = 'uas-daily-cache-v1';
-const ASSETS_TO_CACHE = [
-  './index.html',
-  './manifest.webmanifest'
-];
+const CACHE_NAME = 'uas-daily-v2'; // Changing this version forces an update
 
+// On install, take control immediately
 self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
-  );
   self.skipWaiting();
 });
 
+// On activate, delete old caches
 self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys().then((keys) => {
@@ -28,10 +21,24 @@ self.addEventListener('activate', (e) => {
   self.clients.claim();
 });
 
+// NETWORK-FIRST: Try to fetch the newest version from GitHub first. 
+// If offline, fall back to the saved cache.
 self.addEventListener('fetch', (e) => {
   e.respondWith(
-    caches.match(e.request).then((cachedResponse) => {
-      return cachedResponse || fetch(e.request);
-    })
+    fetch(e.request)
+      .then((networkResponse) => {
+        // Cache the fresh copy
+        if (networkResponse && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(e.request, responseClone);
+          });
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        // If offline (in the woods/mountains), load cached version
+        return caches.match(e.request);
+      })
   );
 });
