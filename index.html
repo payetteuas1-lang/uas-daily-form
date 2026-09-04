@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <title>UAS Daily Operations &amp; Cost Summary</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="UAS Daily">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f2744">
+
 <style>
   :root {
     --primary: #0f2744;
@@ -47,12 +53,14 @@
     background: rgba(15, 39, 68, 0.96);
     backdrop-filter: blur(8px);
     color: white;
-    padding: 8px 16px;
+    padding: 6px 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     font-size: 8.5pt;
+    flex-wrap: wrap;
+    gap: 6px;
   }
 
   .status-badge {
@@ -60,7 +68,7 @@
     align-items: center;
     gap: 6px;
     background: rgba(255,255,255,0.1);
-    padding: 4px 10px;
+    padding: 3px 8px;
     border-radius: 20px;
     font-size: 7.6pt;
   }
@@ -73,28 +81,52 @@
     box-shadow: 0 0 6px #10b981;
   }
 
-  .btn-group { display: flex; gap: 5px; flex-wrap: wrap; }
+  .btn-group { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+
+  .draft-select {
+    background: #1e3a5f;
+    color: white;
+    border: 1px solid #3b82f6;
+    padding: 3px 6px;
+    font-size: 7.4pt;
+    border-radius: 3px;
+    max-width: 140px;
+  }
 
   .btn {
     border: none;
-    padding: 5px 10px;
+    padding: 4px 8px;
     font-weight: 600;
     cursor: pointer;
     border-radius: 3px;
-    font-size: 7.8pt;
+    font-size: 7.6pt;
     transition: all 0.15s ease;
   }
 
   .btn:active { transform: scale(0.97); }
   .btn-save { background: #2563eb; color: white; }
   .btn-aux { background: #475569; color: white; }
+  .btn-rates { background: #8b5cf6; color: white; }
   .btn-clear { background: #dc2626; color: white; }
+  .btn-csv { background: #0284c7; color: white; }
   .btn-print { background: #059669; color: white; }
+
+  .btn-gps {
+    background: #e2e8f0;
+    border: 1px solid #cbd5e1;
+    color: #0f2744;
+    font-size: 6.5pt;
+    padding: 1px 5px;
+    border-radius: 2px;
+    cursor: pointer;
+    font-weight: 700;
+    white-space: nowrap;
+  }
 
   /* PAGE CONTAINER */
   .page-container {
     max-width: 8.5in;
-    margin: 10px auto;
+    margin: 8px auto;
     background: var(--surface);
     padding: 10px 14px;
     border-radius: 4px;
@@ -288,6 +320,55 @@
     cursor: pointer;
   }
 
+  /* PRESET RATES MODAL */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(4px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal-content {
+    background: white;
+    width: 90%;
+    max-width: 480px;
+    border-radius: 6px;
+    padding: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+    font-size: 10pt;
+    font-weight: 700;
+    color: #0f2744;
+  }
+
+  .modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .modal-grid label {
+    font-size: 7.2pt;
+    font-weight: 600;
+    color: #334155;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
   /* STRICT PRINT 1-PAGE RULES */
   @media print {
     body { background: #ffffff !important; }
@@ -297,7 +378,7 @@
       max-width: 100% !important;
       box-shadow: none !important;
     }
-    .no-print-bar, .sig-clear-btn { display: none !important; }
+    .no-print-bar, .sig-clear-btn, .btn-gps, .modal-overlay { display: none !important; }
     th, td, .narrative-card { border-color: #000000 !important; }
     .header-banner {
       background: #0f2744 !important;
@@ -329,15 +410,59 @@
 <div class="no-print-bar">
   <div class="status-badge">
     <div class="status-dot"></div>
-    <span id="save-status">Auto-Saving Engine Active</span>
+    <span id="save-status">Auto-Saved In-App</span>
   </div>
+
   <div class="btn-group">
-    <button class="btn btn-save" onclick="saveJSON()">💾 Save</button>
-    <button class="btn btn-aux" onclick="saveAsJSON()">📁 Save As</button>
-    <button class="btn btn-aux" onclick="document.getElementById('fileInput').click()">📂 Open</button>
-    <input type="file" id="fileInput" style="display:none" accept=".json,application/json" onchange="openJSON(event)">
-    <button class="btn btn-clear" onclick="clearFormData()">🗑️ Clear</button>
-    <button class="btn btn-print" onclick="printPDF()">🖨️ Print / Save PDF</button>
+    <select id="saved_drafts_select" class="draft-select" onchange="loadSelectedDraft()">
+      <option value="">📂 Load Log...</option>
+    </select>
+    
+    <button class="btn btn-save" onclick="saveInAppDraft()">💾 Save</button>
+    <button class="btn btn-rates" onclick="openRatesModal()">⚙️ Rates</button>
+    <button class="btn btn-clear" onclick="clearFormData()">➕ New</button>
+    <button class="btn btn-aux" onclick="exportJSONFile()">📤 JSON</button>
+    <button class="btn btn-aux" onclick="document.getElementById('fileInput').click()">📥 Import</button>
+    <input type="file" id="fileInput" style="display:none" accept=".json,application/json" onchange="openJSONFile(event)">
+    <button class="btn btn-csv" onclick="exportCSVFile()">📊 CSV</button>
+    <button class="btn btn-print" onclick="printPDF()">🖨️ PDF</button>
+  </div>
+</div>
+
+<!-- PRESET RATES MODAL -->
+<div class="modal-overlay" id="ratesModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span>⚙️ Contract Rate Preset Profile</span>
+      <button style="border:none; background:none; font-size:12pt; cursor:pointer;" onclick="closeRatesModal()">✕</button>
+    </div>
+    <div class="modal-grid">
+      <label>Profile Name:
+        <input type="text" id="rate_profile_name" placeholder="e.g. CWN 2026 Contract">
+      </label>
+      <label>Flight Hourly Rate ($):
+        <input type="number" step="0.01" id="preset_r_flt" placeholder="e.g. 1850.00">
+      </label>
+      <label>Daily Availability Rate ($):
+        <input type="number" step="0.01" id="preset_r_avail" placeholder="e.g. 4200.00">
+      </label>
+      <label>Per Diem Daily Rate ($):
+        <input type="number" step="0.01" id="preset_r_perdiem" placeholder="e.g. 155.00">
+      </label>
+      <label>Vehicle Mileage Rate ($/mi):
+        <input type="number" step="0.001" id="preset_r_mileage" placeholder="e.g. 0.670">
+      </label>
+      <label>Payload Daily Rate ($):
+        <input type="number" step="0.01" id="preset_r_payload" placeholder="e.g. 950.00">
+      </label>
+    </div>
+    <div style="display:flex; justify-content:space-between; gap:6px;">
+      <button class="btn btn-clear" onclick="deleteActiveRateProfile()">Delete Profile</button>
+      <div style="display:flex; gap:4px;">
+        <button class="btn btn-save" onclick="saveRateProfile()">Save Profile</button>
+        <button class="btn btn-print" onclick="applyRateProfileToForm()">Apply to Form</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -392,8 +517,9 @@
     <tr>
       <td style="width: 50%;">
         <div class="flex-align">
-          <span class="bold" style="white-space:nowrap; width:130px;">Launch Base / Helibase:</span>
-          <input type="text" id="base_loc" placeholder="Base / Staging Location">
+          <span class="bold" style="white-space:nowrap; width:130px;">LRZ / Staging Base:</span>
+          <input type="text" id="base_loc" placeholder="Base, Staging, or Lat/Long">
+          <button type="button" class="btn-gps" onclick="captureGPSLocation()" title="Capture GPS Lat/Long and Elevation">📍 GPS</button>
         </div>
       </td>
       <td style="width: 25%;">
@@ -433,7 +559,7 @@
     <!-- LEFT COLUMN -->
     <div class="col-left">
 
-      <!-- 4 PILOTS & 4 AIRCRAFT TRACKING (EXPANDED MAKE/MODEL) -->
+      <!-- 4 PILOTS & 4 AIRCRAFT TRACKING -->
       <table>
         <tr class="bg-header bold center">
           <td colspan="2" style="width: 44%;">PILOT FLIGHT TIME (UP TO 4)</td>
@@ -651,14 +777,14 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'uas_daily_summary_clean_aligned_v2';
+  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v3';
+  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v3';
+  const RATE_PROFILES_KEY = 'uas_rate_preset_profiles_v1';
   let totalCostGlobal = 0;
-  let currentFileHandle = null;
 
-  // --- AUTO-UPDATE PAGE TITLE TO MATCH JSON FILE NAME ---
-  function updateDocumentTitle() {
-    const baseName = buildBaseName();
-    document.title = baseName;
+  // --- REGISTER SERVICE WORKER (PWA OFFLINE CAPABILITY) ---
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
 
   function buildBaseName() {
@@ -668,8 +794,8 @@
     return `${date}_${vendor}_${incident}`;
   }
 
-  function buildFileName(extension) {
-    return `${buildBaseName()}.${extension}`;
+  function updateDocumentTitle() {
+    document.title = buildBaseName();
   }
 
   function printPDF() {
@@ -677,7 +803,205 @@
     window.print();
   }
 
-  // --- MATH ENGINE ---
+  // --- ⚙️ PRESET RATES PROFILE MANAGER ---
+  function openRatesModal() {
+    loadSavedRateProfile();
+    document.getElementById('ratesModal').style.display = 'flex';
+  }
+
+  function closeRatesModal() {
+    document.getElementById('ratesModal').style.display = 'none';
+  }
+
+  function saveRateProfile() {
+    const profile = {
+      name: document.getElementById('rate_profile_name').value || 'Default Profile',
+      r_flt: document.getElementById('preset_r_flt').value,
+      r_avail: document.getElementById('preset_r_avail').value,
+      r_perdiem: document.getElementById('preset_r_perdiem').value,
+      r_mileage: document.getElementById('preset_r_mileage').value,
+      r_payload: document.getElementById('preset_r_payload').value
+    };
+    localStorage.setItem(RATE_PROFILES_KEY, JSON.stringify(profile));
+    updateStatus(`Saved Rate Profile: ${profile.name}`);
+    closeRatesModal();
+  }
+
+  function loadSavedRateProfile() {
+    const saved = localStorage.getItem(RATE_PROFILES_KEY);
+    if (saved) {
+      const profile = JSON.parse(saved);
+      document.getElementById('rate_profile_name').value = profile.name || '';
+      document.getElementById('preset_r_flt').value = profile.r_flt || '';
+      document.getElementById('preset_r_avail').value = profile.r_avail || '';
+      document.getElementById('preset_r_perdiem').value = profile.r_perdiem || '';
+      document.getElementById('preset_r_mileage').value = profile.r_mileage || '';
+      document.getElementById('preset_r_payload').value = profile.r_payload || '';
+    }
+  }
+
+  function applyRateProfileToForm() {
+    const saved = localStorage.getItem(RATE_PROFILES_KEY);
+    if (!saved) {
+      saveRateProfile();
+    }
+    const profile = JSON.parse(localStorage.getItem(RATE_PROFILES_KEY));
+
+    if (profile.r_flt) document.getElementById('r_flt').value = profile.r_flt;
+    if (profile.r_avail) document.getElementById('r_avail').value = profile.r_avail;
+    
+    // Apply Per Diem to all 5 personnel rows
+    if (profile.r_perdiem) {
+      for (let i = 1; i <= 5; i++) {
+        const el = document.getElementById(`r_p${i}`);
+        if (el) el.value = profile.r_perdiem;
+      }
+    }
+
+    // Apply Mileage rate to all 5 vehicle rows
+    if (profile.r_mileage) {
+      for (let i = 1; i <= 5; i++) {
+        const el = document.getElementById(`r_v${i}`);
+        if (el) el.value = profile.r_mileage;
+      }
+    }
+
+    if (profile.r_payload) document.getElementById('r_pay').value = profile.r_payload;
+
+    doMath();
+    closeRatesModal();
+    updateStatus(`Applied Preset: ${profile.name}`);
+  }
+
+  function deleteActiveRateProfile() {
+    if (confirm('Delete saved rate profile?')) {
+      localStorage.removeItem(RATE_PROFILES_KEY);
+      document.getElementById('rate_profile_name').value = '';
+      document.getElementById('preset_r_flt').value = '';
+      document.getElementById('preset_r_avail').value = '';
+      document.getElementById('preset_r_perdiem').value = '';
+      document.getElementById('preset_r_mileage').value = '';
+      document.getElementById('preset_r_payload').value = '';
+      updateStatus('Rate profile cleared.');
+    }
+  }
+
+  // --- 📍 GPS COORDINATE & ELEVATION CAPTURE ---
+  function captureGPSLocation() {
+    const baseField = document.getElementById('base_loc');
+    if (!navigator.geolocation) {
+      alert('Geolocation not supported by this browser.');
+      return;
+    }
+
+    updateStatus('📍 Acquiring GPS satellite fix...');
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude.toFixed(5);
+        const lon = position.coords.longitude.toFixed(5);
+        let coordText = `${lat}° N, ${lon}° W`;
+
+        if (position.coords.altitude !== null) {
+          const elevFeet = Math.round(position.coords.altitude * 3.28084);
+          coordText += ` (${elevFeet.toLocaleString()} ft MSL)`;
+        }
+
+        if (baseField.value.trim() !== '') {
+          baseField.value += ` | ${coordText}`;
+        } else {
+          baseField.value = coordText;
+        }
+
+        updateStatus(`📍 GPS Captured: ${coordText}`);
+        autoSaveActive();
+      },
+      (error) => {
+        alert(`Unable to acquire GPS: ${error.message}`);
+        updateStatus('GPS capture failed.', true);
+      },
+      { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
+    );
+  }
+
+  // --- 📊 EXPORT AS CSV SPREADSHEET ---
+  function exportCSVFile() {
+    doMath();
+    const rows = [
+      ['UAS DAILY OPERATIONS & COST SUMMARY - EXPORT'],
+      ['Generated Date', new Date().toISOString()],
+      [],
+      ['--- MISSION HEADER ---'],
+      ['Date', document.getElementById('doc_date').value],
+      ['Contractor / Vendor', document.getElementById('vendor_name').value],
+      ['Incident / Project', document.getElementById('inc_name').value],
+      ['LRZ / Staging Base', document.getElementById('base_loc').value],
+      ['Host Agency / Unit', document.getElementById('agency_name').value],
+      ['Resource Order #', document.getElementById('order_num').value],
+      ['Contract Type', document.querySelector('input[name="ctype"]:checked')?.id?.replace('ct_', '') || ''],
+      ['FRAT Completed', document.querySelector('input[name="frat"]:checked')?.id?.replace('frat_', '') || ''],
+      ['UAS Manager / Gov Rep', document.getElementById('uasm_name').value],
+      [],
+      ['--- PILOT FLIGHT TRACKING ---'],
+      ['Pilot Role / Name', 'Flight Hours'],
+      [document.getElementById('p1_name').value, document.getElementById('p1_flt').value],
+      [document.getElementById('p2_name').value, document.getElementById('p2_flt').value],
+      [document.getElementById('p3_name').value, document.getElementById('p3_flt').value],
+      [document.getElementById('p4_name').value, document.getElementById('p4_flt').value],
+      [],
+      ['--- AIRFRAME TRACKING ---'],
+      ['Tail / Reg #', 'Make / Model', 'Sorties', 'Flight Hours'],
+      [document.getElementById('ac1_reg').value, document.getElementById('ac1_model').value, document.getElementById('ac1_sorties').value, document.getElementById('ac1_flt').value],
+      [document.getElementById('ac2_reg').value, document.getElementById('ac2_model').value, document.getElementById('ac2_sorties').value, document.getElementById('ac2_flt').value],
+      [document.getElementById('ac3_reg').value, document.getElementById('ac3_model').value, document.getElementById('ac3_sorties').value, document.getElementById('ac3_flt').value],
+      [document.getElementById('ac4_reg').value, document.getElementById('ac4_model').value, document.getElementById('ac4_sorties').value, document.getElementById('ac4_flt').value],
+      [],
+      ['--- COST ITEMS & REIMBURSABLES ---'],
+      ['Cost Item Description', 'Quantity', 'Rate ($)', 'Total Cost ($)'],
+      ['Revenue Flight Hours', document.getElementById('q_flt').value, document.getElementById('r_flt').value, document.getElementById('c_flt').value],
+      ['Daily Availability', document.getElementById('q_avail').value, document.getElementById('r_avail').value, document.getElementById('c_avail').value],
+      [document.getElementById('p1_desc').value || 'Person 1', document.getElementById('q_p1').value, document.getElementById('r_p1').value, document.getElementById('c_p1').value],
+      [document.getElementById('p2_desc').value || 'Person 2', document.getElementById('q_p2').value, document.getElementById('r_p2').value, document.getElementById('c_p2').value],
+      [document.getElementById('p3_desc').value || 'Person 3', document.getElementById('q_p3').value, document.getElementById('r_p3').value, document.getElementById('c_p3').value],
+      [document.getElementById('p4_desc').value || 'Person 4', document.getElementById('q_p4').value, document.getElementById('r_p4').value, document.getElementById('c_p4').value],
+      [document.getElementById('p5_desc').value || 'Person 5', document.getElementById('q_p5').value, document.getElementById('r_p5').value, document.getElementById('c_p5').value],
+      [document.getElementById('v1_desc').value || 'Vehicle 1', document.getElementById('q_v1').value, document.getElementById('r_v1').value, document.getElementById('c_v1').value],
+      [document.getElementById('v2_desc').value || 'Vehicle 2', document.getElementById('q_v2').value, document.getElementById('r_v2').value, document.getElementById('c_v2').value],
+      [document.getElementById('v3_desc').value || 'Vehicle 3', document.getElementById('q_v3').value, document.getElementById('r_v3').value, document.getElementById('c_v3').value],
+      [document.getElementById('v4_desc').value || 'Vehicle 4', document.getElementById('q_v4').value, document.getElementById('r_v4').value, document.getElementById('c_v4').value],
+      [document.getElementById('v5_desc').value || 'Vehicle 5', document.getElementById('q_v5').value, document.getElementById('r_v5').value, document.getElementById('c_v5').value],
+      [document.getElementById('pay_desc').value || 'Payload', document.getElementById('q_pay').value, document.getElementById('r_pay').value, document.getElementById('c_pay').value],
+      [document.getElementById('misc_desc').value || 'Misc Reimbursable', document.getElementById('q_misc').value, document.getElementById('r_misc').value, document.getElementById('c_misc').value],
+      ['DAILY GRAND TOTAL COST', '', '', document.getElementById('grandTotal').value],
+      [],
+      ['--- NARRATIVES ---'],
+      ['Aircraft Status', `"${(document.getElementById('box_ac_status').value || '').replace(/"/g, '""')}"`],
+      ['Weather Observations', `"${(document.getElementById('box_weather').value || '').replace(/"/g, '""')}"`],
+      ['Daily Narrative Report', `"${(document.getElementById('box_narrative').value || '').replace(/"/g, '""')}"`],
+      ['Govt Representative Name', document.getElementById('sig_name').value],
+      ['Signature Date', document.getElementById('sig_date').value]
+    ];
+
+    const csvContent = rows.map(e => e.map(cell => `"${String(cell || '').replace(/"/g, '""')}"`).join(',')).join('\n');
+    const fileName = `${buildBaseName()}.csv`;
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+    if (navigator.canShare && navigator.canShare({ files: [new File([blob], fileName, { type: 'text/csv' })] })) {
+      navigator.share({
+        files: [new File([blob], fileName, { type: 'text/csv' })],
+        title: fileName
+      }).catch(() => {});
+      return;
+    }
+
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    updateStatus(`Exported ${fileName}`);
+  }
+
+  // --- LIVE MATH ENGINE ---
   function doMath() {
     let grandTotal = 0;
     const rows = document.querySelectorAll('.calc-row');
@@ -708,7 +1032,7 @@
     }
 
     updateDocumentTitle();
-    saveFormData();
+    autoSaveActive();
   }
 
   // --- SIGNATURE CANVAS ENGINE ---
@@ -751,7 +1075,7 @@
     function endDraw() {
       if (drawing) {
         drawing = false;
-        saveFormData();
+        autoSaveActive();
       }
     }
 
@@ -767,11 +1091,11 @@
   function clearSignature() {
     if (ctx && canvas) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      saveFormData();
+      autoSaveActive();
     }
   }
 
-  // --- PERSISTENCE & JSON HANDLERS ---
+  // --- FORM SERIALIZATION ---
   function getFormDataObject() {
     const data = {};
     document.querySelectorAll('input, textarea').forEach(el => {
@@ -787,24 +1111,6 @@
       data['sig_image'] = canvas.toDataURL();
     }
     return data;
-  }
-
-  function saveFormData() {
-    try {
-      const json = JSON.stringify(getFormDataObject());
-      localStorage.setItem(STORAGE_KEY, json);
-      sessionStorage.setItem(STORAGE_KEY, json);
-      updateStatus("💾 Saved: " + new Date().toLocaleTimeString());
-    } catch (e) {}
-  }
-
-  function loadSavedData() {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY) || sessionStorage.getItem(STORAGE_KEY);
-      if (!saved) return;
-      const data = JSON.parse(saved);
-      applyDataToForm(data);
-    } catch (e) {}
   }
 
   function applyDataToForm(data) {
@@ -826,12 +1132,57 @@
     doMath();
   }
 
+  // --- IN-APP DRAFT MANAGER ---
+  function autoSaveActive() {
+    try {
+      const json = JSON.stringify(getFormDataObject());
+      localStorage.setItem(ACTIVE_DRAFT_KEY, json);
+      updateStatus("💾 Auto-Saved In-App");
+    } catch (e) {}
+  }
+
+  function saveInAppDraft() {
+    const key = buildBaseName();
+    const data = getFormDataObject();
+    localStorage.setItem('draft_' + key, JSON.stringify(data));
+
+    let index = JSON.parse(localStorage.getItem(DRAFTS_INDEX_KEY) || '[]');
+    if (!index.includes(key)) {
+      index.unshift(key);
+      localStorage.setItem(DRAFTS_INDEX_KEY, JSON.stringify(index));
+    }
+    
+    refreshDraftsDropdown();
+    updateStatus("Saved: " + key);
+  }
+
+  function refreshDraftsDropdown() {
+    const select = document.getElementById('saved_drafts_select');
+    const index = JSON.parse(localStorage.getItem(DRAFTS_INDEX_KEY) || '[]');
+    
+    select.innerHTML = '<option value="">📂 Load Log...</option>';
+    index.forEach(item => {
+      const opt = document.createElement('option');
+      opt.value = item;
+      opt.textContent = item;
+      select.appendChild(opt);
+    });
+  }
+
+  function loadSelectedDraft() {
+    const select = document.getElementById('saved_drafts_select');
+    const key = select.value;
+    if (!key) return;
+
+    const saved = localStorage.getItem('draft_' + key);
+    if (saved) {
+      applyDataToForm(JSON.parse(saved));
+      updateStatus("Loaded: " + key);
+    }
+  }
+
   function clearFormData() {
-    if (confirm('Clear all form fields to start a new record?')) {
-      try {
-        localStorage.removeItem(STORAGE_KEY);
-        sessionStorage.removeItem(STORAGE_KEY);
-      } catch (e) {}
+    if (confirm('Start a new blank daily log?')) {
       document.querySelectorAll('input, textarea').forEach(el => {
         if (el.type === 'checkbox' || el.type === 'radio') {
           el.checked = false;
@@ -841,71 +1192,35 @@
       });
       clearSignature();
       doMath();
-      currentFileHandle = null;
-      updateStatus("Form cleared.");
+      localStorage.removeItem(ACTIVE_DRAFT_KEY);
+      document.getElementById('saved_drafts_select').value = '';
+      updateStatus("New Blank Form Ready");
     }
   }
 
-  async function saveJSON() {
-    doMath();
-    if (currentFileHandle && window.showSaveFilePicker) {
-      try {
-        const json = JSON.stringify(getFormDataObject(), null, 2);
-        const writable = await currentFileHandle.createWritable();
-        await writable.write(json);
-        await writable.close();
-        updateStatus("Saved to existing file.");
-        return;
-      } catch (e) {}
-    }
-    await saveAsJSON();
-  }
+  // --- JSON EXPORT / IMPORT ---
+  function exportJSONFile() {
+    const data = getFormDataObject();
+    const fileName = `${buildBaseName()}.json`;
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
 
-  async function saveAsJSON() {
-    doMath();
-    const json = JSON.stringify(getFormDataObject(), null, 2);
-    const suggestedName = buildFileName('json');
-    const blob = new Blob([json], { type: "application/json" });
-    const file = new File([blob], suggestedName, { type: "application/json" });
-
-    if (window.showSaveFilePicker) {
-      try {
-        currentFileHandle = await window.showSaveFilePicker({
-          suggestedName: suggestedName,
-          types: [{ description: 'JSON File', accept: { 'application/json': ['.json'] } }]
-        });
-        const writable = await currentFileHandle.createWritable();
-        await writable.write(json);
-        await writable.close();
-        updateStatus("Saved As: " + suggestedName);
-        return;
-      } catch (e) {
-        return;
-      }
+    if (navigator.canShare && navigator.canShare({ files: [new File([blob], fileName, { type: "application/json" })] })) {
+      navigator.share({
+        files: [new File([blob], fileName, { type: "application/json" })],
+        title: fileName
+      }).catch(() => {});
+      return;
     }
 
-    try {
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          files: [file],
-          title: "UAS Daily Form JSON",
-          text: "UAS Daily Operations Data"
-        });
-        updateStatus("Draft shared/saved.");
-        return;
-      }
-    } catch (e) {}
-
-    const dlAnchor = document.createElement('a');
-    dlAnchor.href = URL.createObjectURL(blob);
-    dlAnchor.download = suggestedName;
-    document.body.appendChild(dlAnchor);
-    dlAnchor.click();
-    dlAnchor.remove();
-    updateStatus("Downloaded: " + suggestedName);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    updateStatus("Exported " + fileName);
   }
 
-  function openJSON(event) {
+  function openJSONFile(event) {
     const file = event.target.files[0];
     if (!file) return;
     const reader = new FileReader();
@@ -913,8 +1228,8 @@
       try {
         const data = JSON.parse(e.target.result);
         applyDataToForm(data);
-        saveFormData();
-        updateStatus("Loaded: " + file.name);
+        autoSaveActive();
+        updateStatus("Imported: " + file.name);
       } catch (err) {
         alert("Invalid JSON file.");
       }
@@ -923,17 +1238,26 @@
     event.target.value = '';
   }
 
-  function updateStatus(msg) {
+  function updateStatus(msg, isError = false) {
     const el = document.getElementById('save-status');
-    if (el) el.innerHTML = msg;
+    if (el) {
+      el.innerHTML = msg;
+      el.style.color = isError ? '#fca5a5' : '#ffffff';
+    }
   }
 
   window.addEventListener('DOMContentLoaded', () => {
     initSignatureCanvas();
-    loadSavedData();
+    refreshDraftsDropdown();
+
+    const active = localStorage.getItem(ACTIVE_DRAFT_KEY);
+    if (active) {
+      applyDataToForm(JSON.parse(active));
+    }
+
     document.querySelectorAll('input, textarea').forEach(el => {
-      el.addEventListener('input', () => { doMath(); saveFormData(); });
-      el.addEventListener('change', () => { doMath(); saveFormData(); });
+      el.addEventListener('input', () => { doMath(); });
+      el.addEventListener('change', () => { doMath(); });
     });
     doMath();
   });
