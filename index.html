@@ -91,6 +91,7 @@
     font-size: 7.2pt;
     border-radius: 3px;
     max-width: 135px;
+    display: none; /* Hidden by default until a draft exists */
   }
 
   .btn {
@@ -123,6 +124,41 @@
     white-space: nowrap;
   }
 
+  /* CONFIGURATION BAR */
+  .config-bar {
+    background: #e2e8f0;
+    border: 1px solid #cbd5e1;
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 6.8pt;
+    font-weight: 700;
+    color: #1e293b;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .config-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .config-select {
+    width: auto !important;
+    height: 16px !important;
+    padding: 0 4px !important;
+    font-size: 6.8pt !important;
+    font-weight: 700;
+    border: 1px solid #94a3b8 !important;
+    border-radius: 2px;
+    background: #ffffff !important;
+    cursor: pointer;
+  }
+
   /* PAGE CONTAINER */
   .page-container {
     max-width: 8.5in;
@@ -139,7 +175,7 @@
     text-align: center;
     padding: 4px;
     border-radius: 2px;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
 
   .title-bar {
@@ -279,7 +315,7 @@
   .narrative-card textarea {
     flex: 1;
     width: 100%;
-    min-height: 68px;
+    min-height: 65px;
     border: none;
     resize: none;
     font-family: inherit;
@@ -289,11 +325,11 @@
     background: #ffffff;
   }
 
-  /* ENLARGED SIGNATURE CANVAS (OVER 50% TALLER) */
+  /* SIGNATURE CANVAS */
   .sig-container {
     position: relative;
     width: 100%;
-    height: 60px;
+    height: 55px;
     background: #ffffff;
     border: 1px dashed #94a3b8;
     border-radius: 2px;
@@ -313,9 +349,9 @@
     background: #f1f5f9;
     border: 1px solid #cbd5e1;
     color: #475569;
-    font-size: 6.0pt;
+    font-size: 5.8pt;
     font-weight: 600;
-    padding: 2px 6px;
+    padding: 1px 5px;
     border-radius: 2px;
     cursor: pointer;
   }
@@ -386,7 +422,7 @@
       max-width: 100% !important;
       box-shadow: none !important;
     }
-    .no-print-bar, .sig-clear-btn, .btn-gps, .modal-overlay, .veh-rate-select { display: none !important; }
+    .no-print-bar, .sig-clear-btn, .btn-gps, .modal-overlay, .veh-rate-select, .config-bar { display: none !important; }
     th, td, .narrative-card { border-color: #000000 !important; }
     .header-banner {
       background: #0f2744 !important;
@@ -422,6 +458,7 @@
   </div>
 
   <div class="btn-group">
+    <!-- HIDDEN UNTIL AT LEAST ONE LOG IS SAVED -->
     <select id="saved_drafts_select" class="draft-select" onchange="loadSelectedDraft()">
       <option value="">📂 Load Log...</option>
     </select>
@@ -437,7 +474,7 @@
   </div>
 </div>
 
-<!-- ⚙️ VENDOR-SPECIFIC RATES PROFILE MODAL (3 MILEAGE RATES) -->
+<!-- ⚙️ VENDOR-SPECIFIC RATES PROFILE MODAL -->
 <div class="modal-overlay" id="ratesModal">
   <div class="modal-content">
     <div class="modal-header">
@@ -488,6 +525,35 @@
   <div class="header-banner">
     <div class="title-bar">UAS Daily Operations &amp; Cost Summary</div>
     <div class="sub-title-bar">Interagency Aviation Operations &bull; UAS Contractor &amp; Resource Daily Diary</div>
+  </div>
+
+  <!-- CONFIGURATION BAR (ROW COUNT STEPPERS) -->
+  <div class="config-bar no-print-bar">
+    <span>📐 Active Resource Counts:</span>
+    <div class="config-item">
+      <span>Pilots / Crew:</span>
+      <select id="cfg_pilots" class="config-select" onchange="updateDynamicRowCounts()">
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option><option value="6">6</option>
+      </select>
+    </div>
+    <div class="config-item">
+      <span>Aircraft:</span>
+      <select id="cfg_aircraft" class="config-select" onchange="updateDynamicRowCounts()">
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option><option value="6">6</option>
+      </select>
+    </div>
+    <div class="config-item">
+      <span>Personnel Cost Rows:</span>
+      <select id="cfg_personnel" class="config-select" onchange="updateDynamicRowCounts()">
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="8">8</option>
+      </select>
+    </div>
+    <div class="config-item">
+      <span>Vehicle Rows:</span>
+      <select id="cfg_vehicles" class="config-select" onchange="updateDynamicRowCounts()">
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="8">8</option>
+      </select>
+    </div>
   </div>
 
   <!-- HEADER LOGISTICS -->
@@ -575,11 +641,11 @@
     <!-- LEFT COLUMN -->
     <div class="col-left">
 
-      <!-- 4 PILOTS & 4 AIRCRAFT TRACKING -->
+      <!-- DYNAMIC PILOTS & AIRCRAFT TRACKING TABLE -->
       <table>
         <tr class="bg-header bold center">
-          <td colspan="2" style="width: 42%;">PILOT FLIGHT TIME (UP TO 4)</td>
-          <td colspan="4" style="width: 58%;">UAS AIRFRAME TRACKING (UP TO 4)</td>
+          <td colspan="2" style="width: 42%;">PILOT FLIGHT TIME (<span id="lbl_pilot_count">4</span> CREW)</td>
+          <td colspan="4" style="width: 58%;">UAS AIRFRAME TRACKING (<span id="lbl_ac_count">4</span> A/C)</td>
         </tr>
         <tr class="bg-sub center bold" style="font-size: 6.8pt;">
           <td style="width: 30%;">Pilot / Operator Name</td>
@@ -589,41 +655,12 @@
           <td style="width: 10%;">Sorties</td>
           <td style="width: 12%;">Flt Hrs</td>
         </tr>
-        <tr>
-          <td><input type="text" id="p1_name" placeholder="Pilot 1 (RPIC)"></td>
-          <td><input type="number" step="0.1" id="p1_flt" placeholder="0.0"></td>
-          <td><input type="text" id="ac1_reg" placeholder="Tail #1"></td>
-          <td><input type="text" id="ac1_model" placeholder="Make / Model"></td>
-          <td><input type="number" id="ac1_sorties" placeholder="0"></td>
-          <td><input type="number" step="0.1" id="ac1_flt" placeholder="0.0"></td>
-        </tr>
-        <tr>
-          <td><input type="text" id="p2_name" placeholder="Pilot 2"></td>
-          <td><input type="number" step="0.1" id="p2_flt" placeholder="0.0"></td>
-          <td><input type="text" id="ac2_reg" placeholder="Tail #2"></td>
-          <td><input type="text" id="ac2_model" placeholder="Make / Model"></td>
-          <td><input type="number" id="ac2_sorties" placeholder="0"></td>
-          <td><input type="number" step="0.1" id="ac2_flt" placeholder="0.0"></td>
-        </tr>
-        <tr>
-          <td><input type="text" id="p3_name" placeholder="Pilot 3"></td>
-          <td><input type="number" step="0.1" id="p3_flt" placeholder="0.0"></td>
-          <td><input type="text" id="ac3_reg" placeholder="Tail #3"></td>
-          <td><input type="text" id="ac3_model" placeholder="Make / Model"></td>
-          <td><input type="number" id="ac3_sorties" placeholder="0"></td>
-          <td><input type="number" step="0.1" id="ac3_flt" placeholder="0.0"></td>
-        </tr>
-        <tr>
-          <td><input type="text" id="p4_name" placeholder="Pilot 4"></td>
-          <td><input type="number" step="0.1" id="p4_flt" placeholder="0.0"></td>
-          <td><input type="text" id="ac4_reg" placeholder="Tail #4"></td>
-          <td><input type="text" id="ac4_model" placeholder="Make / Model"></td>
-          <td><input type="number" id="ac4_sorties" placeholder="0"></td>
-          <td><input type="number" step="0.1" id="ac4_flt" placeholder="0.0"></td>
-        </tr>
+        <tbody id="pilot_aircraft_tbody">
+          <!-- Dynamic rendering via JS -->
+        </tbody>
       </table>
 
-      <!-- COST TABLE (WITH 5 PERSONNEL & 5 VEHICLES) -->
+      <!-- COST TABLE (DYNAMIC PERSONNEL & VEHICLES) -->
       <table>
         <thead>
           <tr class="bg-header bold center">
@@ -648,121 +685,17 @@
             <td><input type="text" class="cost-output" id="c_avail" readonly placeholder="$ 0.00"></td>
           </tr>
 
-          <!-- 5 PERSONNEL ROWS -->
-          <tr class="bg-section"><td colspan="4">PERSONNEL PER DIEM / EXTENDED STANDBY (5 PERSONS)</td></tr>
-          <tr class="calc-row">
-            <td><input type="text" id="p1_desc" placeholder="Person 1: Name / Duty Station"></td>
-            <td><input type="number" step="any" class="qty" id="q_p1" placeholder="Days/Hrs"></td>
-            <td><input type="number" step="any" class="rate" id="r_p1" placeholder="Daily Rate"></td>
-            <td><input type="text" class="cost-output" id="c_p1" readonly placeholder="$ 0.00"></td>
-          </tr>
-          <tr class="calc-row">
-            <td><input type="text" id="p2_desc" placeholder="Person 2: Name / Duty Station"></td>
-            <td><input type="number" step="any" class="qty" id="q_p2" placeholder="Days/Hrs"></td>
-            <td><input type="number" step="any" class="rate" id="r_p2" placeholder="Daily Rate"></td>
-            <td><input type="text" class="cost-output" id="c_p2" readonly placeholder="$ 0.00"></td>
-          </tr>
-          <tr class="calc-row">
-            <td><input type="text" id="p3_desc" placeholder="Person 3: Name / Duty Station"></td>
-            <td><input type="number" step="any" class="qty" id="q_p3" placeholder="Days/Hrs"></td>
-            <td><input type="number" step="any" class="rate" id="r_p3" placeholder="Daily Rate"></td>
-            <td><input type="text" class="cost-output" id="c_p3" readonly placeholder="$ 0.00"></td>
-          </tr>
-          <tr class="calc-row">
-            <td><input type="text" id="p4_desc" placeholder="Person 4: Name / Duty Station"></td>
-            <td><input type="number" step="any" class="qty" id="q_p4" placeholder="Days/Hrs"></td>
-            <td><input type="number" step="any" class="rate" id="r_p4" placeholder="Daily Rate"></td>
-            <td><input type="text" class="cost-output" id="c_p4" readonly placeholder="$ 0.00"></td>
-          </tr>
-          <tr class="calc-row">
-            <td><input type="text" id="p5_desc" placeholder="Person 5: Name / Duty Station"></td>
-            <td><input type="number" step="any" class="qty" id="q_p5" placeholder="Days/Hrs"></td>
-            <td><input type="number" step="any" class="rate" id="r_p5" placeholder="Daily Rate"></td>
-            <td><input type="text" class="cost-output" id="c_p5" readonly placeholder="$ 0.00"></td>
-          </tr>
+          <!-- DYNAMIC PERSONNEL ROWS -->
+          <tr class="bg-section"><td colspan="4">PERSONNEL PER DIEM / EXTENDED STANDBY (<span id="lbl_pers_count">5</span> PERSONS)</td></tr>
+          <tbody id="personnel_tbody">
+            <!-- Dynamic rows rendered via JS -->
+          </tbody>
 
-          <!-- 5 VEHICLE ROWS WITH MILEAGE RATE PRESET SELECTORS (OVERRIDABLE) -->
-          <tr class="bg-section"><td colspan="4">VEHICLE MILEAGE &amp; SUPPORT TRUCKS (5 VEHICLES)</td></tr>
-          <tr class="calc-row">
-            <td>
-              <div style="display:flex; gap:2px;">
-                <input type="text" id="v1_desc" placeholder="Veh 1: Lic/Make &amp; Route" style="flex:1;">
-                <select class="veh-rate-select" onchange="applyVehiclePresetRate(this, 'r_v1')" title="Select preset rate or type directly">
-                  <option value="">Rate</option>
-                  <option value="1">Rate 1</option>
-                  <option value="2">Rate 2</option>
-                  <option value="3">Rate 3</option>
-                </select>
-              </div>
-            </td>
-            <td><input type="number" step="any" class="qty" id="q_v1" placeholder="Miles"></td>
-            <td><input type="number" step="any" class="rate" id="r_v1" placeholder="Rate/Mi"></td>
-            <td><input type="text" class="cost-output" id="c_v1" readonly placeholder="$ 0.00"></td>
-          </tr>
-          <tr class="calc-row">
-            <td>
-              <div style="display:flex; gap:2px;">
-                <input type="text" id="v2_desc" placeholder="Veh 2: Lic/Make &amp; Route" style="flex:1;">
-                <select class="veh-rate-select" onchange="applyVehiclePresetRate(this, 'r_v2')" title="Select preset rate or type directly">
-                  <option value="">Rate</option>
-                  <option value="1">Rate 1</option>
-                  <option value="2">Rate 2</option>
-                  <option value="3">Rate 3</option>
-                </select>
-              </div>
-            </td>
-            <td><input type="number" step="any" class="qty" id="q_v2" placeholder="Miles"></td>
-            <td><input type="number" step="any" class="rate" id="r_v2" placeholder="Rate/Mi"></td>
-            <td><input type="text" class="cost-output" id="c_v2" readonly placeholder="$ 0.00"></td>
-          </tr>
-          <tr class="calc-row">
-            <td>
-              <div style="display:flex; gap:2px;">
-                <input type="text" id="v3_desc" placeholder="Veh 3: Lic/Make &amp; Route" style="flex:1;">
-                <select class="veh-rate-select" onchange="applyVehiclePresetRate(this, 'r_v3')" title="Select preset rate or type directly">
-                  <option value="">Rate</option>
-                  <option value="1">Rate 1</option>
-                  <option value="2">Rate 2</option>
-                  <option value="3">Rate 3</option>
-                </select>
-              </div>
-            </td>
-            <td><input type="number" step="any" class="qty" id="q_v3" placeholder="Miles"></td>
-            <td><input type="number" step="any" class="rate" id="r_v3" placeholder="Rate/Mi"></td>
-            <td><input type="text" class="cost-output" id="c_v3" readonly placeholder="$ 0.00"></td>
-          </tr>
-          <tr class="calc-row">
-            <td>
-              <div style="display:flex; gap:2px;">
-                <input type="text" id="v4_desc" placeholder="Veh 4: Lic/Make &amp; Route" style="flex:1;">
-                <select class="veh-rate-select" onchange="applyVehiclePresetRate(this, 'r_v4')" title="Select preset rate or type directly">
-                  <option value="">Rate</option>
-                  <option value="1">Rate 1</option>
-                  <option value="2">Rate 2</option>
-                  <option value="3">Rate 3</option>
-                </select>
-              </div>
-            </td>
-            <td><input type="number" step="any" class="qty" id="q_v4" placeholder="Miles"></td>
-            <td><input type="number" step="any" class="rate" id="r_v4" placeholder="Rate/Mi"></td>
-            <td><input type="text" class="cost-output" id="c_v4" readonly placeholder="$ 0.00"></td>
-          </tr>
-          <tr class="calc-row">
-            <td>
-              <div style="display:flex; gap:2px;">
-                <input type="text" id="v5_desc" placeholder="Veh 5: Lic/Make &amp; Route" style="flex:1;">
-                <select class="veh-rate-select" onchange="applyVehiclePresetRate(this, 'r_v5')" title="Select preset rate or type directly">
-                  <option value="">Rate</option>
-                  <option value="1">Rate 1</option>
-                  <option value="2">Rate 2</option>
-                  <option value="3">Rate 3</option>
-                </select>
-              </div>
-            </td>
-            <td><input type="number" step="any" class="qty" id="q_v5" placeholder="Miles"></td>
-            <td><input type="number" step="any" class="rate" id="r_v5" placeholder="Rate/Mi"></td>
-            <td><input type="text" class="cost-output" id="c_v5" readonly placeholder="$ 0.00"></td>
-          </tr>
+          <!-- DYNAMIC VEHICLE ROWS -->
+          <tr class="bg-section"><td colspan="4">VEHICLE MILEAGE &amp; SUPPORT TRUCKS (<span id="lbl_veh_count">5</span> VEHICLES)</td></tr>
+          <tbody id="vehicles_tbody">
+            <!-- Dynamic rows rendered via JS -->
+          </tbody>
 
           <!-- PAYLOAD & REIMBURSABLES -->
           <tr class="calc-row">
@@ -819,7 +752,7 @@
 
   </div>
 
-  <!-- SECTION 5: APPROVAL SIGNATURES (EXPANDED SIGNATURE CANVAS BOX) -->
+  <!-- SECTION 5: APPROVAL SIGNATURES -->
   <table>
     <tr>
       <td style="width: 38%; vertical-align: bottom; padding-bottom: 6px;">
@@ -843,13 +776,107 @@
 </div>
 
 <script>
-  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v5';
-  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v5';
-  const RATE_PROFILES_KEY = 'uas_vendor_rate_preset_profiles_v3';
+  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v7';
+  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v7';
+  const RATE_PROFILES_KEY = 'uas_vendor_rate_preset_profiles_v5';
   let totalCostGlobal = 0;
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
+
+  // --- DYNAMIC ROW GENERATION ENGINE ---
+  function updateDynamicRowCounts() {
+    const numPilots = parseInt(document.getElementById('cfg_pilots').value) || 4;
+    const numAircraft = parseInt(document.getElementById('cfg_aircraft').value) || 4;
+    const numPersonnel = parseInt(document.getElementById('cfg_personnel').value) || 5;
+    const numVehicles = parseInt(document.getElementById('cfg_vehicles').value) || 5;
+
+    document.getElementById('lbl_pilot_count').textContent = numPilots;
+    document.getElementById('lbl_ac_count').textContent = numAircraft;
+    document.getElementById('lbl_pers_count').textContent = numPersonnel;
+    document.getElementById('lbl_veh_count').textContent = numVehicles;
+
+    const currentData = getFormDataObject();
+
+    // Render Pilot & Aircraft Table
+    const maxRows = Math.max(numPilots, numAircraft);
+    let paHtml = '';
+    for (let i = 1; i <= maxRows; i++) {
+      paHtml += `<tr>`;
+      if (i <= numPilots) {
+        paHtml += `
+          <td><input type="text" id="p${i}_name" placeholder="Pilot ${i} ${i===1?'(RPIC)':''}"></td>
+          <td><input type="number" step="0.1" id="p${i}_flt" placeholder="0.0"></td>
+        `;
+      } else {
+        paHtml += `<td style="background:#f1f5f9;"></td><td style="background:#f1f5f9;"></td>`;
+      }
+
+      if (i <= numAircraft) {
+        paHtml += `
+          <td><input type="text" id="ac${i}_reg" placeholder="Tail #${i}"></td>
+          <td><input type="text" id="ac${i}_model" placeholder="Make / Model"></td>
+          <td><input type="number" id="ac${i}_sorties" placeholder="0"></td>
+          <td><input type="number" step="0.1" id="ac${i}_flt" placeholder="0.0"></td>
+        `;
+      } else {
+        paHtml += `<td style="background:#f1f5f9;"></td><td style="background:#f1f5f9;"></td><td style="background:#f1f5f9;"></td><td style="background:#f1f5f9;"></td>`;
+      }
+      paHtml += `</tr>`;
+    }
+    document.getElementById('pilot_aircraft_tbody').innerHTML = paHtml;
+
+    // Render Personnel Rows
+    let persHtml = '';
+    for (let i = 1; i <= numPersonnel; i++) {
+      persHtml += `
+        <tr class="calc-row">
+          <td><input type="text" id="p${i}_desc" placeholder="Person ${i}: Name / Duty Station"></td>
+          <td><input type="number" step="any" class="qty" id="q_p${i}" placeholder="Days/Hrs"></td>
+          <td><input type="number" step="any" class="rate" id="r_p${i}" placeholder="Daily Rate"></td>
+          <td><input type="text" class="cost-output" id="c_p${i}" readonly placeholder="$ 0.00"></td>
+        </tr>
+      `;
+    }
+    document.getElementById('personnel_tbody').innerHTML = persHtml;
+
+    // Render Vehicle Rows
+    let vehHtml = '';
+    for (let i = 1; i <= numVehicles; i++) {
+      vehHtml += `
+        <tr class="calc-row">
+          <td>
+            <div style="display:flex; gap:2px;">
+              <input type="text" id="v${i}_desc" placeholder="Veh ${i}: Lic/Make &amp; Route" style="flex:1;">
+              <select class="veh-rate-select" onchange="applyVehiclePresetRate(this, 'r_v${i}')" title="Select preset rate or type directly">
+                <option value="">Rate</option>
+                <option value="1">Rate 1</option>
+                <option value="2">Rate 2</option>
+                <option value="3">Rate 3</option>
+              </select>
+            </div>
+          </td>
+          <td><input type="number" step="any" class="qty" id="q_v${i}" placeholder="Miles"></td>
+          <td><input type="number" step="any" class="rate" id="r_v${i}" placeholder="Rate/Mi"></td>
+          <td><input type="text" class="cost-output" id="c_v${i}" readonly placeholder="$ 0.00"></td>
+        </tr>
+      `;
+    }
+    document.getElementById('vehicles_tbody').innerHTML = vehHtml;
+
+    applyDataToForm(currentData);
+    attachInputListeners();
+    doMath();
+  }
+
+  function attachInputListeners() {
+    document.querySelectorAll('input, textarea, select').forEach(el => {
+      el.removeEventListener('input', doMath);
+      el.removeEventListener('change', doMath);
+      el.addEventListener('input', doMath);
+      el.addEventListener('change', doMath);
+    });
   }
 
   function buildBaseName() {
@@ -868,7 +895,7 @@
     window.print();
   }
 
-  // --- ⚙️ VENDOR RATE PROFILE & 3-MILEAGE PRESET ENGINE ---
+  // --- ⚙️ VENDOR RATE PROFILE & PRESET ENGINE ---
   function openRatesModal() {
     loadSavedRateProfile();
     document.getElementById('ratesModal').style.display = 'flex';
@@ -913,40 +940,28 @@
 
   function applyRateProfileToForm() {
     const saved = localStorage.getItem(RATE_PROFILES_KEY);
-    if (!saved) {
-      saveRateProfile();
-    }
+    if (!saved) saveRateProfile();
     const profile = JSON.parse(localStorage.getItem(RATE_PROFILES_KEY));
 
-    // Auto-populate Vendor Name
-    if (profile.vendor) {
-      document.getElementById('vendor_name').value = profile.vendor;
-    }
-
+    if (profile.vendor) document.getElementById('vendor_name').value = profile.vendor;
     if (profile.r_flt) document.getElementById('r_flt').value = profile.r_flt;
     if (profile.r_avail) document.getElementById('r_avail').value = profile.r_avail;
     
-    // Apply Per Diem to 5 Personnel Rows
     if (profile.r_perdiem) {
-      for (let i = 1; i <= 5; i++) {
-        const el = document.getElementById(`r_p${i}`);
-        if (el) el.value = profile.r_perdiem;
-      }
+      document.querySelectorAll('[id^="r_p"]').forEach(el => el.value = profile.r_perdiem);
     }
 
-    // Default Mileage Rate 1 to all vehicles if empty
     if (profile.r_mi1) {
-      for (let i = 1; i <= 5; i++) {
-        const el = document.getElementById(`r_v${i}`);
-        if (el && !el.value) el.value = profile.r_mi1;
-      }
+      document.querySelectorAll('[id^="r_v"]').forEach(el => {
+        if (!el.value) el.value = profile.r_mi1;
+      });
     }
 
     if (profile.r_payload) document.getElementById('r_pay').value = profile.r_payload;
 
     doMath();
     closeRatesModal();
-    updateStatus(`Applied Vendor Rates: ${profile.vendor || 'Active Profile'}`);
+    updateStatus(`Applied Rates: ${profile.vendor || 'Active'}`);
   }
 
   function applyVehiclePresetRate(selectEl, rateInputId) {
@@ -954,32 +969,21 @@
     const profile = JSON.parse(localStorage.getItem(RATE_PROFILES_KEY) || '{}');
     const inputEl = document.getElementById(rateInputId);
 
-    if (val === '1' && profile.r_mi1) {
-      inputEl.value = profile.r_mi1;
-    } else if (val === '2' && profile.r_mi2) {
-      inputEl.value = profile.r_mi2;
-    } else if (val === '3' && profile.r_mi3) {
-      inputEl.value = profile.r_mi3;
-    }
+    if (val === '1' && profile.r_mi1) inputEl.value = profile.r_mi1;
+    else if (val === '2' && profile.r_mi2) inputEl.value = profile.r_mi2;
+    else if (val === '3' && profile.r_mi3) inputEl.value = profile.r_mi3;
     doMath();
   }
 
   function deleteActiveRateProfile() {
     if (confirm('Delete saved rate profile?')) {
       localStorage.removeItem(RATE_PROFILES_KEY);
-      document.getElementById('preset_vendor_name').value = '';
-      document.getElementById('preset_r_flt').value = '';
-      document.getElementById('preset_r_avail').value = '';
-      document.getElementById('preset_r_perdiem').value = '';
-      document.getElementById('preset_r_payload').value = '';
-      document.getElementById('preset_r_mi1').value = '';
-      document.getElementById('preset_r_mi2').value = '';
-      document.getElementById('preset_r_mi3').value = '';
+      document.querySelectorAll('#ratesModal input').forEach(el => el.value = '');
       updateStatus('Rate profile cleared.');
     }
   }
 
-  // --- 📍 GPS COORDINATE & ELEVATION CAPTURE ---
+  // --- 📍 GPS CAPTURE ---
   function captureGPSLocation() {
     const baseField = document.getElementById('base_loc');
     if (!navigator.geolocation) {
@@ -987,7 +991,7 @@
       return;
     }
 
-    updateStatus('📍 Acquiring GPS satellite fix...');
+    updateStatus('📍 Acquiring GPS fix...');
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const lat = position.coords.latitude.toFixed(5);
@@ -1035,44 +1039,58 @@
       ['UAS Manager / Gov Rep', document.getElementById('uasm_name').value],
       [],
       ['--- PILOT FLIGHT TRACKING ---'],
-      ['Pilot Role / Name', 'Flight Hours'],
-      [document.getElementById('p1_name').value, document.getElementById('p1_flt').value],
-      [document.getElementById('p2_name').value, document.getElementById('p2_flt').value],
-      [document.getElementById('p3_name').value, document.getElementById('p3_flt').value],
-      [document.getElementById('p4_name').value, document.getElementById('p4_flt').value],
-      [],
-      ['--- AIRFRAME TRACKING ---'],
-      ['Tail / Reg #', 'Make / Model', 'Sorties', 'Flight Hours'],
-      [document.getElementById('ac1_reg').value, document.getElementById('ac1_model').value, document.getElementById('ac1_sorties').value, document.getElementById('ac1_flt').value],
-      [document.getElementById('ac2_reg').value, document.getElementById('ac2_model').value, document.getElementById('ac2_sorties').value, document.getElementById('ac2_flt').value],
-      [document.getElementById('ac3_reg').value, document.getElementById('ac3_model').value, document.getElementById('ac3_sorties').value, document.getElementById('ac3_flt').value],
-      [document.getElementById('ac4_reg').value, document.getElementById('ac4_model').value, document.getElementById('ac4_sorties').value, document.getElementById('ac4_flt').value],
-      [],
-      ['--- COST ITEMS & REIMBURSABLES ---'],
-      ['Cost Item Description', 'Quantity', 'Rate ($)', 'Total Cost ($)'],
-      ['Revenue Flight Hours', document.getElementById('q_flt').value, document.getElementById('r_flt').value, document.getElementById('c_flt').value],
-      ['Daily Availability', document.getElementById('q_avail').value, document.getElementById('r_avail').value, document.getElementById('c_avail').value],
-      [document.getElementById('p1_desc').value || 'Person 1', document.getElementById('q_p1').value, document.getElementById('r_p1').value, document.getElementById('c_p1').value],
-      [document.getElementById('p2_desc').value || 'Person 2', document.getElementById('q_p2').value, document.getElementById('r_p2').value, document.getElementById('c_p2').value],
-      [document.getElementById('p3_desc').value || 'Person 3', document.getElementById('q_p3').value, document.getElementById('r_p3').value, document.getElementById('c_p3').value],
-      [document.getElementById('p4_desc').value || 'Person 4', document.getElementById('q_p4').value, document.getElementById('r_p4').value, document.getElementById('c_p4').value],
-      [document.getElementById('p5_desc').value || 'Person 5', document.getElementById('q_p5').value, document.getElementById('r_p5').value, document.getElementById('c_p5').value],
-      [document.getElementById('v1_desc').value || 'Vehicle 1', document.getElementById('q_v1').value, document.getElementById('r_v1').value, document.getElementById('c_v1').value],
-      [document.getElementById('v2_desc').value || 'Vehicle 2', document.getElementById('q_v2').value, document.getElementById('r_v2').value, document.getElementById('c_v2').value],
-      [document.getElementById('v3_desc').value || 'Vehicle 3', document.getElementById('q_v3').value, document.getElementById('r_v3').value, document.getElementById('c_v3').value],
-      [document.getElementById('v4_desc').value || 'Vehicle 4', document.getElementById('q_v4').value, document.getElementById('r_v4').value, document.getElementById('c_v4').value],
-      [document.getElementById('v5_desc').value || 'Vehicle 5', document.getElementById('q_v5').value, document.getElementById('r_v5').value, document.getElementById('c_v5').value],
-      [document.getElementById('pay_desc').value || 'Payload', document.getElementById('q_pay').value, document.getElementById('r_pay').value, document.getElementById('c_pay').value],
-      [document.getElementById('misc_desc').value || 'Misc Reimbursable', document.getElementById('q_misc').value, document.getElementById('r_misc').value, document.getElementById('c_misc').value],
-      ['DAILY GRAND TOTAL COST', '', '', document.getElementById('grandTotal').value],
-      [],
-      ['--- NARRATIVES ---'],
-      ['Aircraft Status', `"${(document.getElementById('box_ac_status').value || '').replace(/"/g, '""')}"`],
-      ['Weather Observations', `"${(document.getElementById('box_weather').value || '').replace(/"/g, '""')}"`],
-      ['Daily Narrative Report', `"${(document.getElementById('box_narrative').value || '').replace(/"/g, '""')}"`],
-      ['Govt Representative Name', document.getElementById('sig_name').value],
-      ['Signature Date', document.getElementById('sig_date').value]
+      ['Pilot Role / Name', 'Flight Hours']
     ];
+
+    const numPilots = parseInt(document.getElementById('cfg_pilots').value) || 4;
+    for (let i = 1; i <= numPilots; i++) {
+      rows.push([document.getElementById(`p${i}_name`)?.value || `Pilot ${i}`, document.getElementById(`p${i}_flt`)?.value || '0']);
+    }
+
+    rows.push([], ['--- AIRFRAME TRACKING ---'], ['Tail / Reg #', 'Make / Model', 'Sorties', 'Flight Hours']);
+    const numAircraft = parseInt(document.getElementById('cfg_aircraft').value) || 4;
+    for (let i = 1; i <= numAircraft; i++) {
+      rows.push([
+        document.getElementById(`ac${i}_reg`)?.value || `Tail #${i}`,
+        document.getElementById(`ac${i}_model`)?.value || '',
+        document.getElementById(`ac${i}_sorties`)?.value || '0',
+        document.getElementById(`ac${i}_flt`)?.value || '0'
+      ]);
+    }
+
+    rows.push([], ['--- COST ITEMS & REIMBURSABLES ---'], ['Cost Item Description', 'Quantity', 'Rate ($)', 'Total Cost ($)']);
+    rows.push(['Revenue Flight Hours', document.getElementById('q_flt').value, document.getElementById('r_flt').value, document.getElementById('c_flt').value]);
+    rows.push(['Daily Availability', document.getElementById('q_avail').value, document.getElementById('r_avail').value, document.getElementById('c_avail').value]);
+
+    const numPersonnel = parseInt(document.getElementById('cfg_personnel').value) || 5;
+    for (let i = 1; i <= numPersonnel; i++) {
+      rows.push([
+        document.getElementById(`p${i}_desc`)?.value || `Person ${i}`,
+        document.getElementById(`q_p${i}`)?.value || '',
+        document.getElementById(`r_p${i}`)?.value || '',
+        document.getElementById(`c_p${i}`)?.value || ''
+      ]);
+    }
+
+    const numVehicles = parseInt(document.getElementById('cfg_vehicles').value) || 5;
+    for (let i = 1; i <= numVehicles; i++) {
+      rows.push([
+        document.getElementById(`v${i}_desc`)?.value || `Vehicle ${i}`,
+        document.getElementById(`q_v${i}`)?.value || '',
+        document.getElementById(`r_v${i}`)?.value || '',
+        document.getElementById(`c_v${i}`)?.value || ''
+      ]);
+    }
+
+    rows.push([document.getElementById('pay_desc').value || 'Payload', document.getElementById('q_pay').value, document.getElementById('r_pay').value, document.getElementById('c_pay').value]);
+    rows.push([document.getElementById('misc_desc').value || 'Misc Reimbursable', document.getElementById('q_misc').value, document.getElementById('r_misc').value, document.getElementById('c_misc').value]);
+    rows.push(['DAILY GRAND TOTAL COST', '', '', document.getElementById('grandTotal').value]);
+    rows.push([], ['--- NARRATIVES ---']);
+    rows.push(['Aircraft Status', `"${(document.getElementById('box_ac_status').value || '').replace(/"/g, '""')}"`]);
+    rows.push(['Weather Observations', `"${(document.getElementById('box_weather').value || '').replace(/"/g, '""')}"`]);
+    rows.push(['Daily Narrative Report', `"${(document.getElementById('box_narrative').value || '').replace(/"/g, '""')}"`]);
+    rows.push(['Govt Representative Name', document.getElementById('sig_name').value]);
+    rows.push(['Signature Date', document.getElementById('sig_date').value]);
 
     const csvContent = rows.map(e => e.map(cell => `"${String(cell || '').replace(/"/g, '""')}"`).join(',')).join('\n');
     const fileName = `${buildBaseName()}.csv`;
@@ -1128,7 +1146,7 @@
     autoSaveActive();
   }
 
-  // --- SIGNATURE CANVAS ENGINE (AUTO-RESIZED TO LARGER BOX) ---
+  // --- SIGNATURE CANVAS ENGINE ---
   let canvas, ctx, drawing = false;
 
   function initSignatureCanvas() {
@@ -1191,7 +1209,7 @@
   // --- FORM SERIALIZATION ---
   function getFormDataObject() {
     const data = {};
-    document.querySelectorAll('input, textarea').forEach(el => {
+    document.querySelectorAll('input, textarea, select').forEach(el => {
       if (el.id) {
         if (el.type === 'checkbox' || el.type === 'radio') {
           data[el.id] = el.checked;
@@ -1207,6 +1225,12 @@
   }
 
   function applyDataToForm(data) {
+    if (!data) return;
+    
+    ['cfg_pilots', 'cfg_aircraft', 'cfg_personnel', 'cfg_vehicles'].forEach(id => {
+      if (data[id]) document.getElementById(id).value = data[id];
+    });
+
     Object.keys(data).forEach(id => {
       const el = document.getElementById(id);
       if (el) {
@@ -1217,15 +1241,15 @@
         }
       }
     });
+    
     if (data['sig_image'] && ctx && canvas) {
       const img = new Image();
       img.onload = () => ctx.drawImage(img, 0, 0);
       img.src = data['sig_image'];
     }
-    doMath();
   }
 
-  // --- IN-APP DRAFT MANAGER ---
+  // --- IN-APP DRAFT MANAGER (AUTO-HIDES IF NO DRAFTS) ---
   function autoSaveActive() {
     try {
       const json = JSON.stringify(getFormDataObject());
@@ -1253,6 +1277,13 @@
     const select = document.getElementById('saved_drafts_select');
     const index = JSON.parse(localStorage.getItem(DRAFTS_INDEX_KEY) || '[]');
     
+    // Auto-hide if no saved drafts exist
+    if (index.length === 0) {
+      select.style.display = 'none';
+      return;
+    }
+
+    select.style.display = 'inline-block';
     select.innerHTML = '<option value="">📂 Load Log...</option>';
     index.forEach(item => {
       const opt = document.createElement('option');
@@ -1269,7 +1300,12 @@
 
     const saved = localStorage.getItem('draft_' + key);
     if (saved) {
-      applyDataToForm(JSON.parse(saved));
+      const data = JSON.parse(saved);
+      ['cfg_pilots', 'cfg_aircraft', 'cfg_personnel', 'cfg_vehicles'].forEach(id => {
+        if (data[id]) document.getElementById(id).value = data[id];
+      });
+      updateDynamicRowCounts();
+      applyDataToForm(data);
       updateStatus("Loaded: " + key);
     }
   }
@@ -1320,6 +1356,10 @@
     reader.onload = function(e) {
       try {
         const data = JSON.parse(e.target.result);
+        ['cfg_pilots', 'cfg_aircraft', 'cfg_personnel', 'cfg_vehicles'].forEach(id => {
+          if (data[id]) document.getElementById(id).value = data[id];
+        });
+        updateDynamicRowCounts();
         applyDataToForm(data);
         autoSaveActive();
         updateStatus("Imported: " + file.name);
@@ -1345,14 +1385,15 @@
 
     const active = localStorage.getItem(ACTIVE_DRAFT_KEY);
     if (active) {
-      applyDataToForm(JSON.parse(active));
+      const data = JSON.parse(active);
+      ['cfg_pilots', 'cfg_aircraft', 'cfg_personnel', 'cfg_vehicles'].forEach(id => {
+        if (data[id]) document.getElementById(id).value = data[id];
+      });
+      updateDynamicRowCounts();
+      applyDataToForm(data);
+    } else {
+      updateDynamicRowCounts();
     }
-
-    document.querySelectorAll('input, textarea').forEach(el => {
-      el.addEventListener('input', () => { doMath(); });
-      el.addEventListener('change', () => { doMath(); });
-    });
-    doMath();
   });
 </script>
 
