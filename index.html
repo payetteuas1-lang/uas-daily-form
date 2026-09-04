@@ -287,7 +287,7 @@
     text-overflow: ellipsis;
   }
 
-  /* FULL-WIDTH LOWER NARRATIVES SECTION WITH DRAGGABLE EXPANSION */
+  /* FULL-WIDTH LOWER NARRATIVES SECTION */
   .narrative-fullwidth-stack {
     display: flex;
     flex-direction: column;
@@ -315,18 +315,32 @@
     align-items: center;
   }
 
-  /* DRAGGABLE RESIZABLE TEXTAREAS */
+  /* DRAGGABLE ON-SCREEN TEXTAREAS */
   .narrative-card textarea {
     width: 100%;
-    min-height: 55px;
+    min-height: 52px;
     border: none;
-    resize: vertical; /* User can drag vertically to expand */
+    resize: vertical;
     font-family: inherit;
     font-size: 7.1pt;
     padding: 4px 6px;
     line-height: 1.3;
     background: #ffffff;
     box-sizing: border-box;
+  }
+
+  /* PRINT-MIRROR CONTAINERS (HIDDEN ON SCREEN, REPLACES TEXTAREA DURING PRINT) */
+  .print-mirror-text {
+    display: none;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: inherit;
+    font-size: 7.0pt;
+    line-height: 1.25;
+    padding: 3px 6px;
+    min-height: 38px;
+    background: transparent;
+    color: #000000;
   }
 
   /* SIGNATURE CANVAS */
@@ -448,7 +462,7 @@
   .alloc-valid { background: #dcfce7; color: #166534; }
   .alloc-invalid { background: #fee2e2; color: #b91c1c; }
 
-  /* STRICT PRINT 1-PAGE RULES */
+  /* STRICT PRINT 1-PAGE RULES & FULL TEXT EXPANSION */
   @media print {
     body { background: #ffffff !important; }
     .page-container {
@@ -468,17 +482,19 @@
       background-color: #f1f5f9 !important;
       color: #000000 !important;
     }
-    input, textarea, select {
+    input, select {
       border: none !important;
       background: transparent !important;
       box-shadow: none !important;
       color: #000000 !important;
       padding: 0 !important;
     }
+    /* HIDE TEXTAREA, SHOW AUTO-EXPANDING PRINT MIRROR */
     .narrative-card textarea {
-      resize: none !important;
-      height: auto !important;
-      overflow: visible !important;
+      display: none !important;
+    }
+    .print-mirror-text {
+      display: block !important;
     }
     input[type="checkbox"], input[type="radio"] {
       appearance: auto;
@@ -540,9 +556,7 @@
 
     <!-- CREW ASSIGNMENT & DIVISION -->
     <div style="font-size:7.0pt; font-weight:bold; color:#1e293b; margin-bottom:3px;">Assign Crew &amp; Allocate Flight Hours:</div>
-    <div id="pop_crew_allocation_container" style="border:1px solid #cbd5e1; border-radius:4px; max-height:160px; overflow-y:auto; margin-bottom:10px;">
-      <!-- Dynamic crew rows -->
-    </div>
+    <div id="pop_crew_allocation_container" style="border:1px solid #cbd5e1; border-radius:4px; max-height:160px; overflow-y:auto; margin-bottom:10px;"></div>
 
     <div style="display:flex; justify-content:space-between; align-items:center;">
       <button type="button" class="btn btn-clear" id="pop_btn_delete_sortie" onclick="deleteCurrentPopoutSortie()" style="display:none;">Delete Sortie</button>
@@ -853,7 +867,7 @@
 
   </div>
 
-  <!-- FULL-WIDTH DRAGGABLE LOWER NARRATIVES SECTION -->
+  <!-- FULL-WIDTH EXPANDED LOWER NARRATIVES SECTION (WITH AUTO-EXPANDING PRINT MIRRORS) -->
   <div class="narrative-fullwidth-stack">
     
     <!-- 15. AIRCRAFT STATUS -->
@@ -862,6 +876,7 @@
         <span>15. Aircraft Status &amp; Maintenance <span class="sub-note">(Inspections, battery cycles, motor calibrations, reasons for unavailability)</span></span>
       </div>
       <textarea id="box_ac_status" placeholder="Detail airworthiness checks, motor calibrations, battery cycle logs, maintenance performed, or downtime causes..."></textarea>
+      <div id="print_mirror_ac_status" class="print-mirror-text"></div>
     </div>
 
     <!-- 16. WEATHER OBSERVATIONS & NARRATIVE -->
@@ -870,6 +885,7 @@
         <span>16. Weather Observations &amp; Conditions <span class="sub-note">(Surface wind, gusts, temp, turbulence/inversion layers, weather delays)</span></span>
       </div>
       <textarea id="box_weather" placeholder="Detail local on-site weather observations, thermal activity, wind shifts, or weather-induced delays/aborts..."></textarea>
+      <div id="print_mirror_weather" class="print-mirror-text"></div>
     </div>
 
     <!-- 17. DAILY NARRATIVE REPORT -->
@@ -878,6 +894,7 @@
         <span>17. Daily Operational Narrative Report <span class="sub-note">(Sortie details, mission objectives, airspace deconfliction, deliverables, SAFECOMs)</span></span>
       </div>
       <textarea id="box_narrative" placeholder="Detail operational events, airspace coordination, deliverables handed over, failsafe / lost link events, SAFECOM numbers..."></textarea>
+      <div id="print_mirror_narrative" class="print-mirror-text"></div>
     </div>
 
   </div>
@@ -906,12 +923,11 @@
 </div>
 
 <script>
-  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v21';
-  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v21';
-  const SETTINGS_PROFILE_KEY = 'uas_unified_settings_profile_v6';
+  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v22';
+  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v22';
+  const SETTINGS_PROFILE_KEY = 'uas_unified_settings_profile_v7';
   let totalCostGlobal = 0;
   
-  // Sorties Data Structure
   let sortiesList = [];
   let currentEditingSortieIndex = -1;
   let tempSortieData = null;
@@ -919,6 +935,15 @@
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
+
+  // --- PRINT-MIRROR SYNC (ENSURES 100% OF TEXT IS PRINTED) ---
+  function syncPrintMirrors() {
+    document.getElementById('print_mirror_ac_status').textContent = document.getElementById('box_ac_status').value || '';
+    document.getElementById('print_mirror_weather').textContent = document.getElementById('box_weather').value || '';
+    document.getElementById('print_mirror_narrative').textContent = document.getElementById('box_narrative').value || '';
+  }
+
+  window.addEventListener('beforeprint', syncPrintMirrors);
 
   // --- POPOUT MODAL SORTIE ENGINE ---
   function openSortieModal(index = -1) {
@@ -1068,7 +1093,6 @@
 
     const assignedKeys = Object.keys(tempSortieData.pilotAllocations);
 
-    // Auto balance other pilot
     if (totalSortieHours > 0 && assignedKeys.length === 2) {
       const otherPIdx = assignedKeys.find(k => parseInt(k) !== parseInt(changedPIdx));
       if (otherPIdx !== undefined) {
@@ -1356,6 +1380,7 @@
 
   function printPDF() {
     updateDocumentTitle();
+    syncPrintMirrors();
     window.print();
   }
 
