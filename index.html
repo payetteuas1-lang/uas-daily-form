@@ -24,9 +24,10 @@
     --success-text: #065f46;
   }
 
+  /* NO URL/PAGE HEADERS OR FOOTERS IN PRINT */
   @page {
     size: letter portrait;
-    margin: 0.16in 0.20in;
+    margin: 0;
   }
 
   * {
@@ -45,7 +46,7 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ENLARGED PROMINENT STICKY TOOLBAR */
+  /* TOP STICKY TOOLBAR */
   .no-print-bar {
     position: sticky;
     top: 0;
@@ -53,94 +54,73 @@
     background: rgba(15, 39, 68, 0.98);
     backdrop-filter: blur(10px);
     color: white;
-    padding: 10px 16px;
+    padding: 8px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-    font-size: 9.0pt;
+    font-size: 8.5pt;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
   }
 
   .status-badge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     background: rgba(255,255,255,0.12);
-    padding: 5px 12px;
+    padding: 4px 10px;
     border-radius: 20px;
-    font-size: 8.2pt;
+    font-size: 7.6pt;
     font-weight: 600;
-    letter-spacing: 0.2px;
   }
 
   .status-dot {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: #10b981;
-    box-shadow: 0 0 8px #10b981;
+    box-shadow: 0 0 6px #10b981;
   }
 
-  .btn-group { 
-    display: flex; 
-    gap: 6px; 
-    align-items: center; 
-    flex-wrap: wrap; 
-  }
+  .btn-group { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
 
-  /* PROMINENT, LARGE SAVED LOGS DROPDOWN */
   .draft-select {
     background: #1e3a5f !important;
     color: #ffffff !important;
     border: 1.5px solid #60a5fa !important;
-    padding: 6px 10px !important;
-    font-size: 8.4pt !important;
+    padding: 4px 8px !important;
+    font-size: 7.8pt !important;
     font-weight: 700 !important;
     border-radius: 4px !important;
-    max-width: 240px !important;
-    height: 32px !important;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    max-width: 220px !important;
+    height: 28px !important;
     display: none;
     cursor: pointer;
   }
-  .draft-select:focus {
-    outline: none;
-    border-color: #93c5fd !important;
-    box-shadow: 0 0 0 2px rgba(96,165,250,0.4);
-  }
 
-  /* ENLARGED BUTTONS */
   .btn {
     border: none;
-    padding: 6px 11px;
+    padding: 5px 9px;
     font-weight: 700;
     cursor: pointer;
-    border-radius: 4px;
-    font-size: 8.2pt;
-    height: 32px;
+    border-radius: 3px;
+    font-size: 7.6pt;
+    height: 28px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 3px;
     transition: all 0.15s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
   }
 
   .btn:active { transform: scale(0.96); }
   .btn-save { background: #2563eb; color: white; }
-  .btn-save:hover { background: #1d4ed8; }
   .btn-aux { background: #475569; color: white; }
-  .btn-aux:hover { background: #334155; }
   .btn-settings { background: #7c3aed; color: white; }
-  .btn-settings:hover { background: #6d28d9; }
   .btn-clear { background: #dc2626; color: white; }
-  .btn-clear:hover { background: #b91c1c; }
   .btn-csv { background: #0284c7; color: white; }
-  .btn-csv:hover { background: #0369a1; }
   .btn-print { background: #059669; color: white; }
-  .btn-print:hover { background: #047857; }
 
   .btn-gps, .btn-action {
     background: #e2e8f0;
@@ -161,7 +141,7 @@
     max-width: 8.5in;
     margin: 6px auto;
     background: var(--surface);
-    padding: 8px 12px;
+    padding: 12px 14px;
     border-radius: 4px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   }
@@ -240,12 +220,13 @@
     background: #f8fafc;
     color: #0f172a;
     font-variant-numeric: tabular-nums;
+    font-size: 7.6pt !important;
   }
 
   #grandTotal {
     background: var(--success-bg) !important;
     color: var(--success-text) !important;
-    font-size: 8.2pt !important;
+    font-size: 8.5pt !important;
     font-weight: 800;
     text-align: right;
     height: 18px;
@@ -284,13 +265,13 @@
   }
 
   .col-top-left {
-    flex: 1.08;
+    flex: 1.05;
     display: flex;
     flex-direction: column;
   }
 
   .col-top-right {
-    flex: 1;
+    flex: 1.05;
     display: flex;
     flex-direction: column;
   }
@@ -347,7 +328,7 @@
 
   .narrative-card textarea {
     width: 100%;
-    min-height: 52px;
+    min-height: 50px;
     border: none;
     resize: vertical;
     font-family: inherit;
@@ -358,7 +339,7 @@
     box-sizing: border-box;
   }
 
-  /* PRINT-MIRROR CONTAINERS */
+  /* PRINT MIRRORS */
   .print-mirror-text {
     display: none;
     white-space: pre-wrap;
@@ -367,47 +348,41 @@
     font-size: 7.0pt;
     line-height: 1.25;
     padding: 3px 6px;
-    min-height: 38px;
+    min-height: 36px;
     background: transparent;
     color: #000000;
   }
 
-  /* SIGNATURE CANVAS */
-  .sig-container {
-    position: relative;
+  /* COMPACT THUMBNAIL SIGNATURE BOX ON MAIN SCREEN */
+  .sig-thumbnail-box {
     width: 100%;
-    height: 48px;
+    height: 38px;
     background: #ffffff;
     border: 1px dashed #94a3b8;
     border-radius: 2px;
-  }
-
-  #sig-canvas {
-    width: 100%;
-    height: 100%;
-    touch-action: none;
-    cursor: crosshair;
-  }
-
-  .sig-clear-btn {
-    position: absolute;
-    bottom: 2px;
-    right: 2px;
-    background: #f1f5f9;
-    border: 1px solid #cbd5e1;
-    color: #475569;
-    font-size: 5.8pt;
-    font-weight: 600;
-    padding: 1px 5px;
-    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .sig-thumbnail-box img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+  }
+  .sig-prompt-text {
+    font-size: 6.8pt;
+    color: #64748b;
+    font-style: italic;
   }
 
   /* MODALS */
   .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(15, 23, 42, 0.7);
+    background: rgba(15, 23, 42, 0.75);
     backdrop-filter: blur(4px);
     display: none;
     justify-content: center;
@@ -472,35 +447,38 @@
     flex-shrink: 0;
   }
 
-  /* POPOUT SORTIE MODAL STYLES */
-  .pilot-alloc-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 3px 6px;
+  /* POPOUT SIGNATURE CANVAS (LARGE FULL-WIDTH DRAWING SURFACE) */
+  .modal-sig-canvas-container {
+    width: 100%;
+    height: 160px;
     background: #ffffff;
-    border-bottom: 1px solid #f1f5f9;
+    border: 2px dashed #94a3b8;
+    border-radius: 4px;
+    position: relative;
+    margin-bottom: 10px;
+    touch-action: none;
+  }
+  #popout-sig-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: crosshair;
+    touch-action: none;
   }
 
-  .alloc-badge {
-    font-size: 6.4pt;
-    font-weight: 700;
-    padding: 1px 5px;
-    border-radius: 3px;
-  }
-  .alloc-valid { background: #dcfce7; color: #166534; }
-  .alloc-invalid { background: #fee2e2; color: #b91c1c; }
-
-  /* STRICT PRINT 1-PAGE RULES */
+  /* PRINT STYLING: ZERO MARGINS, NO URLS, EMBEDDED SORTIE TABLE */
   @media print {
-    body { background: #ffffff !important; }
+    body { 
+      background: #ffffff !important; 
+      padding: 0.16in 0.20in !important;
+    }
     .page-container {
       margin: 0 !important;
       padding: 0 !important;
       max-width: 100% !important;
       box-shadow: none !important;
     }
-    .no-print-bar, .sig-clear-btn, .btn-gps, .btn-action, .modal-overlay, .veh-rate-select, #sorties_container { display: none !important; }
+    .no-print-bar, .modal-overlay, .btn-gps, .btn-action, .veh-rate-select { display: none !important; }
     th, td, .narrative-card { border-color: #000000 !important; }
     .header-banner {
       background: #0f2744 !important;
@@ -524,11 +502,20 @@
     .print-mirror-text {
       display: block !important;
     }
-    input[type="checkbox"], input[type="radio"] {
-      appearance: auto;
-      -webkit-appearance: auto;
+    .sig-prompt-text {
+      display: none !important;
     }
-    #grandTotal { background: transparent !important; color: #000000 !important; }
+    .sig-thumbnail-box {
+      border: none !important;
+    }
+    #sorties_container {
+      max-height: none !important;
+      overflow: visible !important;
+    }
+    .sortie-min-row {
+      border-color: #000000 !important;
+      padding: 1px 2px !important;
+    }
   }
 </style>
 </head>
@@ -542,7 +529,6 @@
   </div>
 
   <div class="btn-group">
-    <!-- PROMINENT HIGH-VISIBILITY SAVED LOGS SELECTOR -->
     <select id="saved_drafts_select" class="draft-select" onchange="loadSelectedDraft()">
       <option value="">📂 Load Saved Log...</option>
     </select>
@@ -555,6 +541,31 @@
     <input type="file" id="fileInput" style="display:none" accept=".json,application/json" onchange="openJSONFile(event)">
     <button class="btn btn-csv" onclick="exportCSVFile()">📊 CSV</button>
     <button class="btn btn-print" onclick="printPDF()">🖨️ PDF</button>
+  </div>
+</div>
+
+<!-- ✍️ POPOUT MODAL: LARGE SIGNATURE DRAWING PAD -->
+<div class="modal-overlay" id="sigModal">
+  <div class="modal-content" style="max-width: 460px;">
+    <div class="modal-header">
+      <span>✍️ Government Representative Signature</span>
+      <button style="border:none; background:none; font-size:12pt; cursor:pointer;" onclick="closeSigModal()">✕</button>
+    </div>
+    <div style="font-size:7.2pt; color:#475569; margin-bottom:6px;">
+      Draw signature using Apple Pencil, stylus, or finger inside the box below:
+    </div>
+
+    <div class="modal-sig-canvas-container">
+      <canvas id="popout-sig-canvas"></canvas>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <button type="button" class="btn btn-clear" onclick="clearPopoutCanvas()">Clear Signature</button>
+      <div style="display:flex; gap:6px;">
+        <button type="button" class="btn btn-aux" onclick="closeSigModal()">Cancel</button>
+        <button type="button" class="btn btn-print" onclick="acceptPopoutSignature()">✓ Accept Signature</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -795,10 +806,10 @@
       <!-- SORTIE LOGGER HEADER & TRIGGER -->
       <div style="display:flex; justify-content:space-between; align-items:center; background:#1e3a5f; color:white; padding:2.5px 6px; border-radius:2px; margin-bottom:2px;">
         <span class="bold" style="font-size:7.0pt;">FLIGHT SORTIE LOG</span>
-        <button type="button" class="btn btn-print no-print-bar" onclick="openSortieModal(-1)" style="padding:1px 6px; font-size:6.4pt;">➕ Add Sortie</button>
+        <button type="button" class="btn btn-print no-print-bar" onclick="openSortieModal(-1)" style="padding:1px 6px; font-size:6.4pt; height:18px;">➕ Add Sortie</button>
       </div>
 
-      <!-- MINIMIZED SORTIES COMPACT CONTAINER -->
+      <!-- SORTIES CONTAINER (PRINTS ON PDF) -->
       <div id="sorties_container" style="margin-bottom:3px; max-height:85px; overflow-y:auto;"></div>
 
       <!-- AUTOMATIC PILOT & AIRCRAFT ROLLUP SUMMARY TABLES -->
@@ -836,15 +847,15 @@
 
     </div>
 
-    <!-- RIGHT SIDE: COST TABLE -->
+    <!-- RIGHT SIDE: COST TABLE (WIDENED COST & RATE COLUMNS) -->
     <div class="col-top-right">
       <table>
         <thead>
           <tr class="bg-header bold center">
-            <th style="width: 44%; text-align: left; padding-left: 5px;">Cost Items &amp; Reimbursables</th>
-            <th style="width: 16%;">Qty</th>
-            <th style="width: 18%;">Rate ($)</th>
-            <th style="width: 22%;">Cost ($)</th>
+            <th style="width: 38%; text-align: left; padding-left: 4px;">Cost Items &amp; Reimbursables</th>
+            <th style="width: 15%;">Qty</th>
+            <th style="width: 19%;">Rate ($)</th>
+            <th style="width: 28%;">Cost ($)</th>
           </tr>
         </thead>
         <tbody>
@@ -896,7 +907,7 @@
 
   </div>
 
-  <!-- FULL-WIDTH DRAGGABLE LOWER NARRATIVES SECTION -->
+  <!-- FULL-WIDTH EXPANDED LOWER NARRATIVES SECTION -->
   <div class="narrative-fullwidth-stack">
     
     <!-- 15. AIRCRAFT STATUS -->
@@ -928,7 +939,7 @@
 
   </div>
 
-  <!-- SECTION 5: APPROVAL SIGNATURES -->
+  <!-- SECTION 5: APPROVAL SIGNATURES (POPOUT SIGNATURE THUMBNAIL) -->
   <table>
     <tr>
       <td style="width: 38%; vertical-align: bottom; padding-bottom: 4px;">
@@ -936,10 +947,10 @@
         <input type="text" id="sig_name" placeholder="Printed Full Name &amp; Title">
       </td>
       <td style="width: 44%; vertical-align: top;">
-        <div class="bold" style="margin-bottom: 2px;">Govt Representative Signature: <span class="sub-note">(Draw signature below)</span></div>
-        <div class="sig-container" id="sig-box">
-          <canvas id="sig-canvas"></canvas>
-          <button type="button" class="sig-clear-btn" onclick="clearSignature()">Clear</button>
+        <div class="bold" style="margin-bottom: 2px;">Govt Representative Signature: <span class="sub-note">(Tap box to sign)</span></div>
+        <div class="sig-thumbnail-box" onclick="openSigModal()" title="Tap to sign on large drawing canvas">
+          <img id="sig_thumbnail_img" style="display:none;" alt="Signature">
+          <span id="sig_thumbnail_prompt" class="sig-prompt-text">✍️ Tap here to open signature pad</span>
         </div>
       </td>
       <td style="width: 18%; vertical-align: bottom; padding-bottom: 4px;">
@@ -952,14 +963,15 @@
 </div>
 
 <script>
-  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v24';
-  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v24';
-  const SETTINGS_PROFILE_KEY = 'uas_unified_settings_profile_v9';
+  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v25';
+  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v25';
+  const SETTINGS_PROFILE_KEY = 'uas_unified_settings_profile_v10';
   let totalCostGlobal = 0;
   
   let sortiesList = [];
   let currentEditingSortieIndex = -1;
   let tempSortieData = null;
+  let savedSignatureDataUrl = null;
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
@@ -973,7 +985,109 @@
 
   window.addEventListener('beforeprint', syncPrintMirrors);
 
-  // --- POPOUT MODAL SORTIE ENGINE (EXACT UNROUNDED DECIMALS) ---
+  // --- ✍️ POPOUT SIGNATURE MODAL ENGINE ---
+  let popSigCanvas, popSigCtx, popSigDrawing = false;
+
+  function initPopoutSigCanvas() {
+    popSigCanvas = document.getElementById('popout-sig-canvas');
+    if (!popSigCanvas) return;
+
+    popSigCanvas.width = popSigCanvas.parentElement.clientWidth;
+    popSigCanvas.height = popSigCanvas.parentElement.clientHeight;
+    popSigCtx = popSigCanvas.getContext('2d');
+    popSigCtx.lineWidth = 2.2;
+    popSigCtx.lineCap = 'round';
+    popSigCtx.strokeStyle = '#0f2744';
+
+    function getPos(e) {
+      const rect = popSigCanvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return { x: clientX - rect.left, y: clientY - rect.top };
+    }
+
+    function startDraw(e) {
+      popSigDrawing = true;
+      const pos = getPos(e);
+      popSigCtx.beginPath();
+      popSigCtx.moveTo(pos.x, pos.y);
+      e.preventDefault();
+    }
+
+    function moveDraw(e) {
+      if (!popSigDrawing) return;
+      const pos = getPos(e);
+      popSigCtx.lineTo(pos.x, pos.y);
+      popSigCtx.stroke();
+      e.preventDefault();
+    }
+
+    function endDraw() {
+      popSigDrawing = false;
+    }
+
+    popSigCanvas.addEventListener('mousedown', startDraw);
+    popSigCanvas.addEventListener('mousemove', moveDraw);
+    window.addEventListener('mouseup', endDraw);
+
+    popSigCanvas.addEventListener('touchstart', startDraw, {passive: false});
+    popSigCanvas.addEventListener('touchmove', moveDraw, {passive: false});
+    window.addEventListener('touchend', endDraw);
+  }
+
+  function openSigModal() {
+    document.getElementById('sigModal').style.display = 'flex';
+    setTimeout(() => {
+      initPopoutSigCanvas();
+      if (savedSignatureDataUrl) {
+        const img = new Image();
+        img.onload = () => popSigCtx.drawImage(img, 0, 0, popSigCanvas.width, popSigCanvas.height);
+        img.src = savedSignatureDataUrl;
+      }
+    }, 50);
+  }
+
+  function closeSigModal() {
+    document.getElementById('sigModal').style.display = 'none';
+  }
+
+  function clearPopoutCanvas() {
+    if (popSigCtx && popSigCanvas) {
+      popSigCtx.clearRect(0, 0, popSigCanvas.width, popSigCanvas.height);
+    }
+  }
+
+  function acceptPopoutSignature() {
+    if (popSigCanvas) {
+      savedSignatureDataUrl = popSigCanvas.toDataURL('image/png');
+      updateSignatureThumbnail();
+      autoSaveActive();
+    }
+    closeSigModal();
+  }
+
+  function clearSignature() {
+    savedSignatureDataUrl = null;
+    clearPopoutCanvas();
+    updateSignatureThumbnail();
+    autoSaveActive();
+  }
+
+  function updateSignatureThumbnail() {
+    const img = document.getElementById('sig_thumbnail_img');
+    const prompt = document.getElementById('sig_thumbnail_prompt');
+    if (savedSignatureDataUrl) {
+      img.src = savedSignatureDataUrl;
+      img.style.display = 'block';
+      prompt.style.display = 'none';
+    } else {
+      img.src = '';
+      img.style.display = 'none';
+      prompt.style.display = 'inline';
+    }
+  }
+
+  // --- POPOUT MODAL SORTIE ENGINE ---
   function openSortieModal(index = -1) {
     currentEditingSortieIndex = index;
     const roster = getRosterData();
@@ -1697,70 +1811,11 @@
     autoSaveActive();
   }
 
-  // --- SIGNATURE CANVAS ENGINE ---
-  let canvas, ctx, drawing = false;
-
-  function initSignatureCanvas() {
-    canvas = document.getElementById('sig-canvas');
-    if (!canvas) return;
-    
-    canvas.width = canvas.parentElement.clientWidth;
-    canvas.height = canvas.parentElement.clientHeight;
-    ctx = canvas.getContext('2d');
-    ctx.lineWidth = 1.8;
-    ctx.lineCap = 'round';
-    ctx.strokeStyle = '#0f2744';
-
-    function getPos(e) {
-      const rect = canvas.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      return { x: clientX - rect.left, y: clientY - rect.top };
-    }
-
-    function startDraw(e) {
-      drawing = true;
-      const pos = getPos(e);
-      ctx.beginPath();
-      ctx.moveTo(pos.x, pos.y);
-      e.preventDefault();
-    }
-
-    function moveDraw(e) {
-      if (!drawing) return;
-      const pos = getPos(e);
-      ctx.lineTo(pos.x, pos.y);
-      ctx.stroke();
-      e.preventDefault();
-    }
-
-    function endDraw() {
-      if (drawing) {
-        drawing = false;
-        autoSaveActive();
-      }
-    }
-
-    canvas.addEventListener('mousedown', startDraw);
-    canvas.addEventListener('mousemove', moveDraw);
-    window.addEventListener('mouseup', endDraw);
-
-    canvas.addEventListener('touchstart', startDraw, {passive: false});
-    canvas.addEventListener('touchmove', moveDraw, {passive: false});
-    window.addEventListener('touchend', endDraw);
-  }
-
-  function clearSignature() {
-    if (ctx && canvas) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      autoSaveActive();
-    }
-  }
-
   // --- FORM SERIALIZATION ---
   function getFormDataObject() {
     const data = {
-      sorties: sortiesList
+      sorties: sortiesList,
+      signature: savedSignatureDataUrl
     };
     document.querySelectorAll('input, textarea, select').forEach(el => {
       if (el.id) {
@@ -1771,9 +1826,6 @@
         }
       }
     });
-    if (canvas) {
-      data['sig_image'] = canvas.toDataURL();
-    }
     return data;
   }
 
@@ -1784,12 +1836,20 @@
       sortiesList = data.sorties;
     }
 
+    if (data.signature) {
+      savedSignatureDataUrl = data.signature;
+      updateSignatureThumbnail();
+    } else {
+      savedSignatureDataUrl = null;
+      updateSignatureThumbnail();
+    }
+
     ['cfg_personnel', 'cfg_vehicles'].forEach(id => {
       if (data[id]) document.getElementById(id).value = data[id];
     });
 
     Object.keys(data).forEach(id => {
-      if (id === 'sorties') return;
+      if (id === 'sorties' || id === 'signature') return;
       const el = document.getElementById(id);
       if (el) {
         if (el.type === 'checkbox' || el.type === 'radio') {
@@ -1799,12 +1859,6 @@
         }
       }
     });
-    
-    if (data['sig_image'] && ctx && canvas) {
-      const img = new Image();
-      img.onload = () => ctx.drawImage(img, 0, 0);
-      img.src = data['sig_image'];
-    }
 
     renderMinimizedSorties();
     recalcFlightSummaries();
@@ -1937,7 +1991,6 @@
   }
 
   window.addEventListener('DOMContentLoaded', () => {
-    initSignatureCanvas();
     refreshDraftsDropdown();
     loadSettingsProfile();
 
