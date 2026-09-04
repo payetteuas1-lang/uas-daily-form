@@ -453,7 +453,7 @@
   </div>
 </div>
 
-<!-- ⚙️ UNIFIED SETTINGS MODAL (ROW COUNTS & CONTRACT RATES) -->
+<!-- ⚙️ UNIFIED SETTINGS MODAL -->
 <div class="modal-overlay" id="settingsModal">
   <div class="modal-content">
     <div class="modal-header">
@@ -654,12 +654,10 @@
           <td style="width: 10%;">Sorties</td>
           <td style="width: 12%;">Flt Hrs</td>
         </tr>
-        <tbody id="pilot_aircraft_tbody">
-          <!-- Dynamic rendering via JS -->
-        </tbody>
+        <tbody id="pilot_aircraft_tbody"></tbody>
       </table>
 
-      <!-- COST TABLE (DYNAMIC PERSONNEL & VEHICLES) -->
+      <!-- COST TABLE -->
       <table>
         <thead>
           <tr class="bg-header bold center">
@@ -686,15 +684,11 @@
 
           <!-- DYNAMIC PERSONNEL ROWS -->
           <tr class="bg-section"><td colspan="4">PERSONNEL PER DIEM / EXTENDED STANDBY (<span id="lbl_pers_count">5</span> PERSONS)</td></tr>
-          <tbody id="personnel_tbody">
-            <!-- Dynamic rows rendered via JS -->
-          </tbody>
+          <tbody id="personnel_tbody"></tbody>
 
           <!-- DYNAMIC VEHICLE ROWS -->
           <tr class="bg-section"><td colspan="4">VEHICLE MILEAGE &amp; SUPPORT TRUCKS (<span id="lbl_veh_count">5</span> VEHICLES)</td></tr>
-          <tbody id="vehicles_tbody">
-            <!-- Dynamic rows rendered via JS -->
-          </tbody>
+          <tbody id="vehicles_tbody"></tbody>
 
           <!-- PAYLOAD & REIMBURSABLES -->
           <tr class="calc-row">
@@ -776,9 +770,9 @@
 </div>
 
 <script>
-  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v9';
-  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v9';
-  const RATE_PROFILES_KEY = 'uas_vendor_rate_preset_profiles_v7';
+  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v10';
+  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v10';
+  const RATE_PROFILES_KEY = 'uas_vendor_rate_preset_profiles_v8';
   let totalCostGlobal = 0;
 
   if ('serviceWorker' in navigator) {
@@ -983,45 +977,66 @@
     }
   }
 
-  // --- 🌤️ LIVE WEATHER PULL ---
+  // --- 🌤️ ROBUST MULTI-STAGE LIVE WEATHER ENGINE ---
   async function fetchLiveWeather() {
     const wxBox = document.getElementById('box_weather');
     const baseVal = document.getElementById('base_loc').value;
     let lat = null, lon = null;
 
-    const coordMatch = baseVal.match(/(-?\d+\.\d+)°?\s*[NS]?\s*,\s*(-?\d+\.\d+)°?\s*[EW]?/i);
-    if (coordMatch) {
-      lat = parseFloat(coordMatch[1]);
-      lon = parseFloat(coordMatch[2]);
+    // Stage 1: Parse coordinates from LRZ box (e.g. 44.123, -115.456 or 44.123° N, 115.456° W)
+    const matches = baseVal.match(/(-?\d+\.\d+)[^\d-]+(-?\d+\.\d+)/);
+    if (matches) {
+      lat = parseFloat(matches[1]);
+      lon = parseFloat(matches[2]);
       if (baseVal.toUpperCase().includes('S')) lat = -Math.abs(lat);
       if (baseVal.toUpperCase().includes('W') || (lon > 0 && !baseVal.toUpperCase().includes('E'))) lon = -Math.abs(lon);
     }
 
+    // Stage 2: Query Device GPS
     if (!lat || !lon) {
-      if (!navigator.geolocation) {
-        alert('Location not found. Use GPS button on LRZ first.');
-        return;
+      if (navigator.geolocation) {
+        updateStatus('📍 Acquiring GPS coordinates...');
+        navigator.geolocation.getCurrentPosition(
+          pos => {
+            queryWeatherAPI(pos.coords.latitude, pos.coords.longitude);
+          },
+          async err => {
+            // Stage 3: Fallback to IP Network Location if GPS timed out or was blocked
+            updateStatus('📍 GPS timed out, using Network Location...');
+            await fetchIPLocationAndWeather();
+          },
+          { enableHighAccuracy: false, timeout: 6000 }
+        );
+      } else {
+        await fetchIPLocationAndWeather();
       }
-      updateStatus('📍 Getting GPS for weather...');
-      navigator.geolocation.getCurrentPosition(
-        pos => queryWeatherAPI(pos.coords.latitude, pos.coords.longitude),
-        err => {
-          alert('GPS required for weather: ' + err.message);
-          updateStatus('Weather fetch failed.', true);
-        },
-        { enableHighAccuracy: true, timeout: 10000 }
-      );
     } else {
       queryWeatherAPI(lat, lon);
     }
   }
 
-  async function queryWeatherAPI(lat, lon) {
-    updateStatus('🌤️ Querying live meteorological data...');
+  async function fetchIPLocationAndWeather() {
+    try {
+      const res = await fetch('https://ipapi.co/json/');
+      if (!res.ok) throw new Error('IP service error');
+      const data = await res.json();
+      if (data.latitude && data.longitude) {
+        queryWeatherAPI(data.latitude, data.longitude, `${data.city || 'Regional'}, ${data.region_code || ''}`);
+      } else {
+        throw new Error('No coordinates returned');
+      }
+    } catch (e) {
+      alert('Unable to determine location. Please click the "📍 GPS" button on the LRZ box first or enter coordinates manually.');
+      updateStatus('Location unavailable for weather.', true);
+    }
+  }
+
+  async function queryWeatherAPI(lat, lon, locLabel = '') {
+    updateStatus('🌤️ Fetching live meteorological data...');
     try {
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m,weather_code&temperature_unit=fahrenheit&wind_speed_unit=knots&precipitation_unit=inch`;
       const res = await fetch(url);
-      if (!res.ok) throw new Error('Network error');
+      if (!res.ok) throw new Error(`Weather Server Error (${res.status})`);
       const data = await res.json();
       const cur = data.current;
 
@@ -1034,7 +1049,7 @@
       const sky = wmoCodeToCondition(cur.weather_code);
       const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-      const wxObs = `[Obs ${timeStr}]: ${temp}°F | Wind: ${windKts} kts (Gusts: ${gustsKts} kts) from ${cur.wind_direction_10m}° ${windDir} | RH: ${rh}% | Sky: ${sky} | Alt: ${pressureInHg} inHg`;
+      let wxObs = `[Obs ${timeStr}${locLabel ? ' - ' + locLabel : ''}]: ${temp}°F | Wind: ${windKts} kts (Gusts: ${gustsKts} kts) from ${cur.wind_direction_10m}° ${windDir} | RH: ${rh}% | Sky: ${sky} | Alt: ${pressureInHg} inHg`;
 
       const wxBox = document.getElementById('box_weather');
       if (wxBox.value.trim() !== '') {
@@ -1046,8 +1061,8 @@
       updateStatus(`🌤️ Weather Updated @ ${timeStr}`);
       autoSaveActive();
     } catch (e) {
-      alert('Unable to fetch online weather. Enter observations manually.');
-      updateStatus('Offline: Weather not fetched.', true);
+      alert(`Weather fetch failed: ${e.message}. Please verify internet access or enter observations manually.`);
+      updateStatus(`Weather error: ${e.message}`, true);
     }
   }
 
