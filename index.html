@@ -406,7 +406,7 @@
     flex-shrink: 0;
   }
 
-  /* SORTIE ROW STYLES */
+  /* SORTIE ENTRY CARD STYLES */
   .sortie-entry-card {
     background: #f8fafc;
     border: 1px solid #cbd5e1;
@@ -415,18 +415,23 @@
     margin-bottom: 4px;
   }
 
-  .pilot-checkbox-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3px;
-    margin-top: 3px;
-    padding: 3px 5px;
+  .pilot-alloc-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 4px;
     background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 3px;
-    max-height: 70px;
-    overflow-y: auto;
+    border-bottom: 1px solid #f1f5f9;
   }
+
+  .alloc-badge {
+    font-size: 6.4pt;
+    font-weight: 700;
+    padding: 1px 4px;
+    border-radius: 2px;
+  }
+  .alloc-valid { background: #dcfce7; color: #166534; }
+  .alloc-invalid { background: #fee2e2; color: #b91c1c; }
 
   /* STRICT PRINT 1-PAGE RULES */
   @media print {
@@ -689,8 +694,8 @@
         <button type="button" class="btn btn-print no-print-bar" onclick="addSortieRow()" style="padding:1px 5px; font-size:6.2pt;">➕ Add Sortie</button>
       </div>
 
-      <!-- SORTIES CONTAINER (ACTIVE ENTRIES) -->
-      <div id="sorties_container" style="margin-bottom:3px; max-height:140px; overflow-y:auto;">
+      <!-- SORTIES CONTAINER (ACTIVE ENTRIES WITH TIME DIVISION & OVER-ALLOCATION PREVENTION) -->
+      <div id="sorties_container" style="margin-bottom:3px; max-height:160px; overflow-y:auto;">
         <!-- Dynamic sorties inserted here -->
       </div>
 
@@ -795,9 +800,9 @@
     <!-- 15. AIRCRAFT STATUS -->
     <div class="narrative-card">
       <div class="narrative-card-header">
-        <span>15. Aircraft Status &amp; Maintenance <span class="sub-note">(Inspections, battery cycles, motor calibrations, reasons for unavailability)</span></span>
+        <span>15. Aircraft Status &amp; Maintenance <span class="sub-note">(Inspections, battery cycles, calibrations, downtime causes)</span></span>
       </div>
-      <textarea id="box_ac_status" placeholder="Detail airworthiness checks, motor/sensor calibrations, battery cycle logs, maintenance performed, or downtime causes..."></textarea>
+      <textarea id="box_ac_status" placeholder="Detail airworthiness checks, motor calibrations, battery cycle logs, maintenance performed, or reasons for unavailability..."></textarea>
     </div>
 
     <!-- 16. WEATHER OBSERVATIONS & NARRATIVE -->
@@ -842,25 +847,25 @@
 </div>
 
 <script>
-  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v16';
-  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v16';
-  const SETTINGS_PROFILE_KEY = 'uas_unified_settings_profile_v1';
+  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v17';
+  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v17';
+  const SETTINGS_PROFILE_KEY = 'uas_unified_settings_profile_v2';
   let totalCostGlobal = 0;
   
-  // Sorties Array
+  // Sorties Array with individual pilot hour allocations
   let sortiesList = [];
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   }
 
-  // --- SORTIE MANAGEMENT ENGINE ---
+  // --- SORTIE MANAGEMENT ENGINE WITH PILOT TIME DIVISION ---
   function addSortieRow(sortieData = null) {
     const defaultData = sortieData || {
       id: Date.now(),
       aircraftIndex: 0,
       duration: '',
-      pilots: []
+      pilotAllocations: {} // { pIdx: hours }
     };
 
     sortiesList.push(defaultData);
@@ -879,13 +884,12 @@
     const roster = getRosterData();
     
     if (sortiesList.length === 0) {
-      container.innerHTML = `<div style="text-align:center; padding:6px; color:#64748b; font-style:italic; font-size:6.8pt; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:3px;">No sorties logged yet. Click "➕ Add Sortie" to log flights.</div>`;
+      container.innerHTML = `<div style="text-align:center; padding:6px; color:#64748b; font-style:italic; font-size:6.8pt; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:3px;">No sorties logged. Click "➕ Add Sortie" to log flights and divide pilot hours.</div>`;
       return;
     }
 
     let html = '';
     sortiesList.forEach((st, idx) => {
-      // Build aircraft options
       let acOptions = '';
       roster.aircraft.forEach((ac, aIdx) => {
         if (ac.tail || ac.model) {
@@ -893,36 +897,83 @@
           acOptions += `<option value="${aIdx}" ${selected}>${ac.tail} - ${ac.model}</option>`;
         }
       });
-      if (!acOptions) acOptions = `<option value="0">Aircraft 1 (Configure in Settings)</option>`;
+      if (!acOptions) acOptions = `<option value="0">Aircraft 1</option>`;
 
-      // Build pilots checkboxes
-      let pilotCheckboxes = '';
+      const totalSortieHours = parseFloat(st.duration) || 0;
+      let allocatedPilotHours = 0;
+      let activePilotsCount = 0;
+
+      // Pilot hour allocation rows
+      let pilotAllocationRows = '';
       roster.pilots.forEach((pName, pIdx) => {
         if (pName.trim()) {
-          const isChecked = st.pilots.includes(pIdx) ? 'checked' : '';
-          pilotCheckboxes += `
-            <label class="checkbox-label" style="font-size:6.4pt;">
-              <input type="checkbox" onchange="toggleSortiePilot(${idx}, ${pIdx}, this.checked)" ${isChecked}> ${pName}
-            </label>
+          const isAssigned = st.pilotAllocations && st.pilotAllocations[pIdx] !== undefined;
+          const assignedHours = isAssigned ? st.pilotAllocations[pIdx] : '';
+          if (isAssigned) {
+            allocatedPilotHours += (parseFloat(assignedHours) || 0);
+            activePilotsCount++;
+          }
+
+          pilotAllocationRows += `
+            <div class="pilot-alloc-row">
+              <label class="checkbox-label" style="font-size:6.4pt; flex:1;">
+                <input type="checkbox" onchange="toggleSortiePilotAllocation(${idx}, ${pIdx}, this.checked)" ${isAssigned ? 'checked' : ''}>
+                <span>${pName}</span>
+              </label>
+              ${isAssigned ? `
+                <div style="display:flex; align-items:center; gap:2px;">
+                  <span style="font-size:6.0pt; color:#64748b;">Flt:</span>
+                  <input type="number" step="0.1" max="${totalSortieHours}" value="${assignedHours}" placeholder="0.0" 
+                    oninput="updatePilotHourAllocation(${idx}, ${pIdx}, this.value)" 
+                    style="width:46px; height:15px; font-size:6.6pt;">
+                  <span style="font-size:6.0pt; color:#64748b;">hrs</span>
+                </div>
+              ` : ''}
+            </div>
           `;
         }
       });
-      if (!pilotCheckboxes) pilotCheckboxes = `<span style="color:#94a3b8; font-size:6.2pt;">Add pilots in ⚙️ Settings</span>`;
+
+      // Allocation validation check
+      allocatedPilotHours = parseFloat(allocatedPilotHours.toFixed(2));
+      const isOverAllocated = totalSortieHours > 0 && allocatedPilotHours > totalSortieHours;
+      const isComplete = totalSortieHours > 0 && Math.abs(allocatedPilotHours - totalSortieHours) < 0.01;
 
       html += `
-        <div class="sortie-entry-card">
+        <div class="sortie-entry-card" style="${isOverAllocated ? 'border-color:#ef4444; background:#fff5f5;' : ''}">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
-            <span class="bold" style="color:#0f2744; font-size:6.8pt;">Sortie #${idx + 1}</span>
-            <button type="button" class="btn-action no-print-bar" onclick="deleteSortieRow(${idx})" style="color:#b91c1c;">✕ Delete</button>
+            <div style="display:flex; align-items:center; gap:4px;">
+              <span class="bold" style="color:#0f2744; font-size:6.8pt;">Sortie #${idx + 1}</span>
+              <span class="alloc-badge ${isOverAllocated ? 'alloc-invalid' : (isComplete ? 'alloc-valid' : '')}">
+                Allocated: ${allocatedPilotHours} / ${totalSortieHours > 0 ? totalSortieHours : '0.0'} hrs
+              </span>
+            </div>
+            <div style="display:flex; gap:3px;">
+              ${activePilotsCount > 1 && totalSortieHours > 0 ? `
+                <button type="button" class="btn-action no-print-bar" onclick="splitEvenlySortiePilots(${idx})" title="Divide flight time evenly between selected pilots">➗ Split Evenly</button>
+              ` : ''}
+              <button type="button" class="btn-action no-print-bar" onclick="deleteSortieRow(${idx})" style="color:#b91c1c;">✕ Delete</button>
+            </div>
           </div>
-          <div style="display:flex; gap:4px; margin-bottom:2px;">
+          
+          <div style="display:flex; gap:4px; margin-bottom:3px;">
             <select style="flex:1;" onchange="updateSortieAircraft(${idx}, this.value)">${acOptions}</select>
-            <input type="number" step="0.1" placeholder="Flt Hrs" value="${st.duration}" oninput="updateSortieDuration(${idx}, this.value)" style="width:55px;">
+            <div style="display:flex; align-items:center; gap:2px;">
+              <span style="font-size:6.2pt; font-weight:bold; color:#0f2744;">A/C Time:</span>
+              <input type="number" step="0.1" placeholder="Total Hrs" value="${st.duration}" oninput="updateSortieDuration(${idx}, this.value)" style="width:58px; font-weight:bold;">
+            </div>
           </div>
-          <div style="font-size:6.0pt; color:#475569; font-weight:bold;">Crew on Sortie (Check all that apply):</div>
-          <div class="pilot-checkbox-grid">
-            ${pilotCheckboxes}
+
+          <div style="font-size:6.0pt; color:#475569; font-weight:bold; margin-bottom:1px;">Assign Crew &amp; Allocate Flight Hours:</div>
+          <div style="border:1px solid #cbd5e1; border-radius:3px; max-height:85px; overflow-y:auto;">
+            ${pilotAllocationRows}
           </div>
+
+          ${isOverAllocated ? `
+            <div style="color:#b91c1c; font-size:5.8pt; font-weight:bold; margin-top:2px;">
+              ⚠️ Warning: Allocated pilot hours (${allocatedPilotHours} hrs) exceed total aircraft time (${totalSortieHours} hrs)!
+            </div>
+          ` : ''}
         </div>
       `;
     });
@@ -936,16 +987,77 @@
   }
 
   function updateSortieDuration(sIdx, duration) {
-    sortiesList[sIdx].duration = parseFloat(duration) || 0;
+    const dur = parseFloat(duration) || 0;
+    sortiesList[sIdx].duration = dur > 0 ? dur : '';
+    
+    // If only 1 pilot assigned, auto-match their hours to full duration
+    if (sortiesList[sIdx].pilotAllocations) {
+      const pKeys = Object.keys(sortiesList[sIdx].pilotAllocations);
+      if (pKeys.length === 1) {
+        sortiesList[sIdx].pilotAllocations[pKeys[0]] = dur;
+      }
+    }
+
+    renderSorties();
     recalcFlightSummaries();
   }
 
-  function toggleSortiePilot(sIdx, pIdx, isChecked) {
+  function toggleSortiePilotAllocation(sIdx, pIdx, isChecked) {
+    if (!sortiesList[sIdx].pilotAllocations) sortiesList[sIdx].pilotAllocations = {};
+    
     if (isChecked) {
-      if (!sortiesList[sIdx].pilots.includes(pIdx)) sortiesList[sIdx].pilots.push(pIdx);
+      const dur = parseFloat(sortiesList[sIdx].duration) || 0;
+      const assignedKeys = Object.keys(sortiesList[sIdx].pilotAllocations);
+      
+      // If first pilot, give full duration by default. If multiple, start at remaining or 0
+      if (assignedKeys.length === 0 && dur > 0) {
+        sortiesList[sIdx].pilotAllocations[pIdx] = dur;
+      } else {
+        sortiesList[sIdx].pilotAllocations[pIdx] = 0;
+      }
     } else {
-      sortiesList[sIdx].pilots = sortiesList[sIdx].pilots.filter(p => p !== pIdx);
+      delete sortiesList[sIdx].pilotAllocations[pIdx];
     }
+
+    renderSorties();
+    recalcFlightSummaries();
+  }
+
+  function updatePilotHourAllocation(sIdx, pIdx, hours) {
+    if (!sortiesList[sIdx].pilotAllocations) sortiesList[sIdx].pilotAllocations = {};
+    sortiesList[sIdx].pilotAllocations[pIdx] = parseFloat(hours) || 0;
+    
+    recalcFlightSummaries();
+    // Re-render badge dynamically without stealing input focus
+    const card = document.querySelectorAll('.sortie-entry-card')[sIdx];
+    if (card) {
+      const dur = parseFloat(sortiesList[sIdx].duration) || 0;
+      let totalAlloc = 0;
+      Object.values(sortiesList[sIdx].pilotAllocations).forEach(v => totalAlloc += (parseFloat(v)||0));
+      totalAlloc = parseFloat(totalAlloc.toFixed(2));
+
+      const badge = card.querySelector('.alloc-badge');
+      if (badge) {
+        badge.textContent = `Allocated: ${totalAlloc} / ${dur > 0 ? dur : '0.0'} hrs`;
+        badge.className = `alloc-badge ${totalAlloc > dur ? 'alloc-invalid' : (Math.abs(totalAlloc - dur) < 0.01 ? 'alloc-valid' : '')}`;
+      }
+    }
+  }
+
+  function splitEvenlySortiePilots(sIdx) {
+    const dur = parseFloat(sortiesList[sIdx].duration) || 0;
+    if (dur <= 0 || !sortiesList[sIdx].pilotAllocations) return;
+
+    const pKeys = Object.keys(sortiesList[sIdx].pilotAllocations);
+    const count = pKeys.length;
+    if (count <= 1) return;
+
+    const splitHrs = parseFloat((dur / count).toFixed(1));
+    pKeys.forEach(pIdx => {
+      sortiesList[sIdx].pilotAllocations[pIdx] = splitHrs;
+    });
+
+    renderSorties();
     recalcFlightSummaries();
   }
 
@@ -970,12 +1082,15 @@
       }
       totalAircraftHours += dur;
 
-      // Tally Pilots
-      st.pilots.forEach(pIdx => {
-        if (pilotHours[pIdx] !== undefined) {
-          pilotHours[pIdx] += dur;
-        }
-      });
+      // Tally Pilots (based on exact individual divided hours)
+      if (st.pilotAllocations) {
+        Object.keys(st.pilotAllocations).forEach(pIdx => {
+          const pHrs = parseFloat(st.pilotAllocations[pIdx]) || 0;
+          if (pilotHours[pIdx] !== undefined) {
+            pilotHours[pIdx] += pHrs;
+          }
+        });
+      }
     });
 
     // Render Pilot Summary Rows
@@ -1289,14 +1404,20 @@
       ['UAS Manager / Gov Rep', document.getElementById('uasm_name').value],
       [],
       ['--- FLIGHT SORTIE ENTRIES ---'],
-      ['Sortie #', 'Aircraft Tail', 'Make / Model', 'Duration (hrs)', 'Crew Members']
+      ['Sortie #', 'Aircraft Tail', 'Make / Model', 'Sortie Duration (hrs)', 'Crew Allocations']
     ];
 
     const roster = getRosterData();
     sortiesList.forEach((st, idx) => {
       const ac = roster.aircraft[st.aircraftIndex] || { tail: 'A/C', model: '' };
-      const crewNames = st.pilots.map(pIdx => roster.pilots[pIdx]).filter(Boolean).join('; ');
-      rows.push([`Sortie ${idx+1}`, ac.tail, ac.model, st.duration, `"${crewNames}"`]);
+      const crewAllocations = [];
+      if (st.pilotAllocations) {
+        Object.keys(st.pilotAllocations).forEach(pIdx => {
+          const pName = roster.pilots[pIdx] || `Pilot ${parseInt(pIdx)+1}`;
+          crewAllocations.push(`${pName}: ${st.pilotAllocations[pIdx]} hrs`);
+        });
+      }
+      rows.push([`Sortie ${idx+1}`, ac.tail, ac.model, st.duration, `"${crewAllocations.join('; ')}"`]);
     });
 
     rows.push([], ['--- COST ITEMS & REIMBURSABLES ---'], ['Cost Item Description', 'Quantity', 'Rate ($)', 'Total Cost ($)']);
@@ -1447,7 +1568,7 @@
     }
   }
 
-  // --- FORM SERIALIZATION (INCLUDES SORTIES LIST) ---
+  // --- FORM SERIALIZATION (INCLUDES SORTIES WITH PILOT ALLOCATIONS) ---
   function getFormDataObject() {
     const data = {
       sorties: sortiesList
