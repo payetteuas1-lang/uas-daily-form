@@ -112,6 +112,7 @@
     justify-content: center;
     gap: 3px;
     transition: all 0.15s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
   }
 
   .btn:active { transform: scale(0.96); }
@@ -447,7 +448,7 @@
     flex-shrink: 0;
   }
 
-  /* POPOUT SIGNATURE CANVAS (LARGE FULL-WIDTH DRAWING SURFACE) */
+  /* POPOUT SIGNATURE CANVAS */
   .modal-sig-canvas-container {
     width: 100%;
     height: 160px;
@@ -466,7 +467,26 @@
     touch-action: none;
   }
 
-  /* PRINT STYLING: ZERO MARGINS, NO URLS, EMBEDDED SORTIE TABLE */
+  /* POPOUT SORTIE MODAL STYLES */
+  .pilot-alloc-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3px 6px;
+    background: #ffffff;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .alloc-badge {
+    font-size: 6.4pt;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  .alloc-valid { background: #dcfce7; color: #166534; }
+  .alloc-invalid { background: #fee2e2; color: #b91c1c; }
+
+  /* PRINT STYLING */
   @media print {
     body { 
       background: #ffffff !important; 
@@ -521,7 +541,7 @@
 </head>
 <body>
 
-<!-- ENLARGED TOP CONTROL BAR -->
+<!-- TOP CONTROL BAR -->
 <div class="no-print-bar">
   <div class="status-badge">
     <div class="status-dot"></div>
@@ -544,7 +564,7 @@
   </div>
 </div>
 
-<!-- ✍️ POPOUT MODAL: LARGE SIGNATURE DRAWING PAD -->
+<!-- ✍️ POPOUT SIGNATURE MODAL -->
 <div class="modal-overlay" id="sigModal">
   <div class="modal-content" style="max-width: 460px;">
     <div class="modal-header">
@@ -569,7 +589,7 @@
   </div>
 </div>
 
-<!-- 🛸 POPOUT MODAL: SORTIE ENTRY & PILOT DIVISION -->
+<!-- 🛸 POPOUT SORTIE MODAL -->
 <div class="modal-overlay" id="sortieModal">
   <div class="modal-content" style="max-width: 440px;">
     <div class="modal-header">
@@ -577,7 +597,6 @@
       <button style="border:none; background:none; font-size:12pt; cursor:pointer;" onclick="closeSortieModal()">✕</button>
     </div>
 
-    <!-- SORTIE AIRFRAME & DURATION -->
     <div style="background:#f8fafc; padding:8px; border:1px solid #cbd5e1; border-radius:4px; margin-bottom:8px;">
       <div style="display:flex; gap:6px; margin-bottom:6px;">
         <label style="flex:1; font-weight:bold; font-size:7.0pt; color:#0f2744;">Select Airframe:
@@ -594,7 +613,6 @@
       </div>
     </div>
 
-    <!-- CREW ASSIGNMENT & DIVISION -->
     <div style="font-size:7.0pt; font-weight:bold; color:#1e293b; margin-bottom:3px;">Assign Crew &amp; Allocate Flight Hours:</div>
     <div id="pop_crew_allocation_container" style="border:1px solid #cbd5e1; border-radius:4px; max-height:160px; overflow-y:auto; margin-bottom:10px;"></div>
 
@@ -619,12 +637,12 @@
     <!-- SECTION 1: PILOT / CREW ROSTER -->
     <div class="modal-section-title">👨‍✈️ Pilot &amp; Crew Roster (Up to 6)</div>
     <div class="modal-grid" id="roster_pilots_grid">
-      <label>Pilot 1 (RPIC): <input type="text" id="rst_p1" placeholder="Name / Role"></label>
-      <label>Pilot 2: <input type="text" id="rst_p2" placeholder="Name / Role"></label>
-      <label>Pilot 3: <input type="text" id="rst_p3" placeholder="Name / Role"></label>
-      <label>Pilot 4: <input type="text" id="rst_p4" placeholder="Name / Role"></label>
-      <label>Pilot 5: <input type="text" id="rst_p5" placeholder="Name / Role"></label>
-      <label>Pilot 6: <input type="text" id="rst_p6" placeholder="Name / Role"></label>
+      <label>Pilot 1 (RPIC): <input type="text" id="rst_p1" oninput="saveSettingsProfile(true)" placeholder="Name / Role"></label>
+      <label>Pilot 2: <input type="text" id="rst_p2" oninput="saveSettingsProfile(true)" placeholder="Name / Role"></label>
+      <label>Pilot 3: <input type="text" id="rst_p3" oninput="saveSettingsProfile(true)" placeholder="Name / Role"></label>
+      <label>Pilot 4: <input type="text" id="rst_p4" oninput="saveSettingsProfile(true)" placeholder="Name / Role"></label>
+      <label>Pilot 5: <input type="text" id="rst_p5" oninput="saveSettingsProfile(true)" placeholder="Name / Role"></label>
+      <label>Pilot 6: <input type="text" id="rst_p6" oninput="saveSettingsProfile(true)" placeholder="Name / Role"></label>
     </div>
 
     <!-- SECTION 2: AIRCRAFT ROSTER -->
@@ -632,26 +650,26 @@
     <div class="modal-grid">
       <label>Aircraft 1 (Tail / Model):
         <div style="display:flex; gap:2px;">
-          <input type="text" id="rst_ac1_tail" placeholder="Tail #" style="width:35%;">
-          <input type="text" id="rst_ac1_model" placeholder="Make / Model" style="flex:1;">
+          <input type="text" id="rst_ac1_tail" oninput="saveSettingsProfile(true)" placeholder="Tail #" style="width:35%;">
+          <input type="text" id="rst_ac1_model" oninput="saveSettingsProfile(true)" placeholder="Make / Model" style="flex:1;">
         </div>
       </label>
       <label>Aircraft 2 (Tail / Model):
         <div style="display:flex; gap:2px;">
-          <input type="text" id="rst_ac2_tail" placeholder="Tail #" style="width:35%;">
-          <input type="text" id="rst_ac2_model" placeholder="Make / Model" style="flex:1;">
+          <input type="text" id="rst_ac2_tail" oninput="saveSettingsProfile(true)" placeholder="Tail #" style="width:35%;">
+          <input type="text" id="rst_ac2_model" oninput="saveSettingsProfile(true)" placeholder="Make / Model" style="flex:1;">
         </div>
       </label>
       <label>Aircraft 3 (Tail / Model):
         <div style="display:flex; gap:2px;">
-          <input type="text" id="rst_ac3_tail" placeholder="Tail #" style="width:35%;">
-          <input type="text" id="rst_ac3_model" placeholder="Make / Model" style="flex:1;">
+          <input type="text" id="rst_ac3_tail" oninput="saveSettingsProfile(true)" placeholder="Tail #" style="width:35%;">
+          <input type="text" id="rst_ac3_model" oninput="saveSettingsProfile(true)" placeholder="Make / Model" style="flex:1;">
         </div>
       </label>
       <label>Aircraft 4 (Tail / Model):
         <div style="display:flex; gap:2px;">
-          <input type="text" id="rst_ac4_tail" placeholder="Tail #" style="width:35%;">
-          <input type="text" id="rst_ac4_model" placeholder="Make / Model" style="flex:1;">
+          <input type="text" id="rst_ac4_tail" oninput="saveSettingsProfile(true)" placeholder="Tail #" style="width:35%;">
+          <input type="text" id="rst_ac4_model" oninput="saveSettingsProfile(true)" placeholder="Make / Model" style="flex:1;">
         </div>
       </label>
     </div>
@@ -660,12 +678,12 @@
     <div class="modal-section-title">📐 Cost Table Row Counts</div>
     <div class="modal-grid">
       <label>Personnel Cost Rows:
-        <select id="cfg_personnel" onchange="renderCostRows()">
+        <select id="cfg_personnel" onchange="renderCostRows(); saveSettingsProfile(true);">
           <option value="1">1 Person</option><option value="2">2 Persons</option><option value="3">3 Persons</option><option value="4">4 Persons</option><option value="5" selected>5 Persons</option><option value="6">6 Persons</option>
         </select>
       </label>
       <label>Vehicle Cost Rows:
-        <select id="cfg_vehicles" onchange="renderCostRows()">
+        <select id="cfg_vehicles" onchange="renderCostRows(); saveSettingsProfile(true);">
           <option value="1">1 Vehicle</option><option value="2">2 Vehicles</option><option value="3">3 Vehicles</option><option value="4">4 Vehicles</option><option value="5" selected>5 Vehicles</option><option value="6">6 Vehicles</option>
         </select>
       </label>
@@ -675,36 +693,36 @@
     <div class="modal-section-title">💲 Vendor Contract Rates &amp; Mileage Presets</div>
     <div class="modal-grid">
       <label style="grid-column: span 2;">Contractor / Vendor Name:
-        <input type="text" id="preset_vendor_name" placeholder="e.g. Drone Aviation Services LLC">
+        <input type="text" id="preset_vendor_name" oninput="saveSettingsProfile(true)" placeholder="e.g. Drone Aviation Services LLC">
       </label>
       <label>Flight Hourly Rate ($):
-        <input type="number" step="0.01" id="preset_r_flt" placeholder="e.g. 1850.00">
+        <input type="number" step="0.01" id="preset_r_flt" oninput="saveSettingsProfile(true)" placeholder="e.g. 1850.00">
       </label>
       <label>Daily Availability Rate ($):
-        <input type="number" step="0.01" id="preset_r_avail" placeholder="e.g. 4200.00">
+        <input type="number" step="0.01" id="preset_r_avail" oninput="saveSettingsProfile(true)" placeholder="e.g. 4200.00">
       </label>
       <label>Per Diem Daily Rate ($):
-        <input type="number" step="0.01" id="preset_r_perdiem" placeholder="e.g. 155.00">
+        <input type="number" step="0.01" id="preset_r_perdiem" oninput="saveSettingsProfile(true)" placeholder="e.g. 155.00">
       </label>
       <label>Payload Daily Rate ($):
-        <input type="number" step="0.01" id="preset_r_payload" placeholder="e.g. 950.00">
+        <input type="number" step="0.01" id="preset_r_payload" oninput="saveSettingsProfile(true)" placeholder="e.g. 950.00">
       </label>
       <label>Mileage Rate 1 - Std ($/mi):
-        <input type="number" step="0.001" id="preset_r_mi1" placeholder="e.g. 0.670">
+        <input type="number" step="0.001" id="preset_r_mi1" oninput="saveSettingsProfile(true)" placeholder="e.g. 0.670">
       </label>
       <label>Mileage Rate 2 - Truck ($/mi):
-        <input type="number" step="0.001" id="preset_r_mi2" placeholder="e.g. 0.850">
+        <input type="number" step="0.001" id="preset_r_mi2" oninput="saveSettingsProfile(true)" placeholder="e.g. 0.850">
       </label>
       <label style="grid-column: span 2;">Mileage Rate 3 - GCS Van ($/mi):
-        <input type="number" step="0.001" id="preset_r_mi3" placeholder="e.g. 1.150">
+        <input type="number" step="0.001" id="preset_r_mi3" oninput="saveSettingsProfile(true)" placeholder="e.g. 1.150">
       </label>
     </div>
 
     <div style="display:flex; justify-content:space-between; gap:6px; margin-top:8px;">
-      <button class="btn btn-clear" onclick="deleteActiveProfile()">Clear All Settings</button>
+      <button class="btn btn-clear" onclick="deleteActiveProfile()">Clear Settings Roster</button>
       <div style="display:flex; gap:4px;">
-        <button class="btn btn-save" onclick="saveSettingsProfile()">Save Profile</button>
-        <button class="btn btn-print" onclick="applySettingsToForm()">Apply to Form</button>
+        <button class="btn btn-save" onclick="saveSettingsProfile(false)">Save Settings</button>
+        <button class="btn btn-print" onclick="applySettingsToForm()">Apply Rates to Form</button>
       </div>
     </div>
   </div>
@@ -809,7 +827,7 @@
         <button type="button" class="btn btn-print no-print-bar" onclick="openSortieModal(-1)" style="padding:1px 6px; font-size:6.4pt; height:18px;">➕ Add Sortie</button>
       </div>
 
-      <!-- SORTIES CONTAINER (PRINTS ON PDF) -->
+      <!-- MINIMIZED SORTIES COMPACT CONTAINER -->
       <div id="sorties_container" style="margin-bottom:3px; max-height:85px; overflow-y:auto;"></div>
 
       <!-- AUTOMATIC PILOT & AIRCRAFT ROLLUP SUMMARY TABLES -->
@@ -847,7 +865,7 @@
 
     </div>
 
-    <!-- RIGHT SIDE: COST TABLE (WIDENED COST & RATE COLUMNS) -->
+    <!-- RIGHT SIDE: COST TABLE -->
     <div class="col-top-right">
       <table>
         <thead>
@@ -939,7 +957,7 @@
 
   </div>
 
-  <!-- SECTION 5: APPROVAL SIGNATURES (POPOUT SIGNATURE THUMBNAIL) -->
+  <!-- SECTION 5: APPROVAL SIGNATURES -->
   <table>
     <tr>
       <td style="width: 38%; vertical-align: bottom; padding-bottom: 4px;">
@@ -963,11 +981,12 @@
 </div>
 
 <script>
-  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v25';
-  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v25';
-  const SETTINGS_PROFILE_KEY = 'uas_unified_settings_profile_v10';
+  // PERMANENT STORAGE KEYS
+  const STORAGE_ACTIVE_LOG = 'UAS_LOG_ACTIVE_DRAFT';
+  const STORAGE_DRAFTS_INDEX = 'UAS_LOG_SAVED_INDEX';
+  const STORAGE_SETTINGS = 'UAS_LOG_SETTINGS_PROFILE';
+
   let totalCostGlobal = 0;
-  
   let sortiesList = [];
   let currentEditingSortieIndex = -1;
   let tempSortieData = null;
@@ -985,7 +1004,7 @@
 
   window.addEventListener('beforeprint', syncPrintMirrors);
 
-  // --- ✍️ POPOUT SIGNATURE MODAL ENGINE ---
+  // --- ✍️ POPOUT SIGNATURE MODAL ---
   let popSigCanvas, popSigCtx, popSigDrawing = false;
 
   function initPopoutSigCanvas() {
@@ -1087,7 +1106,7 @@
     }
   }
 
-  // --- POPOUT MODAL SORTIE ENGINE ---
+  // --- POPOUT SORTIE MODAL ---
   function openSortieModal(index = -1) {
     currentEditingSortieIndex = index;
     const roster = getRosterData();
@@ -1307,6 +1326,7 @@
     closeSortieModal();
     renderMinimizedSorties();
     recalcFlightSummaries();
+    autoSaveActive();
   }
 
   function deleteCurrentPopoutSortie() {
@@ -1315,6 +1335,7 @@
       closeSortieModal();
       renderMinimizedSorties();
       recalcFlightSummaries();
+      autoSaveActive();
     }
   }
 
@@ -1365,6 +1386,7 @@
     sortiesList.splice(index, 1);
     renderMinimizedSorties();
     recalcFlightSummaries();
+    autoSaveActive();
   }
 
   // --- RECALCULATE PILOT & AIRCRAFT ROLLUPS ---
@@ -1500,6 +1522,7 @@
     }
     document.getElementById('vehicles_tbody').innerHTML = vehHtml;
 
+    // Non-destructive apply
     applyDataToForm(currentData);
     attachInputListeners();
     doMath();
@@ -1531,7 +1554,7 @@
     window.print();
   }
 
-  // --- ⚙️ SETTINGS MODAL ENGINE ---
+  // --- ⚙️ PERSISTENT SETTINGS PROFILE ENGINE ---
   function openSettingsModal() {
     loadSettingsProfile();
     document.getElementById('settingsModal').style.display = 'flex';
@@ -1541,7 +1564,7 @@
     document.getElementById('settingsModal').style.display = 'none';
   }
 
-  function saveSettingsProfile() {
+  function saveSettingsProfile(isSilent = false) {
     const profile = {
       vendor: document.getElementById('preset_vendor_name').value || '',
       r_flt: document.getElementById('preset_r_flt').value || '',
@@ -1551,6 +1574,8 @@
       r_mi1: document.getElementById('preset_r_mi1').value || '',
       r_mi2: document.getElementById('preset_r_mi2').value || '',
       r_mi3: document.getElementById('preset_r_mi3').value || '',
+      cfg_personnel: document.getElementById('cfg_personnel').value,
+      cfg_vehicles: document.getElementById('cfg_vehicles').value,
       pilots: [
         document.getElementById('rst_p1').value,
         document.getElementById('rst_p2').value,
@@ -1566,15 +1591,20 @@
         { tail: document.getElementById('rst_ac4_tail').value, model: document.getElementById('rst_ac4_model').value }
       ]
     };
-    localStorage.setItem(SETTINGS_PROFILE_KEY, JSON.stringify(profile));
-    updateStatus(`Saved Settings: ${profile.vendor || 'Default'}`);
-    closeSettingsModal();
+    localStorage.setItem(STORAGE_SETTINGS, JSON.stringify(profile));
+    
+    // Auto sync summaries without touching form inputs
     renderMinimizedSorties();
     recalcFlightSummaries();
+
+    if (!isSilent) {
+      updateStatus(`Saved Settings & Roster`);
+      closeSettingsModal();
+    }
   }
 
   function loadSettingsProfile() {
-    const saved = localStorage.getItem(SETTINGS_PROFILE_KEY);
+    const saved = localStorage.getItem(STORAGE_SETTINGS);
     if (saved) {
       const profile = JSON.parse(saved);
       document.getElementById('preset_vendor_name').value = profile.vendor || document.getElementById('vendor_name').value || '';
@@ -1585,6 +1615,9 @@
       document.getElementById('preset_r_mi1').value = profile.r_mi1 || '';
       document.getElementById('preset_r_mi2').value = profile.r_mi2 || '';
       document.getElementById('preset_r_mi3').value = profile.r_mi3 || '';
+
+      if (profile.cfg_personnel) document.getElementById('cfg_personnel').value = profile.cfg_personnel;
+      if (profile.cfg_vehicles) document.getElementById('cfg_vehicles').value = profile.cfg_vehicles;
 
       if (profile.pilots) {
         profile.pilots.forEach((p, idx) => {
@@ -1606,8 +1639,8 @@
   }
 
   function applySettingsToForm() {
-    saveSettingsProfile();
-    const profile = JSON.parse(localStorage.getItem(SETTINGS_PROFILE_KEY));
+    saveSettingsProfile(true);
+    const profile = JSON.parse(localStorage.getItem(STORAGE_SETTINGS));
 
     if (profile.vendor) document.getElementById('vendor_name').value = profile.vendor;
     if (profile.r_flt) document.getElementById('r_flt').value = profile.r_flt;
@@ -1627,12 +1660,12 @@
     recalcFlightSummaries();
     doMath();
     closeSettingsModal();
-    updateStatus(`Applied Settings to Form`);
+    updateStatus(`Applied Rates to Form`);
   }
 
   function applyVehiclePresetRate(selectEl, rateInputId) {
     const val = selectEl.value;
-    const profile = JSON.parse(localStorage.getItem(SETTINGS_PROFILE_KEY) || '{}');
+    const profile = JSON.parse(localStorage.getItem(STORAGE_SETTINGS) || '{}');
     const inputEl = document.getElementById(rateInputId);
 
     if (val === '1' && profile.r_mi1) inputEl.value = profile.r_mi1;
@@ -1642,8 +1675,8 @@
   }
 
   function deleteActiveProfile() {
-    if (confirm('Clear saved settings and roster?')) {
-      localStorage.removeItem(SETTINGS_PROFILE_KEY);
+    if (confirm('Clear saved roster and rates?')) {
+      localStorage.removeItem(STORAGE_SETTINGS);
       document.querySelectorAll('#settingsModal input').forEach(el => el.value = '');
       updateStatus('Settings cleared.');
       renderMinimizedSorties();
@@ -1849,7 +1882,6 @@
     });
 
     Object.keys(data).forEach(id => {
-      if (id === 'sorties' || id === 'signature') return;
       const el = document.getElementById(id);
       if (el) {
         if (el.type === 'checkbox' || el.type === 'radio') {
@@ -1868,7 +1900,7 @@
   function autoSaveActive() {
     try {
       const json = JSON.stringify(getFormDataObject());
-      localStorage.setItem(ACTIVE_DRAFT_KEY, json);
+      localStorage.setItem(STORAGE_ACTIVE_LOG, json);
       updateStatus("💾 Auto-Saved In-App");
     } catch (e) {}
   }
@@ -1878,10 +1910,10 @@
     const data = getFormDataObject();
     localStorage.setItem('draft_' + key, JSON.stringify(data));
 
-    let index = JSON.parse(localStorage.getItem(DRAFTS_INDEX_KEY) || '[]');
+    let index = JSON.parse(localStorage.getItem(STORAGE_DRAFTS_INDEX) || '[]');
     if (!index.includes(key)) {
       index.unshift(key);
-      localStorage.setItem(DRAFTS_INDEX_KEY, JSON.stringify(index));
+      localStorage.setItem(STORAGE_DRAFTS_INDEX, JSON.stringify(index));
     }
     
     refreshDraftsDropdown();
@@ -1890,7 +1922,7 @@
 
   function refreshDraftsDropdown() {
     const select = document.getElementById('saved_drafts_select');
-    const index = JSON.parse(localStorage.getItem(DRAFTS_INDEX_KEY) || '[]');
+    const index = JSON.parse(localStorage.getItem(STORAGE_DRAFTS_INDEX) || '[]');
     
     if (index.length === 0) {
       select.style.display = 'none';
@@ -1898,7 +1930,7 @@
     }
 
     select.style.display = 'inline-block';
-    select.innerHTML = '<option value="">📂 Load Log...</option>';
+    select.innerHTML = '<option value="">📂 Load Saved Log...</option>';
     index.forEach(item => {
       const opt = document.createElement('option');
       opt.value = item;
@@ -1935,7 +1967,7 @@
       renderMinimizedSorties();
       recalcFlightSummaries();
       doMath();
-      localStorage.removeItem(ACTIVE_DRAFT_KEY);
+      localStorage.removeItem(STORAGE_ACTIVE_LOG);
       document.getElementById('saved_drafts_select').value = '';
       updateStatus("New Blank Form Ready");
     }
@@ -1996,7 +2028,7 @@
 
     renderCostRows();
 
-    const active = localStorage.getItem(ACTIVE_DRAFT_KEY);
+    const active = localStorage.getItem(STORAGE_ACTIVE_LOG);
     if (active) {
       const data = JSON.parse(active);
       applyDataToForm(data);
