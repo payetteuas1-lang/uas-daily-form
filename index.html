@@ -107,7 +107,7 @@
   .btn:active { transform: scale(0.97); }
   .btn-save { background: #2563eb; color: white; }
   .btn-aux { background: #475569; color: white; }
-  .btn-rates { background: #8b5cf6; color: white; }
+  .btn-settings { background: #8b5cf6; color: white; }
   .btn-clear { background: #dc2626; color: white; }
   .btn-csv { background: #0284c7; color: white; }
   .btn-print { background: #059669; color: white; }
@@ -124,37 +124,6 @@
     white-space: nowrap;
   }
   .btn-gps:hover, .btn-wx:hover { background: #cbd5e1; }
-
-  /* CONFIGURATION BAR */
-  .config-bar {
-    background: #e2e8f0;
-    border: 1px solid #cbd5e1;
-    padding: 3px 8px;
-    border-radius: 3px;
-    margin-bottom: 3px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 6.8pt;
-    font-weight: 700;
-    color: #1e293b;
-    flex-wrap: wrap;
-    gap: 4px;
-  }
-
-  .config-item { display: inline-flex; align-items: center; gap: 4px; }
-
-  .config-select {
-    width: auto !important;
-    height: 16px !important;
-    padding: 0 4px !important;
-    font-size: 6.8pt !important;
-    font-weight: 700;
-    border: 1px solid #94a3b8 !important;
-    border-radius: 2px;
-    background: #ffffff !important;
-    cursor: pointer;
-  }
 
   /* PAGE CONTAINER */
   .page-container {
@@ -356,7 +325,7 @@
     cursor: pointer;
   }
 
-  /* PRESET RATES MODAL */
+  /* UNIFIED SETTINGS MODAL */
   .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -371,7 +340,9 @@
   .modal-content {
     background: white;
     width: 90%;
-    max-width: 500px;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
     border-radius: 6px;
     padding: 14px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.3);
@@ -389,11 +360,20 @@
     color: #0f2744;
   }
 
+  .modal-section-title {
+    font-size: 7.8pt;
+    font-weight: 700;
+    color: #0f2744;
+    margin: 8px 0 6px 0;
+    padding-bottom: 2px;
+    border-bottom: 1px dashed #cbd5e1;
+  }
+
   .modal-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   .modal-grid label {
@@ -422,7 +402,7 @@
       max-width: 100% !important;
       box-shadow: none !important;
     }
-    .no-print-bar, .sig-clear-btn, .btn-gps, .btn-wx, .modal-overlay, .veh-rate-select, .config-bar { display: none !important; }
+    .no-print-bar, .sig-clear-btn, .btn-gps, .btn-wx, .modal-overlay, .veh-rate-select { display: none !important; }
     th, td, .narrative-card { border-color: #000000 !important; }
     .header-banner {
       background: #0f2744 !important;
@@ -463,7 +443,7 @@
     </select>
     
     <button class="btn btn-save" onclick="saveInAppDraft()">💾 Save</button>
-    <button class="btn btn-rates" onclick="openRatesModal()">⚙️ Rates</button>
+    <button class="btn btn-settings" onclick="openSettingsModal()">⚙️ Settings</button>
     <button class="btn btn-clear" onclick="clearFormData()">➕ New</button>
     <button class="btn btn-aux" onclick="exportJSONFile()">📤 JSON</button>
     <button class="btn btn-aux" onclick="document.getElementById('fileInput').click()">📥 Import</button>
@@ -473,13 +453,63 @@
   </div>
 </div>
 
-<!-- ⚙️ VENDOR-SPECIFIC RATES PROFILE MODAL -->
-<div class="modal-overlay" id="ratesModal">
+<!-- ⚙️ UNIFIED SETTINGS MODAL (ROW COUNTS & CONTRACT RATES) -->
+<div class="modal-overlay" id="settingsModal">
   <div class="modal-content">
     <div class="modal-header">
-      <span>⚙️ Vendor Contract Rates &amp; Mileage Presets</span>
-      <button style="border:none; background:none; font-size:12pt; cursor:pointer;" onclick="closeRatesModal()">✕</button>
+      <span>⚙️ Form Settings &amp; Rate Profiles</span>
+      <button style="border:none; background:none; font-size:12pt; cursor:pointer;" onclick="closeSettingsModal()">✕</button>
     </div>
+
+    <!-- SECTION 1: DYNAMIC RESOURCE COUNTS -->
+    <div class="modal-section-title">📐 Displayed Resource Counts (Row Controls)</div>
+    <div class="modal-grid">
+      <label>Pilots / Flight Crew Rows:
+        <select id="cfg_pilots" onchange="updateDynamicRowCounts()">
+          <option value="1">1 Pilot</option>
+          <option value="2">2 Pilots</option>
+          <option value="3">3 Pilots</option>
+          <option value="4" selected>4 Pilots</option>
+          <option value="5">5 Pilots</option>
+          <option value="6">6 Pilots</option>
+        </select>
+      </label>
+      <label>Aircraft Airframe Rows:
+        <select id="cfg_aircraft" onchange="updateDynamicRowCounts()">
+          <option value="1">1 Airframe</option>
+          <option value="2">2 Airframes</option>
+          <option value="3">3 Airframes</option>
+          <option value="4" selected>4 Airframes</option>
+          <option value="5">5 Airframes</option>
+          <option value="6">6 Airframes</option>
+        </select>
+      </label>
+      <label>Personnel Cost Rows:
+        <select id="cfg_personnel" onchange="updateDynamicRowCounts()">
+          <option value="1">1 Person</option>
+          <option value="2">2 Persons</option>
+          <option value="3">3 Persons</option>
+          <option value="4">4 Persons</option>
+          <option value="5" selected>5 Persons</option>
+          <option value="6">6 Persons</option>
+          <option value="8">8 Persons</option>
+        </select>
+      </label>
+      <label>Vehicle Cost Rows:
+        <select id="cfg_vehicles" onchange="updateDynamicRowCounts()">
+          <option value="1">1 Vehicle</option>
+          <option value="2">2 Vehicles</option>
+          <option value="3">3 Vehicles</option>
+          <option value="4">4 Vehicles</option>
+          <option value="5" selected>5 Vehicles</option>
+          <option value="6">6 Vehicles</option>
+          <option value="8">8 Vehicles</option>
+        </select>
+      </label>
+    </div>
+
+    <!-- SECTION 2: VENDOR RATES & PRESETS -->
+    <div class="modal-section-title">💲 Vendor Contract Rates &amp; Mileage Presets</div>
     <div class="modal-grid">
       <label style="grid-column: span 2;">Contractor / Vendor Name:
         <input type="text" id="preset_vendor_name" placeholder="e.g. Drone Aviation Services LLC">
@@ -496,23 +526,22 @@
       <label>Payload Daily Rate ($):
         <input type="number" step="0.01" id="preset_r_payload" placeholder="e.g. 950.00">
       </label>
-      
-      <!-- 3 DISTINCT MILEAGE RATES -->
-      <label>Mileage Rate 1 - Standard ($/mi):
-        <input type="number" step="0.001" id="preset_r_mi1" placeholder="e.g. 0.670 (POV / Standard)">
+      <label>Mileage Rate 1 - Std ($/mi):
+        <input type="number" step="0.001" id="preset_r_mi1" placeholder="e.g. 0.670 (POV / Std)">
       </label>
-      <label>Mileage Rate 2 - 4x4/Truck ($/mi):
+      <label>Mileage Rate 2 - Truck ($/mi):
         <input type="number" step="0.001" id="preset_r_mi2" placeholder="e.g. 0.850 (4x4 Utility)">
       </label>
-      <label style="grid-column: span 2;">Mileage Rate 3 - Heavy/GCS Van ($/mi):
-        <input type="number" step="0.001" id="preset_r_mi3" placeholder="e.g. 1.150 (GCS Mobile Command)">
+      <label style="grid-column: span 2;">Mileage Rate 3 - GCS Van ($/mi):
+        <input type="number" step="0.001" id="preset_r_mi3" placeholder="e.g. 1.150 (Mobile Command)">
       </label>
     </div>
-    <div style="display:flex; justify-content:space-between; gap:6px;">
+
+    <div style="display:flex; justify-content:space-between; gap:6px; margin-top:6px;">
       <button class="btn btn-clear" onclick="deleteActiveRateProfile()">Clear Profile</button>
       <div style="display:flex; gap:4px;">
-        <button class="btn btn-save" onclick="saveRateProfile()">Save Local Profile</button>
-        <button class="btn btn-print" onclick="applyRateProfileToForm()">Apply to Form</button>
+        <button class="btn btn-save" onclick="saveRateProfile()">Save Local Rates</button>
+        <button class="btn btn-print" onclick="applyRateProfileToForm()">Apply Rates to Form</button>
       </div>
     </div>
   </div>
@@ -524,35 +553,6 @@
   <div class="header-banner">
     <div class="title-bar">UAS Daily Operations &amp; Cost Summary</div>
     <div class="sub-title-bar">Interagency Aviation Operations &bull; UAS Contractor &amp; Resource Daily Diary</div>
-  </div>
-
-  <!-- CONFIGURATION BAR -->
-  <div class="config-bar no-print-bar">
-    <span>📐 Active Resource Counts:</span>
-    <div class="config-item">
-      <span>Pilots / Crew:</span>
-      <select id="cfg_pilots" class="config-select" onchange="updateDynamicRowCounts()">
-        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option><option value="6">6</option>
-      </select>
-    </div>
-    <div class="config-item">
-      <span>Aircraft:</span>
-      <select id="cfg_aircraft" class="config-select" onchange="updateDynamicRowCounts()">
-        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option><option value="6">6</option>
-      </select>
-    </div>
-    <div class="config-item">
-      <span>Personnel Cost Rows:</span>
-      <select id="cfg_personnel" class="config-select" onchange="updateDynamicRowCounts()">
-        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="8">8</option>
-      </select>
-    </div>
-    <div class="config-item">
-      <span>Vehicle Rows:</span>
-      <select id="cfg_vehicles" class="config-select" onchange="updateDynamicRowCounts()">
-        <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5" selected>5</option><option value="6">6</option><option value="8">8</option>
-      </select>
-    </div>
   </div>
 
   <!-- HEADER LOGISTICS -->
@@ -731,7 +731,7 @@
         <textarea id="box_ac_status" placeholder="Detail airworthiness logs, power trends, motor/sensor calibrations, maintenance actions, battery cycle records, or reasons for unavailability..."></textarea>
       </div>
 
-      <!-- 16. WEATHER NARRATIVE WITH LIVE WEATHER PULL -->
+      <!-- 16. WEATHER NARRATIVE -->
       <div class="narrative-card">
         <div class="narrative-card-header">
           <span>16. Weather Observations <span class="sub-note">(Wind, temp, visibility, delays)</span></span>
@@ -776,9 +776,9 @@
 </div>
 
 <script>
-  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v8';
-  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v8';
-  const RATE_PROFILES_KEY = 'uas_vendor_rate_preset_profiles_v6';
+  const ACTIVE_DRAFT_KEY = 'uas_active_working_draft_v9';
+  const DRAFTS_INDEX_KEY = 'uas_saved_drafts_index_v9';
+  const RATE_PROFILES_KEY = 'uas_vendor_rate_preset_profiles_v7';
   let totalCostGlobal = 0;
 
   if ('serviceWorker' in navigator) {
@@ -895,13 +895,100 @@
     window.print();
   }
 
-  // --- 🌤️ LIVE AVIATION WEATHER FETCH ENGINE (OPEN-METEO) ---
+  // --- ⚙️ UNIFIED SETTINGS MODAL ENGINE ---
+  function openSettingsModal() {
+    loadSavedRateProfile();
+    document.getElementById('settingsModal').style.display = 'flex';
+  }
+
+  function closeSettingsModal() {
+    document.getElementById('settingsModal').style.display = 'none';
+  }
+
+  function saveRateProfile() {
+    const profile = {
+      vendor: document.getElementById('preset_vendor_name').value || '',
+      r_flt: document.getElementById('preset_r_flt').value || '',
+      r_avail: document.getElementById('preset_r_avail').value || '',
+      r_perdiem: document.getElementById('preset_r_perdiem').value || '',
+      r_payload: document.getElementById('preset_r_payload').value || '',
+      r_mi1: document.getElementById('preset_r_mi1').value || '',
+      r_mi2: document.getElementById('preset_r_mi2').value || '',
+      r_mi3: document.getElementById('preset_r_mi3').value || ''
+    };
+    localStorage.setItem(RATE_PROFILES_KEY, JSON.stringify(profile));
+    updateStatus(`Saved Rates: ${profile.vendor || 'Default'}`);
+    closeSettingsModal();
+  }
+
+  function loadSavedRateProfile() {
+    const saved = localStorage.getItem(RATE_PROFILES_KEY);
+    if (saved) {
+      const profile = JSON.parse(saved);
+      document.getElementById('preset_vendor_name').value = profile.vendor || document.getElementById('vendor_name').value || '';
+      document.getElementById('preset_r_flt').value = profile.r_flt || '';
+      document.getElementById('preset_r_avail').value = profile.r_avail || '';
+      document.getElementById('preset_r_perdiem').value = profile.r_perdiem || '';
+      document.getElementById('preset_r_payload').value = profile.r_payload || '';
+      document.getElementById('preset_r_mi1').value = profile.r_mi1 || '';
+      document.getElementById('preset_r_mi2').value = profile.r_mi2 || '';
+      document.getElementById('preset_r_mi3').value = profile.r_mi3 || '';
+    } else {
+      document.getElementById('preset_vendor_name').value = document.getElementById('vendor_name').value || '';
+    }
+  }
+
+  function applyRateProfileToForm() {
+    const saved = localStorage.getItem(RATE_PROFILES_KEY);
+    if (!saved) saveRateProfile();
+    const profile = JSON.parse(localStorage.getItem(RATE_PROFILES_KEY));
+
+    if (profile.vendor) document.getElementById('vendor_name').value = profile.vendor;
+    if (profile.r_flt) document.getElementById('r_flt').value = profile.r_flt;
+    if (profile.r_avail) document.getElementById('r_avail').value = profile.r_avail;
+    
+    if (profile.r_perdiem) {
+      document.querySelectorAll('[id^="r_p"]').forEach(el => el.value = profile.r_perdiem);
+    }
+
+    if (profile.r_mi1) {
+      document.querySelectorAll('[id^="r_v"]').forEach(el => {
+        if (!el.value) el.value = profile.r_mi1;
+      });
+    }
+
+    if (profile.r_payload) document.getElementById('r_pay').value = profile.r_payload;
+
+    doMath();
+    closeSettingsModal();
+    updateStatus(`Applied Rates: ${profile.vendor || 'Active'}`);
+  }
+
+  function applyVehiclePresetRate(selectEl, rateInputId) {
+    const val = selectEl.value;
+    const profile = JSON.parse(localStorage.getItem(RATE_PROFILES_KEY) || '{}');
+    const inputEl = document.getElementById(rateInputId);
+
+    if (val === '1' && profile.r_mi1) inputEl.value = profile.r_mi1;
+    else if (val === '2' && profile.r_mi2) inputEl.value = profile.r_mi2;
+    else if (val === '3' && profile.r_mi3) inputEl.value = profile.r_mi3;
+    doMath();
+  }
+
+  function deleteActiveRateProfile() {
+    if (confirm('Delete saved rate profile?')) {
+      localStorage.removeItem(RATE_PROFILES_KEY);
+      document.querySelectorAll('#settingsModal input').forEach(el => el.value = '');
+      updateStatus('Rate profile cleared.');
+    }
+  }
+
+  // --- 🌤️ LIVE WEATHER PULL ---
   async function fetchLiveWeather() {
     const wxBox = document.getElementById('box_weather');
     const baseVal = document.getElementById('base_loc').value;
     let lat = null, lon = null;
 
-    // Check if coordinates already exist in LRZ box (e.g. 44.1234, -115.5678)
     const coordMatch = baseVal.match(/(-?\d+\.\d+)°?\s*[NS]?\s*,\s*(-?\d+\.\d+)°?\s*[EW]?/i);
     if (coordMatch) {
       lat = parseFloat(coordMatch[1]);
@@ -917,9 +1004,7 @@
       }
       updateStatus('📍 Getting GPS for weather...');
       navigator.geolocation.getCurrentPosition(
-        pos => {
-          queryWeatherAPI(pos.coords.latitude, pos.coords.longitude);
-        },
+        pos => queryWeatherAPI(pos.coords.latitude, pos.coords.longitude),
         err => {
           alert('GPS required for weather: ' + err.message);
           updateStatus('Weather fetch failed.', true);
@@ -980,94 +1065,6 @@
     if (code <= 75) return 'Snow';
     if (code <= 99) return 'Thunderstorm';
     return 'Observed';
-  }
-
-  // --- ⚙️ VENDOR RATE PROFILE & PRESET ENGINE ---
-  function openRatesModal() {
-    loadSavedRateProfile();
-    document.getElementById('ratesModal').style.display = 'flex';
-  }
-
-  function closeRatesModal() {
-    document.getElementById('ratesModal').style.display = 'none';
-  }
-
-  function saveRateProfile() {
-    const profile = {
-      vendor: document.getElementById('preset_vendor_name').value || '',
-      r_flt: document.getElementById('preset_r_flt').value || '',
-      r_avail: document.getElementById('preset_r_avail').value || '',
-      r_perdiem: document.getElementById('preset_r_perdiem').value || '',
-      r_payload: document.getElementById('preset_r_payload').value || '',
-      r_mi1: document.getElementById('preset_r_mi1').value || '',
-      r_mi2: document.getElementById('preset_r_mi2').value || '',
-      r_mi3: document.getElementById('preset_r_mi3').value || ''
-    };
-    localStorage.setItem(RATE_PROFILES_KEY, JSON.stringify(profile));
-    updateStatus(`Saved Vendor Rates: ${profile.vendor || 'Default'}`);
-    closeRatesModal();
-  }
-
-  function loadSavedRateProfile() {
-    const saved = localStorage.getItem(RATE_PROFILES_KEY);
-    if (saved) {
-      const profile = JSON.parse(saved);
-      document.getElementById('preset_vendor_name').value = profile.vendor || document.getElementById('vendor_name').value || '';
-      document.getElementById('preset_r_flt').value = profile.r_flt || '';
-      document.getElementById('preset_r_avail').value = profile.r_avail || '';
-      document.getElementById('preset_r_perdiem').value = profile.r_perdiem || '';
-      document.getElementById('preset_r_payload').value = profile.r_payload || '';
-      document.getElementById('preset_r_mi1').value = profile.r_mi1 || '';
-      document.getElementById('preset_r_mi2').value = profile.r_mi2 || '';
-      document.getElementById('preset_r_mi3').value = profile.r_mi3 || '';
-    } else {
-      document.getElementById('preset_vendor_name').value = document.getElementById('vendor_name').value || '';
-    }
-  }
-
-  function applyRateProfileToForm() {
-    const saved = localStorage.getItem(RATE_PROFILES_KEY);
-    if (!saved) saveRateProfile();
-    const profile = JSON.parse(localStorage.getItem(RATE_PROFILES_KEY));
-
-    if (profile.vendor) document.getElementById('vendor_name').value = profile.vendor;
-    if (profile.r_flt) document.getElementById('r_flt').value = profile.r_flt;
-    if (profile.r_avail) document.getElementById('r_avail').value = profile.r_avail;
-    
-    if (profile.r_perdiem) {
-      document.querySelectorAll('[id^="r_p"]').forEach(el => el.value = profile.r_perdiem);
-    }
-
-    if (profile.r_mi1) {
-      document.querySelectorAll('[id^="r_v"]').forEach(el => {
-        if (!el.value) el.value = profile.r_mi1;
-      });
-    }
-
-    if (profile.r_payload) document.getElementById('r_pay').value = profile.r_payload;
-
-    doMath();
-    closeRatesModal();
-    updateStatus(`Applied Rates: ${profile.vendor || 'Active'}`);
-  }
-
-  function applyVehiclePresetRate(selectEl, rateInputId) {
-    const val = selectEl.value;
-    const profile = JSON.parse(localStorage.getItem(RATE_PROFILES_KEY) || '{}');
-    const inputEl = document.getElementById(rateInputId);
-
-    if (val === '1' && profile.r_mi1) inputEl.value = profile.r_mi1;
-    else if (val === '2' && profile.r_mi2) inputEl.value = profile.r_mi2;
-    else if (val === '3' && profile.r_mi3) inputEl.value = profile.r_mi3;
-    doMath();
-  }
-
-  function deleteActiveRateProfile() {
-    if (confirm('Delete saved rate profile?')) {
-      localStorage.removeItem(RATE_PROFILES_KEY);
-      document.querySelectorAll('#ratesModal input').forEach(el => el.value = '');
-      updateStatus('Rate profile cleared.');
-    }
   }
 
   // --- 📍 GPS CAPTURE ---
