@@ -24,6 +24,7 @@
     --success-text: #065f46;
   }
 
+  /* NO URL/PAGE HEADERS OR FOOTERS IN PRINT */
   @page {
     size: letter portrait;
     margin: 0;
@@ -94,10 +95,10 @@
     color: #ffffff !important;
     border: 1.5px solid #60a5fa !important;
     padding: 4px 8px !important;
-    font-size: 8.0pt !important;
+    font-size: 7.8pt !important;
     font-weight: 700 !important;
     border-radius: 4px !important;
-    max-width: 200px !important;
+    max-width: 170px !important;
     height: 28px !important;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.15);
@@ -123,11 +124,14 @@
     gap: 3px;
     transition: all 0.15s ease;
     box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    text-decoration: none;
   }
 
   .btn:active { transform: scale(0.96); }
   .btn-save { background: #2563eb; color: white; }
   .btn-save:hover { background: #1d4ed8; }
+  .btn-import { background: #0284c7; color: white; cursor: pointer; }
+  .btn-import:hover { background: #0369a1; }
   .btn-aux { background: #475569; color: white; }
   .btn-aux:hover { background: #334155; }
   .btn-copy { background: #0891b2; color: white; }
@@ -136,10 +140,10 @@
   .btn-settings:hover { background: #6d28d9; }
   .btn-clear { background: #dc2626; color: white; }
   .btn-clear:hover { background: #b91c1c; }
-  .btn-csv { background: #0284c7; color: white; }
-  .btn-csv:hover { background: #0369a1; }
-  .btn-print { background: #059669; color: white; }
-  .btn-print:hover { background: #047857; }
+  .btn-csv { background: #059669; color: white; }
+  .btn-csv:hover { background: #047857; }
+  .btn-print { background: #16a34a; color: white; }
+  .btn-print:hover { background: #15803d; }
 
   .btn-gps, .btn-action {
     background: #e2e8f0;
@@ -567,14 +571,17 @@
   </div>
 
   <div class="btn-group">
+    <!-- UNIFIED SELECTOR: SWITCH BETWEEN SAVED DAYS ON THIS DEVICE -->
     <select id="unified_open_select" class="unified-open-select" onchange="handleUnifiedOpenSelect(this)">
-      <option value="">📂 Open Day / File...</option>
-      <option value="__IMPORT_FILE__">📥 Import Master Package (.json)...</option>
+      <option value="">📂 Switch Saved Day...</option>
       <optgroup id="saved_drafts_optgroup" label="Incident Days (Saved)"></optgroup>
     </select>
+
+    <!-- UNBLOCKABLE NATIVE IMPORT BUTTON -->
+    <label for="fileInput" class="btn btn-import" title="Import a single day (.json) or 14-day Master Incident Package">📥 Import</label>
     <input type="file" id="fileInput" style="display:none" accept=".json,application/json" onchange="openJSONFile(event)">
     
-    <button class="btn btn-save" onclick="saveInAppDraft()" title="Save current day">💾 Save Day</button>
+    <button class="btn btn-save" onclick="saveInAppDraft()" title="Save current day to incident package">💾 Save Day</button>
     <button class="btn btn-copy" onclick="copyFromYesterday()" title="Copy header logistics and names from yesterday's log">📋 Copy Yesterday</button>
     <button class="btn btn-settings" onclick="openSettingsModal()">⚙️ Roster &amp; Rates</button>
     <button class="btn btn-clear" onclick="startNewDayShift()" title="Start a new blank day shift">➕ New Day</button>
@@ -756,7 +763,7 @@
     <div class="sub-title-bar">Interagency Aviation Operations &bull; UAS Contractor &amp; Resource Daily Diary</div>
   </div>
 
-  <!-- HEADER LOGISTICS (CLEANED - UASM FIELD REMOVED FROM TOP) -->
+  <!-- HEADER LOGISTICS -->
   <table>
     <tr>
       <td style="width: 50%;">
@@ -971,7 +978,7 @@
 
   </div>
 
-  <!-- SECTION 5: APPROVAL SIGNATURES (UASM PRINTS AND SIGNS HERE) -->
+  <!-- SECTION 5: APPROVAL SIGNATURES -->
   <table>
     <tr>
       <td style="width: 38%; vertical-align: bottom; padding-bottom: 4px;">
@@ -995,7 +1002,7 @@
 </div>
 
 <script>
-  // PERMANENT STORAGE KEYS
+  // STORAGE KEYS
   const STORAGE_ACTIVE_LOG = 'UAS_LOG_ACTIVE_DRAFT';
   const STORAGE_DRAFTS_INDEX = 'UAS_LOG_SAVED_INDEX';
   const STORAGE_SETTINGS = 'UAS_LOG_SETTINGS_PROFILE';
@@ -1837,13 +1844,11 @@
       return;
     }
 
-    // Get the most recent saved day
     const lastDayKey = dayKeys[dayKeys.length - 1];
     const prevDay = packageStore[lastDayKey];
 
     if (!prevDay) return;
 
-    // 1. Copy Header Logistics
     if (prevDay.vendor_name) document.getElementById('vendor_name').value = prevDay.vendor_name;
     if (prevDay.inc_name) document.getElementById('inc_name').value = prevDay.inc_name;
     if (prevDay.base_loc) document.getElementById('base_loc').value = prevDay.base_loc;
@@ -1859,19 +1864,18 @@
     if (prevDay.ct_exu) document.getElementById('ct_exu').checked = true;
     if (prevDay.ct_agency) document.getElementById('ct_agency').checked = true;
 
-    // 2. Copy Personnel & Vehicle Names/Descriptions & Rates (Zero out quantities)
     const numPersonnel = parseInt(document.getElementById('cfg_personnel').value) || 5;
     for (let i = 1; i <= numPersonnel; i++) {
       if (prevDay[`p${i}_desc`]) document.getElementById(`p${i}_desc`).value = prevDay[`p${i}_desc`];
       if (prevDay[`r_p${i}`]) document.getElementById(`r_p${i}`).value = prevDay[`r_p${i}`];
-      document.getElementById(`q_p${i}`).value = ''; // Clean quantity for new day
+      document.getElementById(`q_p${i}`).value = '';
     }
 
     const numVehicles = parseInt(document.getElementById('cfg_vehicles').value) || 5;
     for (let i = 1; i <= numVehicles; i++) {
       if (prevDay[`v${i}_desc`]) document.getElementById(`v${i}_desc`).value = prevDay[`v${i}_desc`];
       if (prevDay[`r_v${i}`]) document.getElementById(`r_v${i}`).value = prevDay[`r_v${i}`];
-      document.getElementById(`q_v${i}`).value = ''; // Clean mileage for new day
+      document.getElementById(`q_v${i}`).value = '';
     }
 
     if (prevDay.pay_desc) document.getElementById('pay_desc').value = prevDay.pay_desc;
@@ -1879,7 +1883,6 @@
     if (prevDay.r_flt) document.getElementById('r_flt').value = prevDay.r_flt;
     if (prevDay.r_avail) document.getElementById('r_avail').value = prevDay.r_avail;
 
-    // Keep today's date
     if (!document.getElementById('doc_date').value) {
       document.getElementById('doc_date').value = new Date().toISOString().slice(0, 10);
     }
@@ -1909,15 +1912,12 @@
     const key = buildBaseName();
     const data = getFormDataObject();
     
-    // Save single day record
     localStorage.setItem('draft_' + key, JSON.stringify(data));
 
-    // Add to Multi-Day Incident Package Store
     const packageStore = getIncidentPackageStore();
     packageStore[key] = data;
     localStorage.setItem(STORAGE_INCIDENT_DAYS_STORE, JSON.stringify(packageStore));
 
-    // Update Drafts Index
     let index = JSON.parse(localStorage.getItem(STORAGE_DRAFTS_INDEX) || '[]');
     if (!index.includes(key)) {
       index.unshift(key);
@@ -1945,9 +1945,7 @@
     const val = selectEl.value;
     if (!val) return;
 
-    if (val === '__IMPORT_FILE__') {
-      document.getElementById('fileInput').click();
-    } else if (val.startsWith('draft_')) {
+    if (val.startsWith('draft_')) {
       const saved = localStorage.getItem(val);
       if (saved) {
         const data = JSON.parse(saved);
@@ -1969,7 +1967,6 @@
       const order = document.getElementById('order_num').value;
       const contractTypeRadio = document.querySelector('input[name="ctype"]:checked')?.id;
 
-      // Clear operational entries
       document.querySelectorAll('input, textarea').forEach(el => {
         if (el.id && !el.id.startsWith('rst_') && !el.id.startsWith('preset_') && el.id !== 'unified_open_select') {
           if (el.type === 'checkbox' || el.type === 'radio') {
@@ -1980,7 +1977,6 @@
         }
       });
 
-      // Restore metadata
       document.getElementById('vendor_name').value = vendor;
       document.getElementById('inc_name').value = incident;
       document.getElementById('agency_name').value = agency;
@@ -1998,10 +1994,6 @@
       
       updateStatus("New Day Shift Ready (Metadata Retained)");
     }
-  }
-
-  function clearFormData() {
-    startNewDayShift();
   }
 
   // --- 📤 MULTI-DAY MASTER JSON EXPORT ---
@@ -2062,7 +2054,6 @@
       []
     ];
 
-    // --- SECTION 1: CUMULATIVE ASSIGNMENT TOTALS ---
     rows.push(['--- 1. CUMULATIVE INCIDENT TOTALS ---']);
     let grandCumulativeCost = 0;
     let totalIncidentFlightHours = 0;
@@ -2125,7 +2116,6 @@
     });
     rows.push([], ['========================================================================'], []);
 
-    // --- SECTION 2: DAILY SHIFT TICKET BREAKDOWNS ---
     rows.push(['--- 2. DAILY SHIFT TICKET & INVOICE BREAKDOWNS ---']);
 
     dayKeys.forEach((k, dayIdx) => {
@@ -2139,7 +2129,6 @@
       rows.push(['Contract Type', d.ctype || '']);
       rows.push(['FRAT Completed', d.frat ? 'Yes' : 'No']);
       
-      // Cost Breakdown
       rows.push(['Cost Item Description', 'Quantity', 'Rate ($)', 'Day Cost ($)']);
       rows.push(['Revenue Flight Hours', d.q_flt || '0', d.r_flt || '0', d.c_flt || '0']);
       rows.push(['Daily Availability', d.q_avail || '0', d.r_avail || '0', d.c_avail || '0']);
@@ -2156,7 +2145,6 @@
       if (d.misc_desc) rows.push([d.misc_desc, d.q_misc || '', d.r_misc || '', d.c_misc || '']);
       rows.push(['DAY TOTAL COST', '', '', d.grandTotal || '$ 0.00']);
 
-      // Narratives
       rows.push(['Aircraft Status', `"${(d.box_ac_status || '').replace(/"/g, '""')}"`]);
       rows.push(['Weather Observations', `"${(d.box_weather || '').replace(/"/g, '""')}"`]);
       rows.push(['Narrative Report', `"${(d.box_narrative || '').replace(/"/g, '""')}"`]);
@@ -2165,7 +2153,6 @@
       rows.push(['------------------------------------------------------------------------']);
     });
 
-    // --- SECTION 3: MASTER SORTIE LOG ---
     rows.push([], ['========================================================================'], ['--- 3. ALL SORTIE FLIGHT LEGS (CHRONOLOGICAL) ---']);
     rows.push(['Date', 'Sortie #', 'Airframe Tail', 'Model', 'Flight Duration (hrs)', 'Crew & Allocations']);
 
@@ -2205,7 +2192,7 @@
     updateStatus(`Exported Master Rollup: ${fileName}`);
   }
 
-  // --- 📥 SMART IMPORT ---
+  // --- 📥 SMART NATIVE IMPORT ---
   function openJSONFile(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -2237,15 +2224,17 @@
             applyDataToForm(packageStore[latestKey]);
           }
 
-          updateStatus(`Imported Master Package (${importedKeys.length} Days)`);
+          alert(`Successfully imported Master Incident Package with ${importedKeys.length} days of logs!`);
+          updateStatus(`Imported Package (${importedKeys.length} Days)`);
         } else {
           renderCostRows();
           applyDataToForm(data);
           autoSaveActive();
+          alert(`Imported single day log: ${file.name}`);
           updateStatus("Imported Single Day: " + file.name);
         }
       } catch (err) {
-        alert("Invalid JSON file.");
+        alert("Invalid JSON file: " + err.message);
       }
     };
     reader.readAsText(file);
