@@ -24,6 +24,7 @@
     --success-text: #065f46;
   }
 
+  /* NO URL/PAGE HEADERS OR FOOTERS IN PRINT */
   @page {
     size: letter portrait;
     margin: 0;
@@ -45,7 +46,7 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* TOP STICKY TOOLBAR */
+  /* TOP STICKY TOOLBAR (CLEANED UP & STREAMLINED) */
   .no-print-bar {
     position: sticky;
     top: 0;
@@ -97,7 +98,7 @@
     font-size: 7.8pt !important;
     font-weight: 700 !important;
     border-radius: 4px !important;
-    max-width: 170px !important;
+    max-width: 175px !important;
     height: 28px !important;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.15);
@@ -111,7 +112,7 @@
   /* BUTTONS */
   .btn {
     border: none;
-    padding: 5px 9px;
+    padding: 5px 10px;
     font-weight: 700;
     cursor: pointer;
     border-radius: 3px;
@@ -120,7 +121,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 3px;
+    gap: 4px;
     transition: all 0.15s ease;
     box-shadow: 0 2px 4px rgba(0,0,0,0.15);
     text-decoration: none;
@@ -129,20 +130,18 @@
   .btn:active { transform: scale(0.96); }
   .btn-save { background: #2563eb; color: white; }
   .btn-save:hover { background: #1d4ed8; }
-  .btn-import { background: #0284c7; color: white; cursor: pointer; }
-  .btn-import:hover { background: #0369a1; }
-  .btn-aux { background: #475569; color: white; }
-  .btn-aux:hover { background: #334155; }
   .btn-copy { background: #0891b2; color: white; }
   .btn-copy:hover { background: #0e7490; }
+  .btn-export { background: #0284c7; color: white; }
+  .btn-export:hover { background: #0369a1; }
   .btn-settings { background: #7c3aed; color: white; }
   .btn-settings:hover { background: #6d28d9; }
-  .btn-clear { background: #dc2626; color: white; }
-  .btn-clear:hover { background: #b91c1c; }
-  .btn-csv { background: #059669; color: white; }
-  .btn-csv:hover { background: #047857; }
-  .btn-print { background: #16a34a; color: white; }
-  .btn-print:hover { background: #15803d; }
+  .btn-clear { background: #475569; color: white; }
+  .btn-clear:hover { background: #334155; }
+  .btn-danger { background: #dc2626; color: white; }
+  .btn-danger:hover { background: #b91c1c; }
+  .btn-print { background: #059669; color: white; }
+  .btn-print:hover { background: #047857; }
 
   .btn-gps, .btn-action {
     background: #e2e8f0;
@@ -415,7 +414,7 @@
   .modal-content {
     background: white;
     width: 90%;
-    max-width: 580px;
+    max-width: 520px;
     max-height: 90vh;
     overflow-y: auto;
     border-radius: 6px;
@@ -442,9 +441,6 @@
     margin: 8px 0 4px 0;
     padding-bottom: 2px;
     border-bottom: 1px dashed #cbd5e1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
   }
 
   .modal-grid {
@@ -510,6 +506,30 @@
   .alloc-valid { background: #dcfce7; color: #166534; }
   .alloc-invalid { background: #fee2e2; color: #b91c1c; }
 
+  /* ACTION LIST ITEM IN EXPORT MODAL */
+  .export-action-box {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .export-action-text {
+    flex: 1;
+  }
+  .export-action-text strong {
+    font-size: 7.8pt;
+    color: #0f2744;
+    display: block;
+  }
+  .export-action-text span {
+    font-size: 6.6pt;
+    color: #64748b;
+  }
+
   /* PRINT STYLING */
   @media print {
     body { 
@@ -565,7 +585,7 @@
 </head>
 <body>
 
-<!-- TOP CONTROL BAR -->
+<!-- STREAMLINED TOP CONTROL BAR -->
 <div class="no-print-bar">
   <div class="status-badge">
     <div class="status-dot"></div>
@@ -575,21 +595,67 @@
   <div class="btn-group">
     <!-- SWITCH SAVED DAYS -->
     <select id="unified_open_select" class="unified-open-select" onchange="handleUnifiedOpenSelect(this)">
-      <option value="">📂 Switch Saved Day...</option>
-      <optgroup id="saved_drafts_optgroup" label="Incident Days (Saved)"></optgroup>
+      <option value="">📂 Switch Day...</option>
+      <optgroup id="saved_drafts_optgroup" label="Saved Incident Days"></optgroup>
     </select>
-
-    <!-- NATIVE UNBLOCKABLE IMPORT -->
-    <label for="fileInput" class="btn btn-import" title="Import single day (.json) or Master Incident Package">📥 Import</label>
-    <input type="file" id="fileInput" style="display:none" accept=".json,application/json" onchange="openJSONFile(event)">
     
     <button class="btn btn-save" onclick="saveInAppDraft()" title="Save current day to incident package">💾 Save Day</button>
-    <button class="btn btn-copy" onclick="copyFromYesterday()" title="Copy header logistics, crew & vehicles from yesterday's log">📋 Copy Yesterday</button>
-    <button class="btn btn-settings" onclick="openSettingsModal()">⚙️ Roster &amp; Fleet</button>
-    <button class="btn btn-clear" onclick="startNewDayShift()" title="Start a new blank day shift">➕ New Day</button>
-    <button class="btn btn-aux" onclick="exportIncidentJSONPackage()" title="Export all days in a single master JSON file">📤 Export JSON</button>
-    <button class="btn btn-csv" onclick="exportMasterIncidentCSV()" title="Export master cumulative CSV spreadsheet">📊 Export CSV</button>
+    <button class="btn btn-clear" onclick="startNewDayShift()" title="Start a fresh day shift">➕ New Day</button>
+    <button class="btn btn-copy" onclick="copyFromYesterday()" title="Copy header logistics, crew & vehicles from yesterday">📋 Copy Yesterday</button>
+    <button class="btn btn-export" onclick="openExportModal()" title="Export CSV, JSON, Import files, or Clear Days archive">📤 Export / Archive</button>
+    <button class="btn btn-settings" onclick="openSettingsModal()">⚙️ Roster &amp; Rates</button>
     <button class="btn btn-print" onclick="printPDF()">🖨️ PDF</button>
+  </div>
+</div>
+
+<!-- 📤 UNIFIED EXPORT, IMPORT & ARCHIVE MODAL -->
+<div class="modal-overlay" id="exportModal">
+  <div class="modal-content" style="max-width: 480px;">
+    <div class="modal-header">
+      <span>📤 Export, Import &amp; Incident Archive</span>
+      <button style="border:none; background:none; font-size:12pt; cursor:pointer;" onclick="closeExportModal()">✕</button>
+    </div>
+
+    <!-- 1. CSV MASTER ROLLUP -->
+    <div class="export-action-box">
+      <div class="export-action-text">
+        <strong>📊 Export Master CSV (All Days)</strong>
+        <span>Cumulative multi-day spreadsheet for Finance and Helibase tracking.</span>
+      </div>
+      <button class="btn btn-csv" onclick="exportMasterIncidentCSV()">Export CSV</button>
+    </div>
+
+    <!-- 2. JSON MASTER PACKAGE -->
+    <div class="export-action-box">
+      <div class="export-action-text">
+        <strong>📤 Export Master JSON Package</strong>
+        <span>Bundles all days, rosters, and rates into a single file to share with incoming managers.</span>
+      </div>
+      <button class="btn btn-save" onclick="exportIncidentJSONPackage()">Export JSON</button>
+    </div>
+
+    <!-- 3. IMPORT BACKUP -->
+    <div class="export-action-box">
+      <div class="export-action-text">
+        <strong>📥 Import File / Master Package</strong>
+        <span>Load a single-day log or multi-day incident package from AirDrop or Files.</span>
+      </div>
+      <label for="fileInput" class="btn btn-aux">Import File</label>
+      <input type="file" id="fileInput" style="display:none" accept=".json,application/json" onchange="openJSONFile(event)">
+    </div>
+
+    <!-- 4. CLEAR SAVED DAYS ARCHIVE (START FRESH) -->
+    <div class="export-action-box" style="border-color:#fca5a5; background:#fff5f5;">
+      <div class="export-action-text">
+        <strong style="color:#b91c1c;">🗑️ Clear Saved Days Archive</strong>
+        <span>Clears saved days from memory when starting a new incident. (Roster & rates are kept).</span>
+      </div>
+      <button class="btn btn-danger" onclick="clearIncidentDaysArchive()">Clear Days</button>
+    </div>
+
+    <div style="text-align:right; margin-top:8px;">
+      <button class="btn btn-clear" onclick="closeExportModal()">Close</button>
+    </div>
   </div>
 </div>
 
@@ -655,15 +721,15 @@
   </div>
 </div>
 
-<!-- ⚙️ UNIFIED SETTINGS: ROSTER, FLEET & RATES BUILDER -->
+<!-- ⚙️ UNIFIED SETTINGS & ROSTER BUILDER MODAL -->
 <div class="modal-overlay" id="settingsModal">
   <div class="modal-content">
     <div class="modal-header">
-      <span>⚙️ Settings: Crew Roster, Fleet &amp; Rates Builder</span>
+      <span>⚙️ Settings: Crew Roster, Fleet &amp; Rates</span>
       <button style="border:none; background:none; font-size:12pt; cursor:pointer;" onclick="closeSettingsModal()">✕</button>
     </div>
 
-    <!-- SECTION 1: CREW ROSTER BUILDER (LINKED TO PERSONNEL ROWS & ROLES) -->
+    <!-- SECTION 1: CREW ROSTER BUILDER -->
     <div class="modal-section-title">
       <span>👥 Crew Roster Builder (Pilots &amp; Ground Personnel)</span>
       <label style="font-size:6.8pt; display:inline-flex; align-items:center; gap:4px; margin:0;">
@@ -673,11 +739,9 @@
         </select>
       </label>
     </div>
-    <div id="roster_crew_builder_container" style="margin-bottom:8px;">
-      <!-- Dynamic crew member builder rows rendered by JS -->
-    </div>
+    <div id="roster_crew_builder_container" style="margin-bottom:8px;"></div>
 
-    <!-- SECTION 2: VEHICLE FLEET BUILDER (LINKED TO VEHICLE ROWS) -->
+    <!-- SECTION 2: VEHICLE FLEET BUILDER -->
     <div class="modal-section-title">
       <span>🚙 Vehicle Fleet Builder</span>
       <label style="font-size:6.8pt; display:inline-flex; align-items:center; gap:4px; margin:0;">
@@ -687,9 +751,7 @@
         </select>
       </label>
     </div>
-    <div id="roster_vehicle_builder_container" style="margin-bottom:8px;">
-      <!-- Dynamic vehicle builder rows rendered by JS -->
-    </div>
+    <div id="roster_vehicle_builder_container" style="margin-bottom:8px;"></div>
 
     <!-- SECTION 3: AIRCRAFT FLEET BUILDER -->
     <div class="modal-section-title">
@@ -701,12 +763,12 @@
         </select>
       </label>
     </div>
-    <div id="roster_aircraft_builder_container" style="margin-bottom:8px;">
-      <!-- Dynamic aircraft builder rows rendered by JS -->
-    </div>
+    <div id="roster_aircraft_builder_container" style="margin-bottom:8px;"></div>
 
     <!-- SECTION 4: VENDOR RATES & PRESETS -->
-    <div class="modal-section-title">💲 Vendor Contract Rates &amp; Mileage Presets</div>
+    <div class="modal-section-title">
+      <span>💲 Vendor Contract Rates &amp; Mileage Presets</span>
+    </div>
     <div class="modal-grid">
       <label style="grid-column: span 2;">Contractor / Vendor Name:
         <input type="text" id="preset_vendor_name" oninput="saveSettingsProfile(true)" placeholder="e.g. Drone Aviation Services LLC">
@@ -887,7 +949,7 @@
           </tr>
         </thead>
         <tbody>
-          <!-- CORE ITEMS (AVAILABILITY DEFAULTS TO 1.0 WITH DECIMAL SUPPORT) -->
+          <!-- CORE ITEMS -->
           <tr class="calc-row">
             <td class="bold">Revenue Flight Hours (Auto):</td>
             <td><input type="number" step="any" class="qty" id="q_flt" placeholder="0.0" readonly style="background:#f8fafc;"></td>
@@ -901,11 +963,11 @@
             <td><input type="text" class="cost-output" id="c_avail" readonly placeholder="$ 0.00"></td>
           </tr>
 
-          <!-- DYNAMIC PERSONNEL ROWS (SYNCED TO CREW ROSTER) -->
+          <!-- DYNAMIC PERSONNEL ROWS -->
           <tr class="bg-section"><td colspan="4">PERSONNEL PER DIEM / EXTENDED STANDBY</td></tr>
           <tbody id="personnel_tbody"></tbody>
 
-          <!-- DYNAMIC VEHICLE ROWS (SYNCED TO VEHICLE ROSTER) -->
+          <!-- DYNAMIC VEHICLE ROWS -->
           <tr class="bg-section"><td colspan="4">VEHICLE MILEAGE &amp; SUPPORT TRUCKS</td></tr>
           <tbody id="vehicles_tbody"></tbody>
 
@@ -1014,6 +1076,15 @@
   }
 
   window.addEventListener('beforeprint', syncPrintMirrors);
+
+  // --- 📤 UNIFIED EXPORT / ARCHIVE MODAL ---
+  function openExportModal() {
+    document.getElementById('exportModal').style.display = 'flex';
+  }
+
+  function closeExportModal() {
+    document.getElementById('exportModal').style.display = 'none';
+  }
 
   // --- ✍️ POPOUT SIGNATURE MODAL ---
   let popSigCanvas, popSigCtx, popSigDrawing = false;
@@ -1263,7 +1334,6 @@
     let allocatedPilotHours = 0;
     let html = '';
 
-    // Only flight crew (Pilots & Sensor Ops) can log flight time
     roster.pilots.forEach((pObj, pIdx) => {
       if (pObj.name.trim()) {
         const isAssigned = tempSortieData.pilotAllocations && tempSortieData.pilotAllocations[pIdx] !== undefined;
@@ -1567,7 +1637,6 @@
     const crew = settings.crewMembers || [];
     const airframes = settings.aircraft || [];
 
-    // Filter pilots & flight operators for sortie assignment
     const flightPilots = [];
     crew.forEach((c, idx) => {
       if (c && c.name && (c.role === 'Pilot / RPIC' || c.role === 'Sensor Op')) {
@@ -1965,7 +2034,7 @@
     for (let i = 1; i <= numPersonnel; i++) {
       if (prevDay[`p${i}_desc`]) document.getElementById(`p${i}_desc`).value = prevDay[`p${i}_desc`];
       if (prevDay[`r_p${i}`]) document.getElementById(`r_p${i}`).value = prevDay[`r_p${i}`];
-      document.getElementById(`q_p${i}`).value = '';
+      document.getElementById(`q_p${i}` ).value = '';
     }
 
     const numVehicles = parseInt(document.getElementById('cfg_vehicles').value) || 5;
@@ -2054,8 +2123,8 @@
     selectEl.value = '';
   }
 
-  function startNewDayShift() {
-    if (confirm('Start a new shift day? (Saves current day into incident package and advances to a clean form)')) {
+  function startNewDayShift(isSilent = false) {
+    if (isSilent || confirm('Start a new shift day? (Saves current day into incident package and advances to a clean form)')) {
       saveInAppDraft();
       
       const vendor = document.getElementById('vendor_name').value;
@@ -2090,12 +2159,31 @@
       
       applySettingsToForm();
       
-      updateStatus("New Day Shift Ready (Metadata Retained)");
+      updateStatus("New Day Shift Ready (Roster Retained)");
     }
   }
 
-  function clearFormData() {
-    startNewDayShift();
+  // --- 🗑️ CLEAR SAVED DAYS ARCHIVE ---
+  function clearIncidentDaysArchive() {
+    const count = Object.keys(getIncidentPackageStore()).length;
+    if (confirm(`Are you sure you want to clear all ${count} saved days from memory?\n\n(Your crew roster, fleet, and contract rates will NOT be deleted).`)) {
+      localStorage.removeItem(STORAGE_INCIDENT_DAYS_STORE);
+      localStorage.removeItem(STORAGE_DRAFTS_INDEX);
+      localStorage.removeItem(STORAGE_ACTIVE_LOG);
+
+      const keysToRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('draft_')) keysToRemove.push(k);
+      }
+      keysToRemove.forEach(k => localStorage.removeItem(k));
+
+      refreshUnifiedOpenDropdown();
+      startNewDayShift(true);
+      closeExportModal();
+      alert('Saved days archive cleared successfully! Ready for a fresh incident.');
+      updateStatus('Cleared saved days archive.');
+    }
   }
 
   // --- 📤 MULTI-DAY MASTER JSON EXPORT ---
@@ -2131,6 +2219,7 @@
     a.click();
     URL.revokeObjectURL(a.href);
     updateStatus(`Exported Master Package: ${fileName}`);
+    closeExportModal();
   }
 
   // --- 📊 MULTI-DAY MASTER CSV EXPORT ---
@@ -2218,6 +2307,7 @@
     });
     rows.push([], ['========================================================================'], []);
 
+    // --- SECTION 2: DAILY SHIFT TICKET BREAKDOWNS ---
     rows.push(['--- 2. DAILY SHIFT TICKET & INVOICE BREAKDOWNS ---']);
 
     dayKeys.forEach((k, dayIdx) => {
@@ -2255,6 +2345,7 @@
       rows.push(['------------------------------------------------------------------------']);
     });
 
+    // --- SECTION 3: MASTER SORTIE LOG ---
     rows.push([], ['========================================================================'], ['--- 3. ALL SORTIE FLIGHT LEGS (CHRONOLOGICAL) ---']);
     rows.push(['Date', 'Sortie #', 'Airframe Tail', 'Model', 'Flight Duration (hrs)', 'Crew & Allocations']);
 
@@ -2266,8 +2357,10 @@
         const crewAllocations = [];
         if (st.pilotAllocations) {
           Object.keys(st.pilotAllocations).forEach(pIdx => {
-            const pObj = roster.pilots[pIdx] || { name: `P${parseInt(pIdx)+1}` };
-            crewAllocations.push(`${pObj.name}: ${st.pilotAllocations[pIdx]}h`);
+            const pObj = roster.pilots[pIdx];
+            if (pObj && pObj.name) {
+              crewAllocations.push(`${pObj.name}: ${st.pilotAllocations[pIdx]}h`);
+            }
           });
         }
         rows.push([d.doc_date || k, `Sortie ${sIdx+1}`, ac.tail, ac.model, st.duration, `"${crewAllocations.join('; ')}"`]);
@@ -2292,9 +2385,10 @@
     a.click();
     URL.revokeObjectURL(a.href);
     updateStatus(`Exported Master Rollup: ${fileName}`);
+    closeExportModal();
   }
 
-  // --- 📥 SMART NATIVE IMPORT ---
+  // --- 📥 SMART IMPORT ---
   function openJSONFile(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -2335,6 +2429,7 @@
           alert(`Imported single day log: ${file.name}`);
           updateStatus("Imported Single Day: " + file.name);
         }
+        closeExportModal();
       } catch (err) {
         alert("Invalid JSON file: " + err.message);
       }
