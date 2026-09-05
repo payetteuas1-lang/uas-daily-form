@@ -24,7 +24,6 @@
     --success-text: #065f46;
   }
 
-  /* NO URL/PAGE HEADERS OR FOOTERS IN PRINT */
   @page {
     size: letter portrait;
     margin: 0;
@@ -90,7 +89,6 @@
     flex-wrap: wrap; 
   }
 
-  /* UNIFIED SMART OPEN/LOAD DROPDOWN */
   .unified-open-select {
     background: #1e3a5f !important;
     color: #ffffff !important;
@@ -99,7 +97,7 @@
     font-size: 8.0pt !important;
     font-weight: 700 !important;
     border-radius: 4px !important;
-    max-width: 210px !important;
+    max-width: 200px !important;
     height: 28px !important;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.15);
@@ -132,6 +130,8 @@
   .btn-save:hover { background: #1d4ed8; }
   .btn-aux { background: #475569; color: white; }
   .btn-aux:hover { background: #334155; }
+  .btn-copy { background: #0891b2; color: white; }
+  .btn-copy:hover { background: #0e7490; }
   .btn-settings { background: #7c3aed; color: white; }
   .btn-settings:hover { background: #6d28d9; }
   .btn-clear { background: #dc2626; color: white; }
@@ -567,7 +567,6 @@
   </div>
 
   <div class="btn-group">
-    <!-- UNIFIED SMART OPEN/LOAD SELECTOR (LOADS FROM MULTI-DAY INCIDENT MEMORY) -->
     <select id="unified_open_select" class="unified-open-select" onchange="handleUnifiedOpenSelect(this)">
       <option value="">📂 Open Day / File...</option>
       <option value="__IMPORT_FILE__">📥 Import Master Package (.json)...</option>
@@ -575,12 +574,13 @@
     </select>
     <input type="file" id="fileInput" style="display:none" accept=".json,application/json" onchange="openJSONFile(event)">
     
-    <button class="btn btn-save" onclick="saveInAppDraft()" title="Save current day to incident package">💾 Save Day</button>
-    <button class="btn btn-settings" onclick="openSettingsModal()">⚙️ Settings</button>
-    <button class="btn btn-clear" onclick="startNewDayShift()" title="Start a fresh daily log">➕ New Day</button>
-    <button class="btn btn-aux" onclick="exportIncidentJSONPackage()" title="Export all days in a single master JSON file">📤 Export JSON (All Days)</button>
-    <button class="btn btn-csv" onclick="exportMasterIncidentCSV()" title="Export 14-day cumulative master spreadsheet">📊 Export CSV (All Days)</button>
-    <button class="btn btn-print" onclick="printPDF()">🖨️ PDF (Current Day)</button>
+    <button class="btn btn-save" onclick="saveInAppDraft()" title="Save current day">💾 Save Day</button>
+    <button class="btn btn-copy" onclick="copyFromYesterday()" title="Copy header logistics and names from yesterday's log">📋 Copy Yesterday</button>
+    <button class="btn btn-settings" onclick="openSettingsModal()">⚙️ Roster &amp; Rates</button>
+    <button class="btn btn-clear" onclick="startNewDayShift()" title="Start a new blank day shift">➕ New Day</button>
+    <button class="btn btn-aux" onclick="exportIncidentJSONPackage()" title="Export all days in a single master JSON file">📤 Export JSON</button>
+    <button class="btn btn-csv" onclick="exportMasterIncidentCSV()" title="Export master cumulative CSV spreadsheet">📊 Export CSV</button>
+    <button class="btn btn-print" onclick="printPDF()">🖨️ PDF</button>
   </div>
 </div>
 
@@ -646,16 +646,16 @@
   </div>
 </div>
 
-<!-- ⚙️ UNIFIED SETTINGS & ROSTER MODAL -->
+<!-- ⚙️ UNIFIED SETTINGS & ROSTER BUILDER MODAL -->
 <div class="modal-overlay" id="settingsModal">
   <div class="modal-content">
     <div class="modal-header">
-      <span>⚙️ Settings: Roster, Aircraft &amp; Rates</span>
+      <span>⚙️ Settings: Crew Roster, Aircraft &amp; Rates</span>
       <button style="border:none; background:none; font-size:12pt; cursor:pointer;" onclick="closeSettingsModal()">✕</button>
     </div>
 
-    <!-- SECTION 1: PILOT / CREW ROSTER -->
-    <div class="modal-section-title">👨‍✈️ Pilot &amp; Crew Roster (Up to 6)</div>
+    <!-- SECTION 1: CREW ROSTER BUILDER -->
+    <div class="modal-section-title">👨‍✈️ Pilot &amp; Crew Roster Builder (Up to 6)</div>
     <div class="modal-grid" id="roster_pilots_grid">
       <label>Pilot 1 (RPIC): <input type="text" id="rst_p1" oninput="saveSettingsProfile(true)" placeholder="Name / Role"></label>
       <label>Pilot 2: <input type="text" id="rst_p2" oninput="saveSettingsProfile(true)" placeholder="Name / Role"></label>
@@ -665,8 +665,8 @@
       <label>Pilot 6: <input type="text" id="rst_p6" oninput="saveSettingsProfile(true)" placeholder="Name / Role"></label>
     </div>
 
-    <!-- SECTION 2: AIRCRAFT ROSTER -->
-    <div class="modal-section-title">🛸 Aircraft Airframe Roster (Tail # &amp; Model)</div>
+    <!-- SECTION 2: AIRCRAFT ROSTER BUILDER -->
+    <div class="modal-section-title">🛸 Aircraft Airframe Roster Builder (Tail # &amp; Model)</div>
     <div class="modal-grid">
       <label>Aircraft 1 (Tail / Model):
         <div style="display:flex; gap:2px;">
@@ -756,7 +756,7 @@
     <div class="sub-title-bar">Interagency Aviation Operations &bull; UAS Contractor &amp; Resource Daily Diary</div>
   </div>
 
-  <!-- HEADER LOGISTICS -->
+  <!-- HEADER LOGISTICS (CLEANED - UASM FIELD REMOVED FROM TOP) -->
   <table>
     <tr>
       <td style="width: 50%;">
@@ -818,18 +818,12 @@
       </td>
     </tr>
     <tr>
-      <td style="width: 50%;">
+      <td colspan="3" style="width: 100%;">
         <div class="flex-align">
-          <span class="bold" style="white-space:nowrap; margin-right:4px;">Contract Type:</span>
-          <label class="checkbox-label"><input type="radio" name="ctype" id="ct_cwn"> CWN</label>
-          <label class="checkbox-label"><input type="radio" name="ctype" id="ct_exu"> Exclusive Use</label>
-          <label class="checkbox-label"><input type="radio" name="ctype" id="ct_agency"> Agency</label>
-        </div>
-      </td>
-      <td colspan="2" style="width: 50%;">
-        <div class="flex-align">
-          <span class="bold" style="white-space:nowrap; width:125px;">UAS Manager / Gov Rep:</span>
-          <input type="text" id="uasm_name" placeholder="Manager Name">
+          <span class="bold" style="white-space:nowrap; margin-right:8px;">Contract Type:</span>
+          <label class="checkbox-label" style="margin-right:12px;"><input type="radio" name="ctype" id="ct_cwn"> CWN / On-Call</label>
+          <label class="checkbox-label" style="margin-right:12px;"><input type="radio" name="ctype" id="ct_exu"> Exclusive Use</label>
+          <label class="checkbox-label" style="margin-right:12px;"><input type="radio" name="ctype" id="ct_agency"> Agency Owned</label>
         </div>
       </td>
     </tr>
@@ -977,7 +971,7 @@
 
   </div>
 
-  <!-- SECTION 5: APPROVAL SIGNATURES -->
+  <!-- SECTION 5: APPROVAL SIGNATURES (UASM PRINTS AND SIGNS HERE) -->
   <table>
     <tr>
       <td style="width: 38%; vertical-align: bottom; padding-bottom: 4px;">
@@ -1001,11 +995,11 @@
 </div>
 
 <script>
-  // STORAGE KEYS
+  // PERMANENT STORAGE KEYS
   const STORAGE_ACTIVE_LOG = 'UAS_LOG_ACTIVE_DRAFT';
   const STORAGE_DRAFTS_INDEX = 'UAS_LOG_SAVED_INDEX';
   const STORAGE_SETTINGS = 'UAS_LOG_SETTINGS_PROFILE';
-  const STORAGE_INCIDENT_DAYS_STORE = 'UAS_INCIDENT_PACKAGE_STORE_V1'; // Stores all days
+  const STORAGE_INCIDENT_DAYS_STORE = 'UAS_INCIDENT_PACKAGE_STORE_V1';
 
   let totalCostGlobal = 0;
   let sortiesList = [];
@@ -1833,7 +1827,68 @@
     recalcFlightSummaries();
   }
 
-  // --- 📦 MULTI-DAY INCIDENT PACKAGE STORE (14-DAY IN-APP MEMORY) ---
+  // --- 📋 COPY YESTERDAY'S LOG WORKFLOW ---
+  function copyFromYesterday() {
+    const packageStore = getIncidentPackageStore();
+    const dayKeys = Object.keys(packageStore).sort();
+    
+    if (dayKeys.length === 0) {
+      alert("No previous saved days found in the incident package to copy from.");
+      return;
+    }
+
+    // Get the most recent saved day
+    const lastDayKey = dayKeys[dayKeys.length - 1];
+    const prevDay = packageStore[lastDayKey];
+
+    if (!prevDay) return;
+
+    // 1. Copy Header Logistics
+    if (prevDay.vendor_name) document.getElementById('vendor_name').value = prevDay.vendor_name;
+    if (prevDay.inc_name) document.getElementById('inc_name').value = prevDay.inc_name;
+    if (prevDay.base_loc) document.getElementById('base_loc').value = prevDay.base_loc;
+    if (prevDay.agency_name) document.getElementById('agency_name').value = prevDay.agency_name;
+    if (prevDay.order_num) document.getElementById('order_num').value = prevDay.order_num;
+    
+    if (prevDay.act_largefire !== undefined) document.getElementById('act_largefire').checked = prevDay.act_largefire;
+    if (prevDay.act_ia !== undefined) document.getElementById('act_ia').checked = prevDay.act_ia;
+    if (prevDay.act_proj !== undefined) document.getElementById('act_proj').checked = prevDay.act_proj;
+    if (prevDay.act_train !== undefined) document.getElementById('act_train').checked = prevDay.act_train;
+
+    if (prevDay.ct_cwn) document.getElementById('ct_cwn').checked = true;
+    if (prevDay.ct_exu) document.getElementById('ct_exu').checked = true;
+    if (prevDay.ct_agency) document.getElementById('ct_agency').checked = true;
+
+    // 2. Copy Personnel & Vehicle Names/Descriptions & Rates (Zero out quantities)
+    const numPersonnel = parseInt(document.getElementById('cfg_personnel').value) || 5;
+    for (let i = 1; i <= numPersonnel; i++) {
+      if (prevDay[`p${i}_desc`]) document.getElementById(`p${i}_desc`).value = prevDay[`p${i}_desc`];
+      if (prevDay[`r_p${i}`]) document.getElementById(`r_p${i}`).value = prevDay[`r_p${i}`];
+      document.getElementById(`q_p${i}`).value = ''; // Clean quantity for new day
+    }
+
+    const numVehicles = parseInt(document.getElementById('cfg_vehicles').value) || 5;
+    for (let i = 1; i <= numVehicles; i++) {
+      if (prevDay[`v${i}_desc`]) document.getElementById(`v${i}_desc`).value = prevDay[`v${i}_desc`];
+      if (prevDay[`r_v${i}`]) document.getElementById(`r_v${i}`).value = prevDay[`r_v${i}`];
+      document.getElementById(`q_v${i}`).value = ''; // Clean mileage for new day
+    }
+
+    if (prevDay.pay_desc) document.getElementById('pay_desc').value = prevDay.pay_desc;
+    if (prevDay.r_pay) document.getElementById('r_pay').value = prevDay.r_pay;
+    if (prevDay.r_flt) document.getElementById('r_flt').value = prevDay.r_flt;
+    if (prevDay.r_avail) document.getElementById('r_avail').value = prevDay.r_avail;
+
+    // Keep today's date
+    if (!document.getElementById('doc_date').value) {
+      document.getElementById('doc_date').value = new Date().toISOString().slice(0, 10);
+    }
+
+    doMath();
+    updateStatus(`📋 Copied Logistics & Names from: ${lastDayKey}`);
+  }
+
+  // --- 📦 MULTI-DAY INCIDENT PACKAGE STORE ---
   function getIncidentPackageStore() {
     try {
       return JSON.parse(localStorage.getItem(STORAGE_INCIDENT_DAYS_STORE) || '{}');
@@ -1854,15 +1909,15 @@
     const key = buildBaseName();
     const data = getFormDataObject();
     
-    // 1. Save single day record
+    // Save single day record
     localStorage.setItem('draft_' + key, JSON.stringify(data));
 
-    // 2. Add to Multi-Day Incident Package Store
+    // Add to Multi-Day Incident Package Store
     const packageStore = getIncidentPackageStore();
     packageStore[key] = data;
     localStorage.setItem(STORAGE_INCIDENT_DAYS_STORE, JSON.stringify(packageStore));
 
-    // 3. Update Drafts Index
+    // Update Drafts Index
     let index = JSON.parse(localStorage.getItem(STORAGE_DRAFTS_INDEX) || '[]');
     if (!index.includes(key)) {
       index.unshift(key);
@@ -1906,15 +1961,13 @@
 
   function startNewDayShift() {
     if (confirm('Start a new shift day? (Saves current day into incident package and advances to a clean form)')) {
-      saveInAppDraft(); // Auto save current day before starting new
+      saveInAppDraft();
       
-      // Preserve incident metadata & vendor
       const vendor = document.getElementById('vendor_name').value;
       const incident = document.getElementById('inc_name').value;
       const agency = document.getElementById('agency_name').value;
       const order = document.getElementById('order_num').value;
       const contractTypeRadio = document.querySelector('input[name="ctype"]:checked')?.id;
-      const uasm = document.getElementById('uasm_name').value;
 
       // Clear operational entries
       document.querySelectorAll('input, textarea').forEach(el => {
@@ -1932,10 +1985,8 @@
       document.getElementById('inc_name').value = incident;
       document.getElementById('agency_name').value = agency;
       document.getElementById('order_num').value = order;
-      document.getElementById('uasm_name').value = uasm;
       if (contractTypeRadio) document.getElementById(contractTypeRadio).checked = true;
 
-      // Advance date to today
       document.getElementById('doc_date').value = new Date().toISOString().slice(0, 10);
 
       clearSignature();
@@ -1943,7 +1994,6 @@
       renderMinimizedSorties();
       recalcFlightSummaries();
       
-      // Re-apply rates automatically
       applySettingsToForm();
       
       updateStatus("New Day Shift Ready (Metadata Retained)");
@@ -1951,9 +2001,7 @@
   }
 
   function clearFormData() {
-    if (confirm('Clear working form fields?')) {
-      startNewDayShift();
-    }
+    startNewDayShift();
   }
 
   // --- 📤 MULTI-DAY MASTER JSON EXPORT ---
@@ -1991,7 +2039,7 @@
     updateStatus(`Exported Master Package: ${fileName}`);
   }
 
-  // --- 📊 MULTI-DAY MASTER CSV EXPORT (ALL DAYS IN 1 SPREADSHEET) ---
+  // --- 📊 MULTI-DAY MASTER CSV EXPORT ---
   function exportMasterIncidentCSV() {
     saveInAppDraft();
     const packageStore = getIncidentPackageStore();
@@ -2043,14 +2091,12 @@
         const dur = parseFloat(st.duration) || 0;
         totalIncidentFlightHours += dur;
         
-        // Airframe stats
         const ac = roster.aircraft[st.aircraftIndex];
         if (ac && ac.tail) {
           airframeCumulativeHours[ac.tail] = (airframeCumulativeHours[ac.tail] || 0) + dur;
           airframeCumulativeSorties[ac.tail] = (airframeCumulativeSorties[ac.tail] || 0) + 1;
         }
 
-        // Pilot stats
         if (st.pilotAllocations) {
           Object.keys(st.pilotAllocations).forEach(pIdx => {
             const pName = roster.pilots[pIdx];
@@ -2092,9 +2138,8 @@
       rows.push(['Order # / Task Order', d.order_num || '']);
       rows.push(['Contract Type', d.ctype || '']);
       rows.push(['FRAT Completed', d.frat ? 'Yes' : 'No']);
-      rows.push(['UAS Manager / Gov Rep', d.uasm_name || '']);
       
-      // Cost Breakdown for this day
+      // Cost Breakdown
       rows.push(['Cost Item Description', 'Quantity', 'Rate ($)', 'Day Cost ($)']);
       rows.push(['Revenue Flight Hours', d.q_flt || '0', d.r_flt || '0', d.c_flt || '0']);
       rows.push(['Daily Availability', d.q_avail || '0', d.r_avail || '0', d.c_avail || '0']);
@@ -2111,7 +2156,7 @@
       if (d.misc_desc) rows.push([d.misc_desc, d.q_misc || '', d.r_misc || '', d.c_misc || '']);
       rows.push(['DAY TOTAL COST', '', '', d.grandTotal || '$ 0.00']);
 
-      // Narratives for this day
+      // Narratives
       rows.push(['Aircraft Status', `"${(d.box_ac_status || '').replace(/"/g, '""')}"`]);
       rows.push(['Weather Observations', `"${(d.box_weather || '').replace(/"/g, '""')}"`]);
       rows.push(['Narrative Report', `"${(d.box_narrative || '').replace(/"/g, '""')}"`]);
@@ -2120,7 +2165,7 @@
       rows.push(['------------------------------------------------------------------------']);
     });
 
-    // --- SECTION 3: MASTER CHRONOLOGICAL SORTIE LOG ---
+    // --- SECTION 3: MASTER SORTIE LOG ---
     rows.push([], ['========================================================================'], ['--- 3. ALL SORTIE FLIGHT LEGS (CHRONOLOGICAL) ---']);
     rows.push(['Date', 'Sortie #', 'Airframe Tail', 'Model', 'Flight Duration (hrs)', 'Crew & Allocations']);
 
@@ -2160,7 +2205,7 @@
     updateStatus(`Exported Master Rollup: ${fileName}`);
   }
 
-  // --- 📥 SMART IMPORT (SINGLE DAY OR 14-DAY INCIDENT PACKAGE) ---
+  // --- 📥 SMART IMPORT ---
   function openJSONFile(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -2170,7 +2215,6 @@
         const data = JSON.parse(e.target.result);
         
         if (data.packageVersion === 'UAS_INCIDENT_PACKAGE_V1' && data.days) {
-          // Master Multi-Day Package
           const packageStore = data.days;
           localStorage.setItem(STORAGE_INCIDENT_DAYS_STORE, JSON.stringify(packageStore));
           
@@ -2179,7 +2223,6 @@
             loadSettingsProfile();
           }
 
-          // Update index with all imported days
           const importedKeys = Object.keys(packageStore);
           let index = JSON.parse(localStorage.getItem(STORAGE_DRAFTS_INDEX) || '[]');
           importedKeys.forEach(k => {
@@ -2189,7 +2232,6 @@
           localStorage.setItem(STORAGE_DRAFTS_INDEX, JSON.stringify(index));
           refreshUnifiedOpenDropdown();
 
-          // Load latest day onto screen
           const latestKey = importedKeys.sort().reverse()[0];
           if (latestKey) {
             applyDataToForm(packageStore[latestKey]);
@@ -2197,7 +2239,6 @@
 
           updateStatus(`Imported Master Package (${importedKeys.length} Days)`);
         } else {
-          // Single day JSON
           renderCostRows();
           applyDataToForm(data);
           autoSaveActive();
