@@ -24,7 +24,6 @@
     --success-text: #065f46;
   }
 
-  /* NO URL/PAGE HEADERS OR FOOTERS IN PRINT */
   @page {
     size: letter portrait;
     margin: 0;
@@ -416,7 +415,7 @@
   .modal-content {
     background: white;
     width: 90%;
-    max-width: 520px;
+    max-width: 580px;
     max-height: 90vh;
     overflow-y: auto;
     border-radius: 6px;
@@ -443,6 +442,9 @@
     margin: 8px 0 4px 0;
     padding-bottom: 2px;
     border-bottom: 1px dashed #cbd5e1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .modal-grid {
@@ -571,19 +573,19 @@
   </div>
 
   <div class="btn-group">
-    <!-- UNIFIED SELECTOR: SWITCH BETWEEN SAVED DAYS ON THIS DEVICE -->
+    <!-- SWITCH SAVED DAYS -->
     <select id="unified_open_select" class="unified-open-select" onchange="handleUnifiedOpenSelect(this)">
       <option value="">📂 Switch Saved Day...</option>
       <optgroup id="saved_drafts_optgroup" label="Incident Days (Saved)"></optgroup>
     </select>
 
-    <!-- UNBLOCKABLE NATIVE IMPORT BUTTON -->
-    <label for="fileInput" class="btn btn-import" title="Import a single day (.json) or 14-day Master Incident Package">📥 Import</label>
+    <!-- NATIVE UNBLOCKABLE IMPORT -->
+    <label for="fileInput" class="btn btn-import" title="Import single day (.json) or Master Incident Package">📥 Import</label>
     <input type="file" id="fileInput" style="display:none" accept=".json,application/json" onchange="openJSONFile(event)">
     
     <button class="btn btn-save" onclick="saveInAppDraft()" title="Save current day to incident package">💾 Save Day</button>
-    <button class="btn btn-copy" onclick="copyFromYesterday()" title="Copy header logistics and names from yesterday's log">📋 Copy Yesterday</button>
-    <button class="btn btn-settings" onclick="openSettingsModal()">⚙️ Roster &amp; Rates</button>
+    <button class="btn btn-copy" onclick="copyFromYesterday()" title="Copy header logistics, crew & vehicles from yesterday's log">📋 Copy Yesterday</button>
+    <button class="btn btn-settings" onclick="openSettingsModal()">⚙️ Roster &amp; Fleet</button>
     <button class="btn btn-clear" onclick="startNewDayShift()" title="Start a new blank day shift">➕ New Day</button>
     <button class="btn btn-aux" onclick="exportIncidentJSONPackage()" title="Export all days in a single master JSON file">📤 Export JSON</button>
     <button class="btn btn-csv" onclick="exportMasterIncidentCSV()" title="Export master cumulative CSV spreadsheet">📊 Export CSV</button>
@@ -640,7 +642,7 @@
       </div>
     </div>
 
-    <div style="font-size:7.0pt; font-weight:bold; color:#1e293b; margin-bottom:3px;">Assign Crew &amp; Allocate Flight Hours:</div>
+    <div style="font-size:7.0pt; font-weight:bold; color:#1e293b; margin-bottom:3px;">Assign Flight Crew &amp; Allocate Hours:</div>
     <div id="pop_crew_allocation_container" style="border:1px solid #cbd5e1; border-radius:4px; max-height:160px; overflow-y:auto; margin-bottom:10px;"></div>
 
     <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -653,67 +655,54 @@
   </div>
 </div>
 
-<!-- ⚙️ UNIFIED SETTINGS & ROSTER BUILDER MODAL -->
+<!-- ⚙️ UNIFIED SETTINGS: ROSTER, FLEET & RATES BUILDER -->
 <div class="modal-overlay" id="settingsModal">
   <div class="modal-content">
     <div class="modal-header">
-      <span>⚙️ Settings: Crew Roster, Aircraft &amp; Rates</span>
+      <span>⚙️ Settings: Crew Roster, Fleet &amp; Rates Builder</span>
       <button style="border:none; background:none; font-size:12pt; cursor:pointer;" onclick="closeSettingsModal()">✕</button>
     </div>
 
-    <!-- SECTION 1: CREW ROSTER BUILDER -->
-    <div class="modal-section-title">👨‍✈️ Pilot &amp; Crew Roster Builder (Up to 6)</div>
-    <div class="modal-grid" id="roster_pilots_grid">
-      <label>Pilot 1 (RPIC): <input type="text" id="rst_p1" oninput="saveSettingsProfile(true)" placeholder="Name / Role"></label>
-      <label>Pilot 2: <input type="text" id="rst_p2" oninput="saveSettingsProfile(true)" placeholder="Name / Role"></label>
-      <label>Pilot 3: <input type="text" id="rst_p3" oninput="saveSettingsProfile(true)" placeholder="Name / Role"></label>
-      <label>Pilot 4: <input type="text" id="rst_p4" oninput="saveSettingsProfile(true)" placeholder="Name / Role"></label>
-      <label>Pilot 5: <input type="text" id="rst_p5" oninput="saveSettingsProfile(true)" placeholder="Name / Role"></label>
-      <label>Pilot 6: <input type="text" id="rst_p6" oninput="saveSettingsProfile(true)" placeholder="Name / Role"></label>
-    </div>
-
-    <!-- SECTION 2: AIRCRAFT ROSTER BUILDER -->
-    <div class="modal-section-title">🛸 Aircraft Airframe Roster Builder (Tail # &amp; Model)</div>
-    <div class="modal-grid">
-      <label>Aircraft 1 (Tail / Model):
-        <div style="display:flex; gap:2px;">
-          <input type="text" id="rst_ac1_tail" oninput="saveSettingsProfile(true)" placeholder="Tail #" style="width:35%;">
-          <input type="text" id="rst_ac1_model" oninput="saveSettingsProfile(true)" placeholder="Make / Model" style="flex:1;">
-        </div>
-      </label>
-      <label>Aircraft 2 (Tail / Model):
-        <div style="display:flex; gap:2px;">
-          <input type="text" id="rst_ac2_tail" oninput="saveSettingsProfile(true)" placeholder="Tail #" style="width:35%;">
-          <input type="text" id="rst_ac2_model" oninput="saveSettingsProfile(true)" placeholder="Make / Model" style="flex:1;">
-        </div>
-      </label>
-      <label>Aircraft 3 (Tail / Model):
-        <div style="display:flex; gap:2px;">
-          <input type="text" id="rst_ac3_tail" oninput="saveSettingsProfile(true)" placeholder="Tail #" style="width:35%;">
-          <input type="text" id="rst_ac3_model" oninput="saveSettingsProfile(true)" placeholder="Make / Model" style="flex:1;">
-        </div>
-      </label>
-      <label>Aircraft 4 (Tail / Model):
-        <div style="display:flex; gap:2px;">
-          <input type="text" id="rst_ac4_tail" oninput="saveSettingsProfile(true)" placeholder="Tail #" style="width:35%;">
-          <input type="text" id="rst_ac4_model" oninput="saveSettingsProfile(true)" placeholder="Make / Model" style="flex:1;">
-        </div>
-      </label>
-    </div>
-
-    <!-- SECTION 3: COST ROW COUNTS -->
-    <div class="modal-section-title">📐 Cost Table Row Counts</div>
-    <div class="modal-grid">
-      <label>Personnel Cost Rows:
-        <select id="cfg_personnel" onchange="renderCostRows(); saveSettingsProfile(true);">
-          <option value="1">1 Person</option><option value="2">2 Persons</option><option value="3">3 Persons</option><option value="4">4 Persons</option><option value="5" selected>5 Persons</option><option value="6">6 Persons</option>
+    <!-- SECTION 1: CREW ROSTER BUILDER (LINKED TO PERSONNEL ROWS & ROLES) -->
+    <div class="modal-section-title">
+      <span>👥 Crew Roster Builder (Pilots &amp; Ground Personnel)</span>
+      <label style="font-size:6.8pt; display:inline-flex; align-items:center; gap:4px; margin:0;">
+        Count:
+        <select id="cfg_personnel" onchange="onCrewCountChange(); saveSettingsProfile(true);" style="width:65px; height:18px;">
+          <option value="1">1 Person</option><option value="2">2 Persons</option><option value="3">3 Persons</option><option value="4">4 Persons</option><option value="5" selected>5 Persons</option><option value="6">6 Persons</option><option value="7">7 Persons</option><option value="8">8 Persons</option>
         </select>
       </label>
-      <label>Vehicle Cost Rows:
-        <select id="cfg_vehicles" onchange="renderCostRows(); saveSettingsProfile(true);">
-          <option value="1">1 Vehicle</option><option value="2">2 Vehicles</option><option value="3">3 Vehicles</option><option value="4">4 Vehicles</option><option value="5" selected>5 Vehicles</option><option value="6">6 Vehicles</option>
+    </div>
+    <div id="roster_crew_builder_container" style="margin-bottom:8px;">
+      <!-- Dynamic crew member builder rows rendered by JS -->
+    </div>
+
+    <!-- SECTION 2: VEHICLE FLEET BUILDER (LINKED TO VEHICLE ROWS) -->
+    <div class="modal-section-title">
+      <span>🚙 Vehicle Fleet Builder</span>
+      <label style="font-size:6.8pt; display:inline-flex; align-items:center; gap:4px; margin:0;">
+        Count:
+        <select id="cfg_vehicles" onchange="onVehicleCountChange(); saveSettingsProfile(true);" style="width:65px; height:18px;">
+          <option value="1">1 Vehicle</option><option value="2">2 Vehicles</option><option value="3">3 Vehicles</option><option value="4">4 Vehicles</option><option value="5" selected>5 Vehicles</option><option value="6">6 Vehicles</option><option value="7">7 Vehicles</option><option value="8">8 Vehicles</option>
         </select>
       </label>
+    </div>
+    <div id="roster_vehicle_builder_container" style="margin-bottom:8px;">
+      <!-- Dynamic vehicle builder rows rendered by JS -->
+    </div>
+
+    <!-- SECTION 3: AIRCRAFT FLEET BUILDER -->
+    <div class="modal-section-title">
+      <span>🛸 Aircraft Fleet Builder</span>
+      <label style="font-size:6.8pt; display:inline-flex; align-items:center; gap:4px; margin:0;">
+        Count:
+        <select id="cfg_aircraft" onchange="onAircraftCountChange(); saveSettingsProfile(true);" style="width:65px; height:18px;">
+          <option value="1">1 Aircraft</option><option value="2">2 Aircraft</option><option value="3">3 Aircraft</option><option value="4" selected>4 Aircraft</option><option value="5">5 Aircraft</option><option value="6">6 Aircraft</option>
+        </select>
+      </label>
+    </div>
+    <div id="roster_aircraft_builder_container" style="margin-bottom:8px;">
+      <!-- Dynamic aircraft builder rows rendered by JS -->
     </div>
 
     <!-- SECTION 4: VENDOR RATES & PRESETS -->
@@ -898,7 +887,7 @@
           </tr>
         </thead>
         <tbody>
-          <!-- CORE ITEMS -->
+          <!-- CORE ITEMS (AVAILABILITY DEFAULTS TO 1.0 WITH DECIMAL SUPPORT) -->
           <tr class="calc-row">
             <td class="bold">Revenue Flight Hours (Auto):</td>
             <td><input type="number" step="any" class="qty" id="q_flt" placeholder="0.0" readonly style="background:#f8fafc;"></td>
@@ -907,16 +896,16 @@
           </tr>
           <tr class="calc-row">
             <td class="bold">*Daily System Availability:</td>
-            <td><input type="number" step="any" class="qty" id="q_avail" placeholder="0.0"></td>
+            <td><input type="number" step="any" class="qty" id="q_avail" value="1.0" placeholder="1.0"></td>
             <td><input type="number" step="any" class="rate" id="r_avail" placeholder="0.00"></td>
             <td><input type="text" class="cost-output" id="c_avail" readonly placeholder="$ 0.00"></td>
           </tr>
 
-          <!-- DYNAMIC PERSONNEL ROWS -->
+          <!-- DYNAMIC PERSONNEL ROWS (SYNCED TO CREW ROSTER) -->
           <tr class="bg-section"><td colspan="4">PERSONNEL PER DIEM / EXTENDED STANDBY</td></tr>
           <tbody id="personnel_tbody"></tbody>
 
-          <!-- DYNAMIC VEHICLE ROWS -->
+          <!-- DYNAMIC VEHICLE ROWS (SYNCED TO VEHICLE ROSTER) -->
           <tr class="bg-section"><td colspan="4">VEHICLE MILEAGE &amp; SUPPORT TRUCKS</td></tr>
           <tbody id="vehicles_tbody"></tbody>
 
@@ -1002,7 +991,7 @@
 </div>
 
 <script>
-  // STORAGE KEYS
+  // PERMANENT STORAGE KEYS
   const STORAGE_ACTIVE_LOG = 'UAS_LOG_ACTIVE_DRAFT';
   const STORAGE_DRAFTS_INDEX = 'UAS_LOG_SAVED_INDEX';
   const STORAGE_SETTINGS = 'UAS_LOG_SETTINGS_PROFILE';
@@ -1128,6 +1117,97 @@
     }
   }
 
+  // --- ⚙️ DYNAMIC ROSTER BUILDER UI IN SETTINGS ---
+  function onCrewCountChange() {
+    renderCrewBuilderInputs();
+    renderCostRows();
+  }
+
+  function onVehicleCountChange() {
+    renderVehicleBuilderInputs();
+    renderCostRows();
+  }
+
+  function onAircraftCountChange() {
+    renderAircraftBuilderInputs();
+    renderSorties();
+    recalcFlightSummaries();
+  }
+
+  function renderCrewBuilderInputs() {
+    const container = document.getElementById('roster_crew_builder_container');
+    const count = parseInt(document.getElementById('cfg_personnel').value) || 5;
+    const currentSaved = JSON.parse(localStorage.getItem(STORAGE_SETTINGS) || '{}').crewMembers || [];
+
+    let html = '<div class="modal-grid">';
+    for (let i = 1; i <= count; i++) {
+      const mem = currentSaved[i-1] || {};
+      html += `
+        <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:3px; padding:4px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+            <strong style="font-size:6.8pt; color:#0f2744;">Crew Member #${i}</strong>
+            <select id="rst_role_${i}" onchange="saveSettingsProfile(true)" style="width:90px; height:16px; font-size:6.4pt;">
+              <option value="Pilot / RPIC" ${mem.role==='Pilot / RPIC'?'selected':''}>Pilot / RPIC</option>
+              <option value="Sensor Op" ${mem.role==='Sensor Op'?'selected':''}>Sensor Op</option>
+              <option value="Tech / Driver" ${mem.role==='Tech / Driver'?'selected':''}>Tech / Driver</option>
+              <option value="Ground Crew" ${mem.role==='Ground Crew'?'selected':''}>Ground Crew</option>
+            </select>
+          </div>
+          <div style="display:flex; gap:2px;">
+            <input type="text" id="rst_cname_${i}" value="${mem.name || ''}" placeholder="Full Name" oninput="saveSettingsProfile(true)" style="flex:1;">
+            <input type="text" id="rst_cbase_${i}" value="${mem.base || ''}" placeholder="Duty Station" oninput="saveSettingsProfile(true)" style="width:40%;">
+          </div>
+        </div>
+      `;
+    }
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
+  function renderVehicleBuilderInputs() {
+    const container = document.getElementById('roster_vehicle_builder_container');
+    const count = parseInt(document.getElementById('cfg_vehicles').value) || 5;
+    const currentSaved = JSON.parse(localStorage.getItem(STORAGE_SETTINGS) || '{}').vehiclesList || [];
+
+    let html = '<div class="modal-grid">';
+    for (let i = 1; i <= count; i++) {
+      const veh = currentSaved[i-1] || {};
+      html += `
+        <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:3px; padding:4px;">
+          <strong style="font-size:6.8pt; color:#0f2744;">Vehicle #${i}</strong>
+          <div style="display:flex; gap:2px; margin-top:2px;">
+            <input type="text" id="rst_vname_${i}" value="${veh.name || ''}" placeholder="Make/Model & Lic #" oninput="saveSettingsProfile(true)" style="flex:1;">
+            <input type="text" id="rst_vroute_${i}" value="${veh.route || ''}" placeholder="Route / City" oninput="saveSettingsProfile(true)" style="width:40%;">
+          </div>
+        </div>
+      `;
+    }
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
+  function renderAircraftBuilderInputs() {
+    const container = document.getElementById('roster_aircraft_builder_container');
+    const count = parseInt(document.getElementById('cfg_aircraft').value) || 4;
+    const currentSaved = JSON.parse(localStorage.getItem(STORAGE_SETTINGS) || '{}').aircraft || [];
+
+    let html = '<div class="modal-grid">';
+    for (let i = 1; i <= count; i++) {
+      const ac = currentSaved[i-1] || {};
+      html += `
+        <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:3px; padding:4px;">
+          <strong style="font-size:6.8pt; color:#0f2744;">Aircraft #${i}</strong>
+          <div style="display:flex; gap:2px; margin-top:2px;">
+            <input type="text" id="rst_ac_tail_${i}" value="${ac.tail || ''}" placeholder="Tail / Reg #" oninput="saveSettingsProfile(true)" style="width:35%;">
+            <input type="text" id="rst_ac_model_${i}" value="${ac.model || ''}" placeholder="Make / Model" oninput="saveSettingsProfile(true)" style="flex:1;">
+          </div>
+        </div>
+      `;
+    }
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
   // --- POPOUT SORTIE MODAL ---
   function openSortieModal(index = -1) {
     currentEditingSortieIndex = index;
@@ -1183,8 +1263,9 @@
     let allocatedPilotHours = 0;
     let html = '';
 
-    roster.pilots.forEach((pName, pIdx) => {
-      if (pName.trim()) {
+    // Only flight crew (Pilots & Sensor Ops) can log flight time
+    roster.pilots.forEach((pObj, pIdx) => {
+      if (pObj.name.trim()) {
         const isAssigned = tempSortieData.pilotAllocations && tempSortieData.pilotAllocations[pIdx] !== undefined;
         const assignedHours = isAssigned ? tempSortieData.pilotAllocations[pIdx] : '';
         if (isAssigned) {
@@ -1195,7 +1276,7 @@
           <div class="pilot-alloc-row">
             <label class="checkbox-label" style="font-size:7.0pt; flex:1;">
               <input type="checkbox" onchange="togglePopoutPilot(${pIdx}, this.checked)" ${isAssigned ? 'checked' : ''}>
-              <span>${pName}</span>
+              <span><strong>${pObj.name}</strong> <span style="color:#64748b;">(${pObj.role})</span></span>
             </label>
             ${isAssigned ? `
               <div style="display:flex; align-items:center; gap:2px;">
@@ -1377,9 +1458,9 @@
       const crewBadges = [];
       if (st.pilotAllocations) {
         Object.keys(st.pilotAllocations).forEach(pIdx => {
-          const pName = roster.pilots[pIdx] || `P${parseInt(pIdx)+1}`;
+          const pObj = roster.pilots[pIdx] || { name: `P${parseInt(pIdx)+1}` };
           const hrs = parseFloat(st.pilotAllocations[pIdx]) || 0;
-          crewBadges.push(`${pName} (${Number(hrs.toFixed(2))}h)`);
+          crewBadges.push(`${pObj.name} (${Number(hrs.toFixed(2))}h)`);
         });
       }
 
@@ -1442,18 +1523,18 @@
     });
 
     let pSummaryHtml = '';
-    roster.pilots.forEach((pName, pIdx) => {
-      if (pName.trim()) {
+    roster.pilots.forEach((pObj, pIdx) => {
+      if (pObj.name.trim()) {
         const pHrTotal = pilotHours[pIdx] || 0;
         pSummaryHtml += `
           <tr style="border-bottom:1px solid #cbd5e1;">
-            <td style="padding:1.5px 3px; border-right:1px solid #cbd5e1;">${pName}</td>
+            <td style="padding:1.5px 3px; border-right:1px solid #cbd5e1;">${pObj.name} <span style="color:#64748b; font-size:5.8pt;">(${pObj.role})</span></td>
             <td class="bold right" style="padding:1.5px 3px; font-variant-numeric:tabular-nums;">${pHrTotal > 0 ? Number(pHrTotal.toFixed(2)) : '0.0'}</td>
           </tr>
         `;
       }
     });
-    if (!pSummaryHtml) pSummaryHtml = `<tr><td colspan="2" style="text-align:center; color:#94a3b8; font-style:italic;">Configure pilots in Settings</td></tr>`;
+    if (!pSummaryHtml) pSummaryHtml = `<tr><td colspan="2" style="text-align:center; color:#94a3b8; font-style:italic;">Configure crew in Settings</td></tr>`;
     document.getElementById('pilot_summary_tbody').innerHTML = pSummaryHtml;
 
     let acSummaryHtml = '';
@@ -1482,21 +1563,25 @@
   }
 
   function getRosterData() {
+    const settings = JSON.parse(localStorage.getItem(STORAGE_SETTINGS) || '{}');
+    const crew = settings.crewMembers || [];
+    const airframes = settings.aircraft || [];
+
+    // Filter pilots & flight operators for sortie assignment
+    const flightPilots = [];
+    crew.forEach((c, idx) => {
+      if (c && c.name && (c.role === 'Pilot / RPIC' || c.role === 'Sensor Op')) {
+        flightPilots.push({ index: idx, name: c.name, role: c.role });
+      }
+    });
+    if (flightPilots.length === 0) {
+      flightPilots.push({ index: 0, name: 'Pilot 1 (RPIC)', role: 'Pilot / RPIC' });
+    }
+
     return {
-      pilots: [
-        document.getElementById('rst_p1').value || 'Pilot 1 (RPIC)',
-        document.getElementById('rst_p2').value || '',
-        document.getElementById('rst_p3').value || '',
-        document.getElementById('rst_p4').value || '',
-        document.getElementById('rst_p5').value || '',
-        document.getElementById('rst_p6').value || ''
-      ],
-      aircraft: [
-        { tail: document.getElementById('rst_ac1_tail').value || 'Tail #1', model: document.getElementById('rst_ac1_model').value || 'Aircraft 1' },
-        { tail: document.getElementById('rst_ac2_tail').value || '', model: document.getElementById('rst_ac2_model').value || '' },
-        { tail: document.getElementById('rst_ac3_tail').value || '', model: document.getElementById('rst_ac3_model').value || '' },
-        { tail: document.getElementById('rst_ac4_tail').value || '', model: document.getElementById('rst_ac4_model').value || '' }
-      ]
+      pilots: flightPilots,
+      allCrew: crew,
+      aircraft: airframes.length > 0 ? airframes : [{ tail: 'Tail #1', model: 'Aircraft 1' }]
     };
   }
 
@@ -1504,16 +1589,22 @@
   function renderCostRows() {
     const numPersonnel = parseInt(document.getElementById('cfg_personnel').value) || 5;
     const numVehicles = parseInt(document.getElementById('cfg_vehicles').value) || 5;
+    const settings = JSON.parse(localStorage.getItem(STORAGE_SETTINGS) || '{}');
+    const crewRoster = settings.crewMembers || [];
+    const vehRoster = settings.vehiclesList || [];
+
     const currentData = getFormDataObject();
 
     // Personnel Rows
     let persHtml = '';
     for (let i = 1; i <= numPersonnel; i++) {
+      const cMem = crewRoster[i-1] || {};
+      const defaultDesc = cMem.name ? `${cMem.name} (${cMem.role || 'Crew'}${cMem.base ? ' - ' + cMem.base : ''})` : '';
       persHtml += `
         <tr class="calc-row">
-          <td><input type="text" id="p${i}_desc" placeholder="Person ${i}: Name / Duty Station"></td>
-          <td><input type="number" step="any" class="qty" id="q_p${i}" placeholder="Days/Hrs"></td>
-          <td><input type="number" step="any" class="rate" id="r_p${i}" placeholder="Daily Rate"></td>
+          <td><input type="text" id="p${i}_desc" value="${currentData[`p${i}_desc`] || defaultDesc}" placeholder="Person ${i}: Name / Duty Station"></td>
+          <td><input type="number" step="any" class="qty" id="q_p${i}" value="${currentData[`q_p${i}`] || ''}" placeholder="Days/Hrs"></td>
+          <td><input type="number" step="any" class="rate" id="r_p${i}" value="${currentData[`r_p${i}`] || settings.r_perdiem || ''}" placeholder="Daily Rate"></td>
           <td><input type="text" class="cost-output" id="c_p${i}" readonly placeholder="$ 0.00"></td>
         </tr>
       `;
@@ -1523,11 +1614,13 @@
     // Vehicle Rows
     let vehHtml = '';
     for (let i = 1; i <= numVehicles; i++) {
+      const vMem = vehRoster[i-1] || {};
+      const defaultDesc = vMem.name ? `${vMem.name}${vMem.route ? ' (' + vMem.route + ')' : ''}` : '';
       vehHtml += `
         <tr class="calc-row">
           <td>
             <div style="display:flex; gap:2px;">
-              <input type="text" id="v${i}_desc" placeholder="Veh ${i}: Lic/Make &amp; Route" style="flex:1;">
+              <input type="text" id="v${i}_desc" value="${currentData[`v${i}_desc`] || defaultDesc}" placeholder="Veh ${i}: Make & Lic / Route" style="flex:1;">
               <select class="veh-rate-select" onchange="applyVehiclePresetRate(this, 'r_v${i}')" title="Select preset rate or type directly">
                 <option value="">Rate</option>
                 <option value="1">Rate 1</option>
@@ -1536,15 +1629,14 @@
               </select>
             </div>
           </td>
-          <td><input type="number" step="any" class="qty" id="q_v${i}" placeholder="Miles"></td>
-          <td><input type="number" step="any" class="rate" id="r_v${i}" placeholder="Rate/Mi"></td>
+          <td><input type="number" step="any" class="qty" id="q_v${i}" value="${currentData[`q_v${i}`] || ''}" placeholder="Miles"></td>
+          <td><input type="number" step="any" class="rate" id="r_v${i}" value="${currentData[`r_v${i}`] || settings.r_mi1 || ''}" placeholder="Rate/Mi"></td>
           <td><input type="text" class="cost-output" id="c_v${i}" readonly placeholder="$ 0.00"></td>
         </tr>
       `;
     }
     document.getElementById('vehicles_tbody').innerHTML = vehHtml;
 
-    applyDataToForm(currentData);
     attachInputListeners();
     doMath();
   }
@@ -1581,7 +1673,7 @@
     window.print();
   }
 
-  // --- ⚙️ PERSISTENT SETTINGS PROFILE ENGINE ---
+  // --- ⚙️ PERSISTENT SETTINGS & ROSTER ENGINE ---
   function openSettingsModal() {
     loadSettingsProfile();
     document.getElementById('settingsModal').style.display = 'flex';
@@ -1592,6 +1684,32 @@
   }
 
   function saveSettingsProfile(isSilent = false) {
+    const crewCount = parseInt(document.getElementById('cfg_personnel').value) || 5;
+    const vehCount = parseInt(document.getElementById('cfg_vehicles').value) || 5;
+    const acCount = parseInt(document.getElementById('cfg_aircraft').value) || 4;
+
+    const crewList = [];
+    for (let i = 1; i <= crewCount; i++) {
+      const nEl = document.getElementById(`rst_cname_${i}`);
+      const rEl = document.getElementById(`rst_role_${i}`);
+      const bEl = document.getElementById(`rst_cbase_${i}`);
+      if (nEl) crewList.push({ name: nEl.value, role: rEl.value, base: bEl.value });
+    }
+
+    const vehList = [];
+    for (let i = 1; i <= vehCount; i++) {
+      const vnEl = document.getElementById(`rst_vname_${i}`);
+      const vrEl = document.getElementById(`rst_vroute_${i}`);
+      if (vnEl) vehList.push({ name: vnEl.value, route: vrEl.value });
+    }
+
+    const acList = [];
+    for (let i = 1; i <= acCount; i++) {
+      const tEl = document.getElementById(`rst_ac_tail_${i}`);
+      const mEl = document.getElementById(`rst_ac_model_${i}`);
+      if (tEl) acList.push({ tail: tEl.value, model: mEl.value });
+    }
+
     const profile = {
       vendor: document.getElementById('preset_vendor_name').value || '',
       r_flt: document.getElementById('preset_r_flt').value || '',
@@ -1603,21 +1721,12 @@
       r_mi3: document.getElementById('preset_r_mi3').value || '',
       cfg_personnel: document.getElementById('cfg_personnel').value,
       cfg_vehicles: document.getElementById('cfg_vehicles').value,
-      pilots: [
-        document.getElementById('rst_p1').value,
-        document.getElementById('rst_p2').value,
-        document.getElementById('rst_p3').value,
-        document.getElementById('rst_p4').value,
-        document.getElementById('rst_p5').value,
-        document.getElementById('rst_p6').value
-      ],
-      aircraft: [
-        { tail: document.getElementById('rst_ac1_tail').value, model: document.getElementById('rst_ac1_model').value },
-        { tail: document.getElementById('rst_ac2_tail').value, model: document.getElementById('rst_ac2_model').value },
-        { tail: document.getElementById('rst_ac3_tail').value, model: document.getElementById('rst_ac3_model').value },
-        { tail: document.getElementById('rst_ac4_tail').value, model: document.getElementById('rst_ac4_model').value }
-      ]
+      cfg_aircraft: document.getElementById('cfg_aircraft').value,
+      crewMembers: crewList,
+      vehiclesList: vehList,
+      aircraft: acList
     };
+
     localStorage.setItem(STORAGE_SETTINGS, JSON.stringify(profile));
     
     renderMinimizedSorties();
@@ -1644,23 +1753,16 @@
 
       if (profile.cfg_personnel) document.getElementById('cfg_personnel').value = profile.cfg_personnel;
       if (profile.cfg_vehicles) document.getElementById('cfg_vehicles').value = profile.cfg_vehicles;
+      if (profile.cfg_aircraft) document.getElementById('cfg_aircraft').value = profile.cfg_aircraft;
 
-      if (profile.pilots) {
-        profile.pilots.forEach((p, idx) => {
-          const el = document.getElementById(`rst_p${idx+1}`);
-          if (el) el.value = p || '';
-        });
-      }
-      if (profile.aircraft) {
-        profile.aircraft.forEach((ac, idx) => {
-          const tEl = document.getElementById(`rst_ac${idx+1}_tail`);
-          const mEl = document.getElementById(`rst_ac${idx+1}_model`);
-          if (tEl) tEl.value = ac.tail || '';
-          if (mEl) mEl.value = ac.model || '';
-        });
-      }
+      renderCrewBuilderInputs();
+      renderVehicleBuilderInputs();
+      renderAircraftBuilderInputs();
     } else {
       document.getElementById('preset_vendor_name').value = document.getElementById('vendor_name').value || '';
+      renderCrewBuilderInputs();
+      renderVehicleBuilderInputs();
+      renderAircraftBuilderInputs();
     }
   }
 
@@ -1672,21 +1774,12 @@
     if (profile.r_flt) document.getElementById('r_flt').value = profile.r_flt;
     if (profile.r_avail) document.getElementById('r_avail').value = profile.r_avail;
     
-    if (profile.r_perdiem) {
-      document.querySelectorAll('[id^="r_p"]').forEach(el => el.value = profile.r_perdiem);
-    }
-    if (profile.r_mi1) {
-      document.querySelectorAll('[id^="r_v"]').forEach(el => {
-        if (!el.value) el.value = profile.r_mi1;
-      });
-    }
-    if (profile.r_payload) document.getElementById('r_pay').value = profile.r_payload;
-
+    renderCostRows();
     renderMinimizedSorties();
     recalcFlightSummaries();
     doMath();
     closeSettingsModal();
-    updateStatus(`Applied Rates to Form`);
+    updateStatus(`Applied Roster & Rates to Form`);
   }
 
   function applyVehiclePresetRate(selectEl, rateInputId) {
@@ -1701,10 +1794,14 @@
   }
 
   function deleteActiveProfile() {
-    if (confirm('Clear saved roster and rates?')) {
+    if (confirm('Clear saved roster, fleet and rates?')) {
       localStorage.removeItem(STORAGE_SETTINGS);
       document.querySelectorAll('#settingsModal input').forEach(el => el.value = '');
       updateStatus('Settings cleared.');
+      renderCrewBuilderInputs();
+      renderVehicleBuilderInputs();
+      renderAircraftBuilderInputs();
+      renderCostRows();
       renderMinimizedSorties();
       recalcFlightSummaries();
     }
@@ -1814,7 +1911,7 @@
       updateSignatureThumbnail();
     }
 
-    ['cfg_personnel', 'cfg_vehicles'].forEach(id => {
+    ['cfg_personnel', 'cfg_vehicles', 'cfg_aircraft'].forEach(id => {
       if (data[id]) document.getElementById(id).value = data[id];
     });
 
@@ -1888,7 +1985,7 @@
     }
 
     doMath();
-    updateStatus(`📋 Copied Logistics & Names from: ${lastDayKey}`);
+    updateStatus(`📋 Copied Logistics & Roster from: ${lastDayKey}`);
   }
 
   // --- 📦 MULTI-DAY INCIDENT PACKAGE STORE ---
@@ -1984,6 +2081,7 @@
       if (contractTypeRadio) document.getElementById(contractTypeRadio).checked = true;
 
       document.getElementById('doc_date').value = new Date().toISOString().slice(0, 10);
+      document.getElementById('q_avail').value = '1.0';
 
       clearSignature();
       sortiesList = [];
@@ -1994,6 +2092,10 @@
       
       updateStatus("New Day Shift Ready (Metadata Retained)");
     }
+  }
+
+  function clearFormData() {
+    startNewDayShift();
   }
 
   // --- 📤 MULTI-DAY MASTER JSON EXPORT ---
@@ -2062,7 +2164,7 @@
     const airframeCumulativeHours = {};
     const airframeCumulativeSorties = {};
 
-    roster.pilots.forEach(p => { if (p) pilotCumulativeHours[p] = 0; });
+    roster.pilots.forEach(p => { if (p && p.name) pilotCumulativeHours[p.name] = 0; });
     roster.aircraft.forEach(a => { 
       if (a.tail) {
         airframeCumulativeHours[a.tail] = 0;
@@ -2090,9 +2192,9 @@
 
         if (st.pilotAllocations) {
           Object.keys(st.pilotAllocations).forEach(pIdx => {
-            const pName = roster.pilots[pIdx];
-            if (pName) {
-              pilotCumulativeHours[pName] = (pilotCumulativeHours[pName] || 0) + (parseFloat(st.pilotAllocations[pIdx]) || 0);
+            const pObj = roster.pilots[pIdx];
+            if (pObj && pObj.name) {
+              pilotCumulativeHours[pObj.name] = (pilotCumulativeHours[pObj.name] || 0) + (parseFloat(st.pilotAllocations[pIdx]) || 0);
             }
           });
         }
@@ -2104,7 +2206,7 @@
     rows.push(['CUMULATIVE INCIDENT COST (GRAND TOTAL)', `$ ${grandCumulativeCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`]);
     rows.push([]);
 
-    rows.push(['Pilot Name', 'Cumulative Flight Hours']);
+    rows.push(['Pilot / Flight Operator Name', 'Cumulative Flight Hours']);
     Object.keys(pilotCumulativeHours).forEach(p => {
       rows.push([p, Number(pilotCumulativeHours[p].toFixed(2))]);
     });
@@ -2164,8 +2266,8 @@
         const crewAllocations = [];
         if (st.pilotAllocations) {
           Object.keys(st.pilotAllocations).forEach(pIdx => {
-            const pName = roster.pilots[pIdx] || `Pilot ${parseInt(pIdx)+1}`;
-            crewAllocations.push(`${pName}: ${st.pilotAllocations[pIdx]}h`);
+            const pObj = roster.pilots[pIdx] || { name: `P${parseInt(pIdx)+1}` };
+            crewAllocations.push(`${pObj.name}: ${st.pilotAllocations[pIdx]}h`);
           });
         }
         rows.push([d.doc_date || k, `Sortie ${sIdx+1}`, ac.tail, ac.model, st.duration, `"${crewAllocations.join('; ')}"`]);
