@@ -98,7 +98,7 @@
     font-size: 7.8pt !important;
     font-weight: 700 !important;
     border-radius: 4px !important;
-    max-width: 175px !important;
+    max-width: 170px !important;
     height: 28px !important;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.15);
@@ -130,18 +130,22 @@
   .btn:active { transform: scale(0.96); }
   .btn-save { background: #2563eb; color: white; }
   .btn-save:hover { background: #1d4ed8; }
+  .btn-import { background: #0284c7; color: white; cursor: pointer; }
+  .btn-import:hover { background: #0369a1; }
+  .btn-aux { background: #475569; color: white; }
+  .btn-aux:hover { background: #334155; }
   .btn-copy { background: #0891b2; color: white; }
   .btn-copy:hover { background: #0e7490; }
-  .btn-export { background: #0284c7; color: white; }
-  .btn-export:hover { background: #0369a1; }
   .btn-settings { background: #7c3aed; color: white; }
   .btn-settings:hover { background: #6d28d9; }
-  .btn-clear { background: #475569; color: white; }
-  .btn-clear:hover { background: #334155; }
-  .btn-danger { background: #dc2626; color: white; }
-  .btn-danger:hover { background: #b91c1c; }
-  .btn-print { background: #059669; color: white; }
-  .btn-print:hover { background: #047857; }
+  .btn-help { background: #334155; color: #38bdf8; border: 1px solid #0284c7; }
+  .btn-help:hover { background: #1e293b; color: #7dd3fc; }
+  .btn-clear { background: #dc2626; color: white; }
+  .btn-clear:hover { background: #b91c1c; }
+  .btn-csv { background: #059669; color: white; }
+  .btn-csv:hover { background: #047857; }
+  .btn-print { background: #16a34a; color: white; }
+  .btn-print:hover { background: #15803d; }
 
   .btn-gps, .btn-action {
     background: #e2e8f0;
@@ -414,7 +418,7 @@
   .modal-content {
     background: white;
     width: 90%;
-    max-width: 560px;
+    max-width: 580px;
     max-height: 90vh;
     overflow-y: auto;
     border-radius: 6px;
@@ -428,7 +432,7 @@
     align-items: center;
     border-bottom: 1px solid #e2e8f0;
     padding-bottom: 6px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     font-size: 9.5pt;
     font-weight: 700;
     color: #0f2744;
@@ -507,9 +511,28 @@
     font-weight: 700;
   }
 
-  /* MULTI-PAGE PRINT CONTAINER */
-  #multi_print_host {
-    display: none;
+  /* HELP MODAL STYLES */
+  .help-step-box {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-left: 3px solid #2563eb;
+    border-radius: 3px;
+    padding: 6px 8px;
+    margin-bottom: 6px;
+  }
+  .help-step-title {
+    font-weight: 700;
+    font-size: 7.4pt;
+    color: #0f2744;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 2px;
+  }
+  .help-step-desc {
+    font-size: 6.8pt;
+    color: #334155;
+    line-height: 1.35;
   }
 
   /* PRINT STYLING */
@@ -523,7 +546,6 @@
       padding: 0 !important;
       max-width: 100% !important;
       box-shadow: none !important;
-      page-break-inside: avoid;
     }
     .no-print-bar, .modal-overlay, .btn-gps, .btn-action, .veh-rate-select { display: none !important; }
     th, td, .narrative-card { border-color: #000000 !important; }
@@ -563,27 +585,6 @@
       border-color: #000000 !important;
       padding: 1px 2px !important;
     }
-
-    /* MULTI-PAGE BATCH PRINT OVERRIDES */
-    body.multi-printing > *:not(#multi_print_host) {
-      display: none !important;
-    }
-    body.multi-printing #multi_print_host {
-      display: block !important;
-    }
-    .batch-print-page {
-      page-break-after: always !important;
-      break-after: page !important;
-      page-break-inside: avoid !important;
-      width: 100% !important;
-      min-height: 10.4in !important;
-      box-sizing: border-box;
-      padding-bottom: 0.2in;
-    }
-    .batch-print-page:last-child {
-      page-break-after: auto !important;
-      break-after: auto !important;
-    }
   }
 </style>
 </head>
@@ -597,30 +598,95 @@
   </div>
 
   <div class="btn-group">
-    <!-- SWITCH SAVED DAYS -->
     <select id="unified_open_select" class="unified-open-select" onchange="handleUnifiedOpenSelect(this)">
       <option value="">📂 Switch Saved Day...</option>
       <optgroup id="saved_drafts_optgroup" label="Incident Days (Saved)"></optgroup>
     </select>
-    
+
     <button class="btn btn-save" onclick="saveInAppDraft()" title="Save current day to incident package">💾 Save Day</button>
-    <button class="btn btn-clear" onclick="startNewDayShift()" title="Start a fresh day shift">➕ New Day</button>
-    <button class="btn btn-copy" onclick="copyFromYesterday()" title="Copy header logistics, crew & vehicles from yesterday">📋 Copy Yesterday</button>
-    <button class="btn btn-export" onclick="openExportModal()" title="Export CSV, JSON, Batch Print or Manage Days">📤 Export / Archive</button>
+    <button class="btn btn-copy" onclick="copyFromYesterday()" title="Copy header logistics, crew & vehicles from yesterday's log">📋 Copy Yesterday</button>
     <button class="btn btn-settings" onclick="openSettingsModal()">⚙️ Roster &amp; Rates</button>
-    <button class="btn btn-print" onclick="printPDF()">🖨️ PDF (Current Day)</button>
+    <button class="btn btn-clear" onclick="startNewDayShift()" title="Start a new blank day shift">➕ New Day</button>
+    <button class="btn btn-aux" onclick="openExportModal()" title="Export CSV, JSON, Batch Print or Manage Days">📤 Export / Archive</button>
+    <button class="btn btn-help" onclick="openHelpModal()" title="View operational guide and instructions">❓ Help</button>
+    <button class="btn btn-print" onclick="printPDF()">🖨️ PDF</button>
   </div>
 </div>
 
-<!-- 📤 UNIFIED EXPORT, IMPORT & MULTI-DAY BATCH PRINT MODAL -->
-<div class="modal-overlay" id="exportModal">
-  <div class="modal-content">
+<!-- ❓ COMPREHENSIVE USER GUIDE & INSTRUCTIONS MODAL -->
+<div class="modal-overlay" id="helpModal">
+  <div class="modal-content" style="max-width: 540px;">
     <div class="modal-header">
-      <span>📤 Incident Days Manager &amp; Batch Print</span>
+      <span>❓ UAS Operations Daily Diary - User Guide</span>
+      <button style="border:none; background:none; font-size:12pt; cursor:pointer;" onclick="closeHelpModal()">✕</button>
+    </div>
+
+    <div style="font-size:7.0pt; color:#475569; margin-bottom:8px; line-height:1.3;">
+      This standalone PWA is designed for interagency wildland fire and resource UAS operations. It stores all data <strong>100% locally on this device</strong> with zero external server tracking.
+    </div>
+
+    <!-- GUIDE SECTIONS -->
+    <div class="help-step-box">
+      <div class="help-step-title">1. Initial Setup (Day 1 of Assignment)</div>
+      <div class="help-step-desc">
+        &bull; Tap <strong>⚙️ Roster &amp; Rates</strong> to build your team.<br>
+        &bull; Set your crew count, names, and roles (<em>Pilot / RPIC, Sensor Op, Tech/Driver, Ground Crew</em>).<br>
+        &bull; Set aircraft tail #s, vehicle descriptions, and standard contract rates (Hourly, Availability, Per Diem, Mileage).<br>
+        &bull; Tap <strong>Apply Rates to Form</strong> to populate your shift ticket.
+      </div>
+    </div>
+
+    <div class="help-step-box">
+      <div class="help-step-title">2. Daily Flight Logging &amp; Pilot Hour Splitting</div>
+      <div class="help-step-desc">
+        &bull; Tap <strong>➕ Add Sortie</strong> to record individual flights.<br>
+        &bull; Enter the total aircraft duration and check the assigned crewmembers.<br>
+        &bull; <strong>Auto-Balancing:</strong> If multiple pilots fly a sortie, enter one pilot's time and the remaining balance automatically calculates for the second pilot without going over total aircraft time.<br>
+        &bull; Tap <strong>➗ Split Evenly</strong> to instantly divide sortie time equally among all assigned flight crew.
+      </div>
+    </div>
+
+    <div class="help-step-box">
+      <div class="help-step-title">3. Moving to Day 2, Day 3, etc. (Daily Shift Transitions)</div>
+      <div class="help-step-desc">
+        &bull; At the end of each shift, tap <strong>💾 Save Day</strong> to commit the log into your incident memory.<br>
+        &bull; The next morning, tap <strong>➕ New Day</strong> &rarr; the app preserves your incident name, vendor, order #, roster, and rates while clearing quantities for the new shift.<br>
+        &bull; Tap <strong>📋 Copy Yesterday</strong> anytime to pull over exact duty station notes and vehicle routes.
+      </div>
+    </div>
+
+    <div class="help-step-box">
+      <div class="help-step-title">4. Manager Rotations &amp; Incident Handoffs</div>
+      <div class="help-step-desc">
+        &bull; <strong>Outgoing Manager:</strong> Tap <strong>📤 Export / Archive</strong> &rarr; select <strong>Export JSON</strong>. AirDrop or Email the single master file (<code>Incident_Package_...json</code>) to the incoming relief manager.<br>
+        &bull; <strong>Incoming Manager:</strong> Open the app, tap <strong>📤 Export / Archive</strong> &rarr; <strong>Import File</strong> &rarr; select the package. <em>All previous days, rosters, and cumulative stats restore instantly!</em>
+      </div>
+    </div>
+
+    <div class="help-step-box">
+      <div class="help-step-title">5. Reporting, Invoicing &amp; Signatures</div>
+      <div class="help-step-desc">
+        &bull; <strong>📍 GPS Button:</strong> Tapping GPS on the LRZ box captures exact Lat/Long coordinates and elevation MSL.<br>
+        &bull; <strong>✍️ Signature Pad:</strong> Tap the signature box at the bottom to open a full-screen canvas to sign with Apple Pencil or finger.<br>
+        &bull; <strong>🖨️ PDF:</strong> Tap PDF to export a clean, 1-page daily shift ticket.<br>
+        &bull; <strong>📊 Cumulative CSV:</strong> In the Export modal, generate a multi-day master spreadsheet for Finance and Helibase tracking.
+      </div>
+    </div>
+
+    <div style="text-align:right; margin-top:8px;">
+      <button class="btn btn-save" onclick="closeHelpModal()">Got it, thanks!</button>
+    </div>
+  </div>
+</div>
+
+<!-- 📤 UNIFIED EXPORT, IMPORT & ARCHIVE MODAL -->
+<div class="modal-overlay" id="exportModal">
+  <div class="modal-content" style="max-width: 560px;">
+    <div class="modal-header">
+      <span>📤 Incident Days Manager &amp; Batch Exporter</span>
       <button style="border:none; background:none; font-size:12pt; cursor:pointer;" onclick="closeExportModal()">✕</button>
     </div>
 
-    <!-- DAYS LIST WITH SELECTION CONTROLS -->
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
       <span style="font-weight:bold; color:#0f2744; font-size:7.4pt;">Select Days for Batch Print or Export:</span>
       <div style="display:flex; gap:4px;">
@@ -640,21 +706,16 @@
             <th style="width:75px; text-align:right;">Day Total</th>
           </tr>
         </thead>
-        <tbody id="days_manager_tbody">
-          <!-- Dynamically populated rows with checkboxes -->
-        </tbody>
+        <tbody id="days_manager_tbody"></tbody>
       </table>
     </div>
 
-    <!-- MULTI-DAY PRINT & EXPORT ACTION BUTTONS -->
     <div style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:10px; background:#f8fafc; padding:8px; border:1px solid #e2e8f0; border-radius:4px;">
-      <button class="btn btn-print" onclick="batchPrintSelectedDays()" style="flex:100%; height:32px; font-size:8.2pt;">🖨️ Print Selected Days (Multi-Page PDF)</button>
-      <button class="btn btn-csv" onclick="exportSelectedDaysCSV()" style="flex:1;">📊 Export CSV</button>
-      <button class="btn btn-save" onclick="exportSelectedDaysJSON()" style="flex:1;">📤 Export JSON</button>
-      <button class="btn btn-danger" onclick="deleteSelectedDays()" style="flex:1;">🗑️ Delete Days</button>
+      <button class="btn btn-csv" onclick="exportSelectedDaysCSV()" style="flex:1;">📊 Export Selected to CSV</button>
+      <button class="btn btn-save" onclick="exportSelectedDaysJSON()" style="flex:1;">📤 Export Selected to JSON</button>
+      <button class="btn btn-danger" onclick="deleteSelectedDays()" style="flex:1;">🗑️ Delete Selected Days</button>
     </div>
 
-    <!-- IMPORT & FILE LOAD SECTION -->
     <div style="border-top:1px dashed #cbd5e1; padding-top:8px; display:flex; justify-content:space-between; align-items:center;">
       <label for="fileInput" class="btn btn-aux" style="cursor:pointer;">📥 Import External JSON File...</label>
       <input type="file" id="fileInput" style="display:none" accept=".json,application/json" onchange="openJSONFile(event)">
@@ -810,11 +871,7 @@
   </div>
 </div>
 
-<!-- HOST CONTAINER FOR MULTI-PAGE BATCH PRINTING (HIDDEN ON SCREEN) -->
-<div id="multi_print_host"></div>
-
-<!-- MAIN SINGLE-PAGE WORKING FORM CONTAINER -->
-<div class="page-container" id="main_form_page">
+<div class="page-container">
 
   <!-- BANNER -->
   <div class="header-banner">
@@ -1085,6 +1142,15 @@
 
   window.addEventListener('beforeprint', syncPrintMirrors);
 
+  // --- ❓ HELP MODAL CONTROLS ---
+  function openHelpModal() {
+    document.getElementById('helpModal').style.display = 'flex';
+  }
+
+  function closeHelpModal() {
+    document.getElementById('helpModal').style.display = 'none';
+  }
+
   // --- 📤 EXPORT & DAYS MANAGER MODAL ---
   function openExportModal() {
     renderDaysManagerTable();
@@ -1139,65 +1205,6 @@
     return keys;
   }
 
-  // --- 🖨️ MULTI-PAGE BATCH PRINT ENGINE ---
-  function batchPrintSelectedDays() {
-    const selectedKeys = getSelectedDayKeys();
-    if (selectedKeys.length === 0) {
-      alert('Please check at least one day from the list to print.');
-      return;
-    }
-
-    saveInAppDraft(); // Ensure current working day is up to date
-    const packageStore = getIncidentPackageStore();
-    const activeBackup = getFormDataObject();
-    const printHost = document.getElementById('multi_print_host');
-    printHost.innerHTML = '';
-
-    // Temporarily apply and render each day into the multi-page print host
-    selectedKeys.forEach((k, pageIdx) => {
-      const d = packageStore[k];
-      if (!d) return;
-
-      applyDataToForm(d);
-      syncPrintMirrors();
-
-      const pageClone = document.getElementById('main_form_page').cloneNode(true);
-      pageClone.id = `batch_page_${pageIdx}`;
-      pageClone.classList.add('batch-print-page');
-
-      // Ensure form inputs in cloned page display their values in print
-      pageClone.querySelectorAll('input, select, textarea').forEach(el => {
-        const original = document.getElementById(el.id);
-        if (original) {
-          if (el.type === 'checkbox' || el.type === 'radio') {
-            el.checked = original.checked;
-          } else {
-            el.value = original.value;
-          }
-        }
-      });
-
-      printHost.appendChild(pageClone);
-    });
-
-    // Re-apply active working session
-    applyDataToForm(activeBackup);
-    closeExportModal();
-
-    // Trigger Multi-Page Batch Print
-    document.body.classList.add('multi-printing');
-    document.title = `${getIncidentIdentifier()}_Batch_Shift_Tickets_(${selectedKeys.length}_Days)`;
-    
-    window.print();
-
-    // Clean up after print dialog closes
-    setTimeout(() => {
-      document.body.classList.remove('multi-printing');
-      printHost.innerHTML = '';
-      updateDocumentTitle();
-    }, 1000);
-  }
-
   // --- EXPORT SELECTED DAYS TO CSV ---
   function exportSelectedDaysCSV() {
     const selectedKeys = getSelectedDayKeys();
@@ -1220,7 +1227,6 @@
       []
     ];
 
-    // Cumulative summary for selected days
     rows.push(['--- 1. CUMULATIVE TOTALS FOR SELECTED DAYS ---']);
     let grandCumulativeCost = 0;
     let totalIncidentFlightHours = 0;
@@ -1284,7 +1290,6 @@
     });
     rows.push([], ['========================================================================'], []);
 
-    // Daily shift ticket breakdowns for selected days
     rows.push(['--- 2. SELECTED DAILY SHIFT TICKET BREAKDOWNS ---']);
     selectedKeys.forEach((k, dayIdx) => {
       const d = packageStore[k];
@@ -1322,7 +1327,6 @@
       rows.push(['------------------------------------------------------------------------']);
     });
 
-    // Chronological Sorties
     rows.push([], ['========================================================================'], ['--- 3. SORTIE FLIGHT LEGS (SELECTED DAYS) ---']);
     rows.push(['Date', 'Sortie #', 'Airframe Tail', 'Model', 'Flight Duration (hrs)', 'Crew & Allocations']);
 
@@ -2514,6 +2518,10 @@
       
       updateStatus("New Day Shift Ready (Roster Retained)");
     }
+  }
+
+  function clearFormData() {
+    startNewDayShift();
   }
 
   // --- 📥 SMART IMPORT ---
