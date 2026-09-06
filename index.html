@@ -98,7 +98,7 @@
     font-size: 7.8pt !important;
     font-weight: 700 !important;
     border-radius: 4px !important;
-    max-width: 170px !important;
+    max-width: 175px !important;
     height: 28px !important;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.15);
@@ -112,7 +112,7 @@
   /* BUTTONS */
   .btn {
     border: none;
-    padding: 5px 9px;
+    padding: 5px 10px;
     font-weight: 700;
     cursor: pointer;
     border-radius: 3px;
@@ -121,7 +121,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 3px;
+    gap: 4px;
     transition: all 0.15s ease;
     box-shadow: 0 2px 4px rgba(0,0,0,0.15);
     text-decoration: none;
@@ -130,22 +130,20 @@
   .btn:active { transform: scale(0.96); }
   .btn-save { background: #2563eb; color: white; }
   .btn-save:hover { background: #1d4ed8; }
-  .btn-import { background: #0284c7; color: white; cursor: pointer; }
-  .btn-import:hover { background: #0369a1; }
-  .btn-aux { background: #475569; color: white; }
-  .btn-aux:hover { background: #334155; }
   .btn-copy { background: #0891b2; color: white; }
   .btn-copy:hover { background: #0e7490; }
+  .btn-export { background: #0284c7; color: white; }
+  .btn-export:hover { background: #0369a1; }
   .btn-settings { background: #7c3aed; color: white; }
   .btn-settings:hover { background: #6d28d9; }
   .btn-help { background: #334155; color: #38bdf8; border: 1px solid #0284c7; }
   .btn-help:hover { background: #1e293b; color: #7dd3fc; }
-  .btn-clear { background: #dc2626; color: white; }
-  .btn-clear:hover { background: #b91c1c; }
-  .btn-csv { background: #059669; color: white; }
-  .btn-csv:hover { background: #047857; }
-  .btn-print { background: #16a34a; color: white; }
-  .btn-print:hover { background: #15803d; }
+  .btn-clear { background: #475569; color: white; }
+  .btn-clear:hover { background: #334155; }
+  .btn-danger { background: #dc2626; color: white; }
+  .btn-danger:hover { background: #b91c1c; }
+  .btn-print { background: #059669; color: white; }
+  .btn-print:hover { background: #047857; }
 
   .btn-gps, .btn-action {
     background: #e2e8f0;
@@ -515,14 +513,14 @@
   .help-step-box {
     background: #f8fafc;
     border: 1px solid #cbd5e1;
-    border-left: 3px solid #2563eb;
+    border-left: 3.5px solid #2563eb;
     border-radius: 3px;
     padding: 6px 8px;
     margin-bottom: 6px;
   }
   .help-step-title {
     font-weight: 700;
-    font-size: 7.4pt;
+    font-size: 7.5pt;
     color: #0f2744;
     display: flex;
     align-items: center;
@@ -532,7 +530,7 @@
   .help-step-desc {
     font-size: 6.8pt;
     color: #334155;
-    line-height: 1.35;
+    line-height: 1.38;
   }
 
   /* PRINT STYLING */
@@ -613,39 +611,59 @@
   </div>
 </div>
 
-<!-- ❓ COMPREHENSIVE USER GUIDE & INSTRUCTIONS MODAL -->
+<!-- ❓ COMPREHENSIVE USER GUIDE & PWA INSTALLATION INSTRUCTIONS MODAL -->
 <div class="modal-overlay" id="helpModal">
-  <div class="modal-content" style="max-width: 540px;">
+  <div class="modal-content" style="max-width: 550px;">
     <div class="modal-header">
       <span>❓ UAS Operations Daily Diary - User Guide</span>
       <button style="border:none; background:none; font-size:12pt; cursor:pointer;" onclick="closeHelpModal()">✕</button>
     </div>
 
     <div style="font-size:7.0pt; color:#475569; margin-bottom:8px; line-height:1.3;">
-      This standalone PWA is designed for interagency wildland fire and resource UAS operations. It stores all data <strong>100% locally on this device</strong> with zero external server tracking.
+      This standalone Progressive Web App (PWA) is designed for interagency wildland fire and resource UAS operations. It stores all records <strong>100% locally in this device's memory</strong> with zero external server tracking.
     </div>
 
-    <!-- GUIDE SECTIONS -->
+    <!-- 0. PWA INSTALLATION ON IOS & ANDROID -->
+    <div class="help-step-box" style="border-left-color: #8b5cf6; background: #fdf4ff;">
+      <div class="help-step-title" style="color:#6b21a8;">📲 How to Install as a Full App (PWA) on iPad, iPhone &amp; Android</div>
+      <div class="help-step-desc">
+        Installing as a PWA gives you a dedicated home-screen app icon, removes browser URL bars, and guarantees <strong>100% offline functionality in the field</strong>.<br><br>
+        <strong>🍏 On iOS (iPad &amp; iPhone):</strong><br>
+        1. Open your hosted GitHub link in <strong>Safari</strong> (<em>Note: Must be Apple Safari, not Chrome or third-party browsers</em>).<br>
+        2. Tap the <strong>Share</strong> button (the square icon with an upward arrow at the top or bottom of Safari).<br>
+        3. Scroll down in the share sheet and tap <strong>"Add to Home Screen"</strong>.<br>
+        4. Name it <strong>"UAS Daily"</strong> and tap <strong>Add</strong>. Launch it from your home screen.<br><br>
+        <strong>🤖 On Android (Phone / Tablet):</strong><br>
+        1. Open the link in <strong>Google Chrome</strong> or <strong>Edge</strong>.<br>
+        2. Tap the <strong>three vertical dots (⋮)</strong> menu in the top-right corner.<br>
+        3. Tap <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong> &rarr; confirm by tapping <strong>Install</strong>.<br>
+        4. The app icon will appear in your app drawer and home screen for full-screen offline use.
+      </div>
+    </div>
+
+    <!-- 1. INITIAL SETUP -->
     <div class="help-step-box">
       <div class="help-step-title">1. Initial Setup (Day 1 of Assignment)</div>
       <div class="help-step-desc">
-        &bull; Tap <strong>⚙️ Roster &amp; Rates</strong> to build your team.<br>
+        &bull; Tap <strong>⚙️ Roster &amp; Rates</strong> to build your team and contract rates.<br>
         &bull; Set your crew count, names, and roles (<em>Pilot / RPIC, Sensor Op, Tech/Driver, Ground Crew</em>).<br>
         &bull; Set aircraft tail #s, vehicle descriptions, and standard contract rates (Hourly, Availability, Per Diem, Mileage).<br>
-        &bull; Tap <strong>Apply Rates to Form</strong> to populate your shift ticket.
+        &bull; Tap <strong>Apply Rates to Form</strong> to populate your initial shift ticket.
       </div>
     </div>
 
+    <!-- 2. FLIGHT LOGGING -->
     <div class="help-step-box">
       <div class="help-step-title">2. Daily Flight Logging &amp; Pilot Hour Splitting</div>
       <div class="help-step-desc">
-        &bull; Tap <strong>➕ Add Sortie</strong> to record individual flights.<br>
-        &bull; Enter the total aircraft duration and check the assigned crewmembers.<br>
-        &bull; <strong>Auto-Balancing:</strong> If multiple pilots fly a sortie, enter one pilot's time and the remaining balance automatically calculates for the second pilot without going over total aircraft time.<br>
-        &bull; Tap <strong>➗ Split Evenly</strong> to instantly divide sortie time equally among all assigned flight crew.
+        &bull; Tap <strong>➕ Add Sortie</strong> to open the popout flight logger.<br>
+        &bull; Select the airframe, enter duration, and check assigned crewmembers.<br>
+        &bull; <strong>Auto-Balancing:</strong> If multiple pilots fly a sortie, entering one pilot's time automatically balances the remaining time for the second pilot without exceeding total aircraft duration.<br>
+        &bull; Tap <strong>➗ Split Evenly</strong> to instantly divide sortie duration equally among assigned flight crew.
       </div>
     </div>
 
+    <!-- 3. DAILY SHIFT TRANSITIONS -->
     <div class="help-step-box">
       <div class="help-step-title">3. Moving to Day 2, Day 3, etc. (Daily Shift Transitions)</div>
       <div class="help-step-desc">
@@ -655,6 +673,7 @@
       </div>
     </div>
 
+    <!-- 4. MANAGER ROTATIONS -->
     <div class="help-step-box">
       <div class="help-step-title">4. Manager Rotations &amp; Incident Handoffs</div>
       <div class="help-step-desc">
@@ -663,6 +682,7 @@
       </div>
     </div>
 
+    <!-- 5. REPORTING & INVOICING -->
     <div class="help-step-box">
       <div class="help-step-title">5. Reporting, Invoicing &amp; Signatures</div>
       <div class="help-step-desc">
@@ -1118,7 +1138,7 @@
 </div>
 
 <script>
-  // STORAGE KEYS
+  // PERMANENT STORAGE KEYS
   const STORAGE_ACTIVE_LOG = 'UAS_LOG_ACTIVE_DRAFT';
   const STORAGE_DRAFTS_INDEX = 'UAS_LOG_SAVED_INDEX';
   const STORAGE_SETTINGS = 'UAS_LOG_SETTINGS_PROFILE';
@@ -1203,244 +1223,6 @@
       keys.push(cb.getAttribute('data-key'));
     });
     return keys;
-  }
-
-  // --- EXPORT SELECTED DAYS TO CSV ---
-  function exportSelectedDaysCSV() {
-    const selectedKeys = getSelectedDayKeys();
-    if (selectedKeys.length === 0) {
-      alert('Please check at least one day from the list to export.');
-      return;
-    }
-
-    const packageStore = getIncidentPackageStore();
-    const incidentName = getIncidentIdentifier();
-    const roster = getRosterData();
-
-    const rows = [
-      ['========================================================================'],
-      ['UAS INCIDENT OPERATIONS & PAYMENT ROLLUP (SELECTED DAYS EXPORT)'],
-      ['Incident / Assignment', incidentName],
-      ['Total Days in Report', selectedKeys.length],
-      ['Generated Date', new Date().toISOString()],
-      ['========================================================================'],
-      []
-    ];
-
-    rows.push(['--- 1. CUMULATIVE TOTALS FOR SELECTED DAYS ---']);
-    let grandCumulativeCost = 0;
-    let totalIncidentFlightHours = 0;
-    let totalIncidentSorties = 0;
-    const pilotCumulativeHours = {};
-    const airframeCumulativeHours = {};
-    const airframeCumulativeSorties = {};
-
-    roster.pilots.forEach(p => { if (p && p.name) pilotCumulativeHours[p.name] = 0; });
-    roster.aircraft.forEach(a => { 
-      if (a.tail) {
-        airframeCumulativeHours[a.tail] = 0;
-        airframeCumulativeSorties[a.tail] = 0;
-      }
-    });
-
-    selectedKeys.forEach(k => {
-      const d = packageStore[k];
-      if (!d) return;
-      const dTotal = parseFloat((d.grandTotal || '0').replace(/[^0-9.]/g, '')) || 0;
-      grandCumulativeCost += dTotal;
-
-      const dSorties = d.sorties || [];
-      totalIncidentSorties += dSorties.length;
-
-      dSorties.forEach(st => {
-        const dur = parseFloat(st.duration) || 0;
-        totalIncidentFlightHours += dur;
-        
-        const ac = roster.aircraft[st.aircraftIndex];
-        if (ac && ac.tail) {
-          airframeCumulativeHours[ac.tail] = (airframeCumulativeHours[ac.tail] || 0) + dur;
-          airframeCumulativeSorties[ac.tail] = (airframeCumulativeSorties[ac.tail] || 0) + 1;
-        }
-
-        if (st.pilotAllocations) {
-          Object.keys(st.pilotAllocations).forEach(pIdx => {
-            const pObj = roster.pilots[pIdx];
-            if (pObj && pObj.name) {
-              pilotCumulativeHours[pObj.name] = (pilotCumulativeHours[pObj.name] || 0) + (parseFloat(st.pilotAllocations[pIdx]) || 0);
-            }
-          });
-        }
-      });
-    });
-
-    rows.push(['Total Selected Flight Hours (Aircraft)', Number(totalIncidentFlightHours.toFixed(2))]);
-    rows.push(['Total Selected Sorties Flown', totalIncidentSorties]);
-    rows.push(['CUMULATIVE SELECTED COST (GRAND TOTAL)', `$ ${grandCumulativeCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`]);
-    rows.push([]);
-
-    rows.push(['Pilot / Flight Operator Name', 'Cumulative Flight Hours']);
-    Object.keys(pilotCumulativeHours).forEach(p => {
-      rows.push([p, Number(pilotCumulativeHours[p].toFixed(2))]);
-    });
-    rows.push([]);
-
-    rows.push(['Airframe Tail #', 'Cumulative Sorties', 'Cumulative Flight Hours']);
-    Object.keys(airframeCumulativeHours).forEach(tail => {
-      rows.push([tail, airframeCumulativeSorties[tail] || 0, Number(airframeCumulativeHours[tail].toFixed(2))]);
-    });
-    rows.push([], ['========================================================================'], []);
-
-    rows.push(['--- 2. SELECTED DAILY SHIFT TICKET BREAKDOWNS ---']);
-    selectedKeys.forEach((k, dayIdx) => {
-      const d = packageStore[k];
-      if (!d) return;
-      rows.push([]);
-      rows.push([`>>> SHIFT DAY ${dayIdx + 1}: ${d.doc_date || k}`]);
-      rows.push(['Contractor / Vendor', d.vendor_name || '']);
-      rows.push(['Incident / Project', d.inc_name || '']);
-      rows.push(['LRZ Location', d.base_loc || '']);
-      rows.push(['Order # / Task Order', d.order_num || '']);
-      rows.push(['Contract Type', d.ctype || '']);
-      rows.push(['FRAT Completed', d.frat ? 'Yes' : 'No']);
-      
-      rows.push(['Cost Item Description', 'Quantity', 'Rate ($)', 'Day Cost ($)']);
-      rows.push(['Revenue Flight Hours', d.q_flt || '0', d.r_flt || '0', d.c_flt || '0']);
-      rows.push(['Daily Availability', d.q_avail || '0', d.r_avail || '0', d.c_avail || '0']);
-      
-      for (let i = 1; i <= 8; i++) {
-        if (d[`p${i}_desc`]) {
-          rows.push([d[`p${i}_desc`], d[`q_p${i}`] || '', d[`r_p${i}`] || '', d[`c_p${i}`] || '']);
-        }
-        if (d[`v${i}_desc`]) {
-          rows.push([d[`v${i}_desc`], d[`q_v${i}`] || '', d[`r_v${i}`] || '', d[`c_v${i}`] || '']);
-        }
-      }
-      if (d.pay_desc) rows.push([d.pay_desc, d.q_pay || '', d.r_pay || '', d.c_pay || '']);
-      if (d.misc_desc) rows.push([d.misc_desc, d.q_misc || '', d.r_misc || '', d.c_misc || '']);
-      rows.push(['DAY TOTAL COST', '', '', d.grandTotal || '$ 0.00']);
-
-      rows.push(['Aircraft Status', `"${(d.box_ac_status || '').replace(/"/g, '""')}"`]);
-      rows.push(['Weather Observations', `"${(d.box_weather || '').replace(/"/g, '""')}"`]);
-      rows.push(['Narrative Report', `"${(d.box_narrative || '').replace(/"/g, '""')}"`]);
-      rows.push(['Approved By (Gov Rep)', d.sig_name || '']);
-      rows.push(['Signed Date', d.sig_date || '']);
-      rows.push(['------------------------------------------------------------------------']);
-    });
-
-    rows.push([], ['========================================================================'], ['--- 3. SORTIE FLIGHT LEGS (SELECTED DAYS) ---']);
-    rows.push(['Date', 'Sortie #', 'Airframe Tail', 'Model', 'Flight Duration (hrs)', 'Crew & Allocations']);
-
-    selectedKeys.forEach(k => {
-      const d = packageStore[k];
-      if (!d) return;
-      const dSorties = d.sorties || [];
-      dSorties.forEach((st, sIdx) => {
-        const ac = roster.aircraft[st.aircraftIndex] || { tail: 'A/C', model: '' };
-        const crewAllocations = [];
-        if (st.pilotAllocations) {
-          Object.keys(st.pilotAllocations).forEach(pIdx => {
-            const pObj = roster.pilots[pIdx];
-            if (pObj && pObj.name) {
-              crewAllocations.push(`${pObj.name}: ${st.pilotAllocations[pIdx]}h`);
-            }
-          });
-        }
-        rows.push([d.doc_date || k, `Sortie ${sIdx+1}`, ac.tail, ac.model, st.duration, `"${crewAllocations.join('; ')}"`]);
-      });
-    });
-
-    const csvContent = rows.map(e => e.map(cell => `"${String(cell || '').replace(/"/g, '""')}"`).join(',')).join('\n');
-    const fileName = `Selected_Days_Rollup_${incidentName}_(${selectedKeys.length}_days).csv`;
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-    if (navigator.canShare && navigator.canShare({ files: [new File([blob], fileName, { type: 'text/csv' })] })) {
-      navigator.share({
-        files: [new File([blob], fileName, { type: 'text/csv' })],
-        title: fileName
-      }).catch(() => {});
-      return;
-    }
-
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = fileName;
-    a.click();
-    URL.revokeObjectURL(a.href);
-    updateStatus(`Exported ${selectedKeys.length} Selected Days to CSV`);
-    closeExportModal();
-  }
-
-  // --- EXPORT SELECTED DAYS TO JSON ---
-  function exportSelectedDaysJSON() {
-    const selectedKeys = getSelectedDayKeys();
-    if (selectedKeys.length === 0) {
-      alert('Please check at least one day from the list to export.');
-      return;
-    }
-
-    const packageStore = getIncidentPackageStore();
-    const settingsProfile = JSON.parse(localStorage.getItem(STORAGE_SETTINGS) || '{}');
-    const incidentName = getIncidentIdentifier();
-
-    const selectedDaysObject = {};
-    selectedKeys.forEach(k => {
-      if (packageStore[k]) selectedDaysObject[k] = packageStore[k];
-    });
-
-    const masterPackage = {
-      packageVersion: 'UAS_INCIDENT_PACKAGE_V1',
-      exportedAt: new Date().toISOString(),
-      incidentName: incidentName,
-      settings: settingsProfile,
-      totalDaysCount: selectedKeys.length,
-      days: selectedDaysObject
-    };
-
-    const fileName = `Selected_Days_Package_${incidentName}_(${selectedKeys.length}_days).json`;
-    const blob = new Blob([JSON.stringify(masterPackage, null, 2)], { type: "application/json" });
-
-    if (navigator.canShare && navigator.canShare({ files: [new File([blob], fileName, { type: "application/json" })] })) {
-      navigator.share({
-        files: [new File([blob], fileName, { type: "application/json" })],
-        title: fileName
-      }).catch(() => {});
-      return;
-    }
-
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = fileName;
-    a.click();
-    URL.revokeObjectURL(a.href);
-    updateStatus(`Exported ${selectedKeys.length} Days to JSON`);
-    closeExportModal();
-  }
-
-  // --- DELETE SELECTED DAYS FROM MASTER ARCHIVE ---
-  function deleteSelectedDays() {
-    const selectedKeys = getSelectedDayKeys();
-    if (selectedKeys.length === 0) {
-      alert('Please check at least one day to delete.');
-      return;
-    }
-
-    if (confirm(`Are you sure you want to permanently delete the ${selectedKeys.length} selected days from memory?`)) {
-      const packageStore = getIncidentPackageStore();
-      let index = JSON.parse(localStorage.getItem(STORAGE_DRAFTS_INDEX) || '[]');
-
-      selectedKeys.forEach(k => {
-        delete packageStore[k];
-        localStorage.removeItem('draft_' + k);
-        index = index.filter(item => item !== k);
-      });
-
-      localStorage.setItem(STORAGE_INCIDENT_DAYS_STORE, JSON.stringify(packageStore));
-      localStorage.setItem(STORAGE_DRAFTS_INDEX, JSON.stringify(index));
-
-      refreshUnifiedOpenDropdown();
-      renderDaysManagerTable();
-      updateStatus(`Deleted ${selectedKeys.length} Days from Archive`);
-    }
   }
 
   // --- ✍️ POPOUT SIGNATURE MODAL ---
