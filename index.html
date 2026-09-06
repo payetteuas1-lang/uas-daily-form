@@ -46,7 +46,7 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* TOP STICKY TOOLBAR (CLEANED UP & STREAMLINED) */
+  /* TOP STICKY TOOLBAR */
   .no-print-bar {
     position: sticky;
     top: 0;
@@ -414,7 +414,7 @@
   .modal-content {
     background: white;
     width: 90%;
-    max-width: 520px;
+    max-width: 560px;
     max-height: 90vh;
     overflow-y: auto;
     border-radius: 6px;
@@ -428,7 +428,7 @@
     align-items: center;
     border-bottom: 1px solid #e2e8f0;
     padding-bottom: 6px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     font-size: 9.5pt;
     font-weight: 700;
     color: #0f2744;
@@ -441,6 +441,9 @@
     margin: 8px 0 4px 0;
     padding-bottom: 2px;
     border-bottom: 1px dashed #cbd5e1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .modal-grid {
@@ -487,47 +490,21 @@
     touch-action: none;
   }
 
-  /* POPOUT SORTIE MODAL STYLES */
-  .pilot-alloc-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 3px 6px;
-    background: #ffffff;
-    border-bottom: 1px solid #f1f5f9;
-  }
-
-  .alloc-badge {
-    font-size: 6.4pt;
-    font-weight: 700;
-    padding: 1px 5px;
-    border-radius: 3px;
-  }
-  .alloc-valid { background: #dcfce7; color: #166534; }
-  .alloc-invalid { background: #fee2e2; color: #b91c1c; }
-
-  /* ACTION LIST ITEM IN EXPORT MODAL */
-  .export-action-box {
-    background: #f8fafc;
-    border: 1px solid #cbd5e1;
-    border-radius: 4px;
-    padding: 10px;
+  /* DAYS MANAGER TABLE IN EXPORT MODAL */
+  .days-manager-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 4px;
     margin-bottom: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
   }
-  .export-action-text {
-    flex: 1;
+  .days-manager-table th, .days-manager-table td {
+    border: 1px solid #cbd5e1;
+    padding: 3px 5px;
+    font-size: 6.8pt;
   }
-  .export-action-text strong {
-    font-size: 7.8pt;
-    color: #0f2744;
-    display: block;
-  }
-  .export-action-text span {
-    font-size: 6.6pt;
-    color: #64748b;
+  .days-manager-table th {
+    background: #f1f5f9;
+    font-weight: 700;
   }
 
   /* PRINT STYLING */
@@ -585,7 +562,7 @@
 </head>
 <body>
 
-<!-- STREAMLINED TOP CONTROL BAR -->
+<!-- TOP CONTROL BAR -->
 <div class="no-print-bar">
   <div class="status-badge">
     <div class="status-dot"></div>
@@ -595,65 +572,64 @@
   <div class="btn-group">
     <!-- SWITCH SAVED DAYS -->
     <select id="unified_open_select" class="unified-open-select" onchange="handleUnifiedOpenSelect(this)">
-      <option value="">📂 Switch Day...</option>
-      <optgroup id="saved_drafts_optgroup" label="Saved Incident Days"></optgroup>
+      <option value="">📂 Switch Saved Day...</option>
+      <optgroup id="saved_drafts_optgroup" label="Incident Days (Saved)"></optgroup>
     </select>
     
     <button class="btn btn-save" onclick="saveInAppDraft()" title="Save current day to incident package">💾 Save Day</button>
     <button class="btn btn-clear" onclick="startNewDayShift()" title="Start a fresh day shift">➕ New Day</button>
     <button class="btn btn-copy" onclick="copyFromYesterday()" title="Copy header logistics, crew & vehicles from yesterday">📋 Copy Yesterday</button>
-    <button class="btn btn-export" onclick="openExportModal()" title="Export CSV, JSON, Import files, or Clear Days archive">📤 Export / Archive</button>
+    <button class="btn btn-export" onclick="openExportModal()" title="Export CSV, JSON, Import files, or Manage Days">📤 Export / Archive</button>
     <button class="btn btn-settings" onclick="openSettingsModal()">⚙️ Roster &amp; Rates</button>
     <button class="btn btn-print" onclick="printPDF()">🖨️ PDF</button>
   </div>
 </div>
 
-<!-- 📤 UNIFIED EXPORT, IMPORT & ARCHIVE MODAL -->
+<!-- 📤 UNIFIED EXPORT, IMPORT & DAYS SELECTION MANAGER MODAL -->
 <div class="modal-overlay" id="exportModal">
-  <div class="modal-content" style="max-width: 480px;">
+  <div class="modal-content">
     <div class="modal-header">
-      <span>📤 Export, Import &amp; Incident Archive</span>
+      <span>📤 Incident Days Manager &amp; Exporter</span>
       <button style="border:none; background:none; font-size:12pt; cursor:pointer;" onclick="closeExportModal()">✕</button>
     </div>
 
-    <!-- 1. CSV MASTER ROLLUP -->
-    <div class="export-action-box">
-      <div class="export-action-text">
-        <strong>📊 Export Master CSV (All Days)</strong>
-        <span>Cumulative multi-day spreadsheet for Finance and Helibase tracking.</span>
+    <!-- DAYS LIST WITH SELECTION CONTROLS -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+      <span style="font-weight:bold; color:#0f2744; font-size:7.4pt;">Select Days to Export or Delete:</span>
+      <div style="display:flex; gap:4px;">
+        <button type="button" class="btn btn-aux" style="height:20px; font-size:6.2pt; padding:1px 6px;" onclick="toggleSelectAllDays(true)">Select All</button>
+        <button type="button" class="btn btn-aux" style="height:20px; font-size:6.2pt; padding:1px 6px;" onclick="toggleSelectAllDays(false)">Deselect All</button>
       </div>
-      <button class="btn btn-csv" onclick="exportMasterIncidentCSV()">Export CSV</button>
     </div>
 
-    <!-- 2. JSON MASTER PACKAGE -->
-    <div class="export-action-box">
-      <div class="export-action-text">
-        <strong>📤 Export Master JSON Package</strong>
-        <span>Bundles all days, rosters, and rates into a single file to share with incoming managers.</span>
-      </div>
-      <button class="btn btn-save" onclick="exportIncidentJSONPackage()">Export JSON</button>
+    <div style="max-height:180px; overflow-y:auto; border:1px solid #cbd5e1; border-radius:3px; margin-bottom:8px;">
+      <table class="days-manager-table" style="margin:0;">
+        <thead>
+          <tr>
+            <th style="width:30px; text-align:center;">✓</th>
+            <th style="text-align:left;">Date &amp; Shift Identifier</th>
+            <th style="width:55px; text-align:right;">Flt Hrs</th>
+            <th style="width:45px; text-align:center;">Sorties</th>
+            <th style="width:75px; text-align:right;">Day Total</th>
+          </tr>
+        </thead>
+        <tbody id="days_manager_tbody">
+          <!-- Dynamically populated rows with checkboxes -->
+        </tbody>
+      </table>
     </div>
 
-    <!-- 3. IMPORT BACKUP -->
-    <div class="export-action-box">
-      <div class="export-action-text">
-        <strong>📥 Import File / Master Package</strong>
-        <span>Load a single-day log or multi-day incident package from AirDrop or Files.</span>
-      </div>
-      <label for="fileInput" class="btn btn-aux">Import File</label>
+    <!-- ACTION BUTTONS FOR SELECTED DAYS -->
+    <div style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:10px; background:#f8fafc; padding:8px; border:1px solid #e2e8f0; border-radius:4px;">
+      <button class="btn btn-csv" onclick="exportSelectedDaysCSV()" style="flex:1;">📊 Export Selected to CSV</button>
+      <button class="btn btn-save" onclick="exportSelectedDaysJSON()" style="flex:1;">📤 Export Selected to JSON</button>
+      <button class="btn btn-danger" onclick="deleteSelectedDays()" style="flex:1;">🗑️ Delete Selected Days</button>
+    </div>
+
+    <!-- IMPORT & FILE LOAD SECTION -->
+    <div style="border-top:1px dashed #cbd5e1; padding-top:8px; display:flex; justify-content:space-between; align-items:center;">
+      <label for="fileInput" class="btn btn-aux" style="cursor:pointer;">📥 Import External JSON File...</label>
       <input type="file" id="fileInput" style="display:none" accept=".json,application/json" onchange="openJSONFile(event)">
-    </div>
-
-    <!-- 4. CLEAR SAVED DAYS ARCHIVE (START FRESH) -->
-    <div class="export-action-box" style="border-color:#fca5a5; background:#fff5f5;">
-      <div class="export-action-text">
-        <strong style="color:#b91c1c;">🗑️ Clear Saved Days Archive</strong>
-        <span>Clears saved days from memory when starting a new incident. (Roster & rates are kept).</span>
-      </div>
-      <button class="btn btn-danger" onclick="clearIncidentDaysArchive()">Clear Days</button>
-    </div>
-
-    <div style="text-align:right; margin-top:8px;">
       <button class="btn btn-clear" onclick="closeExportModal()">Close</button>
     </div>
   </div>
@@ -1077,13 +1053,299 @@
 
   window.addEventListener('beforeprint', syncPrintMirrors);
 
-  // --- 📤 UNIFIED EXPORT / ARCHIVE MODAL ---
+  // --- 📤 EXPORT & DAYS MANAGER MODAL ---
   function openExportModal() {
+    renderDaysManagerTable();
     document.getElementById('exportModal').style.display = 'flex';
   }
 
   function closeExportModal() {
     document.getElementById('exportModal').style.display = 'none';
+  }
+
+  function renderDaysManagerTable() {
+    const packageStore = getIncidentPackageStore();
+    const dayKeys = Object.keys(packageStore).sort();
+    const tbody = document.getElementById('days_manager_tbody');
+
+    if (dayKeys.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:10px; color:#64748b; font-style:italic;">No saved days found in memory yet. Use "💾 Save Day" on each completed shift ticket.</td></tr>`;
+      return;
+    }
+
+    let html = '';
+    dayKeys.forEach(k => {
+      const d = packageStore[k];
+      const dTotal = d.grandTotal || '$ 0.00';
+      const dSortiesCount = (d.sorties || []).length;
+      let dFltHours = 0;
+      (d.sorties || []).forEach(st => dFltHours += (parseFloat(st.duration) || 0));
+
+      html += `
+        <tr>
+          <td style="text-align:center;"><input type="checkbox" class="day-select-checkbox" data-key="${k}" checked></td>
+          <td><strong>${d.doc_date || k}</strong> <span style="color:#64748b;">(${d.inc_name || 'Incident'})</span></td>
+          <td style="text-align:right; font-weight:600;">${dFltHours.toFixed(1)} hrs</td>
+          <td style="text-align:center;">${dSortiesCount}</td>
+          <td style="text-align:right; font-weight:bold; color:#065f46;">${dTotal}</td>
+        </tr>
+      `;
+    });
+
+    tbody.innerHTML = html;
+  }
+
+  function toggleSelectAllDays(selectAll = true) {
+    document.querySelectorAll('.day-select-checkbox').forEach(cb => cb.checked = selectAll);
+  }
+
+  function getSelectedDayKeys() {
+    const keys = [];
+    document.querySelectorAll('.day-select-checkbox:checked').forEach(cb => {
+      keys.push(cb.getAttribute('data-key'));
+    });
+    return keys;
+  }
+
+  // --- EXPORT SELECTED DAYS TO CSV ---
+  function exportSelectedDaysCSV() {
+    const selectedKeys = getSelectedDayKeys();
+    if (selectedKeys.length === 0) {
+      alert('Please check at least one day from the list to export.');
+      return;
+    }
+
+    const packageStore = getIncidentPackageStore();
+    const incidentName = getIncidentIdentifier();
+    const roster = getRosterData();
+
+    const rows = [
+      ['========================================================================'],
+      ['UAS INCIDENT OPERATIONS & PAYMENT ROLLUP (SELECTED DAYS EXPORT)'],
+      ['Incident / Assignment', incidentName],
+      ['Total Days in Report', selectedKeys.length],
+      ['Generated Date', new Date().toISOString()],
+      ['========================================================================'],
+      []
+    ];
+
+    // Cumulative summary for selected days
+    rows.push(['--- 1. CUMULATIVE TOTALS FOR SELECTED DAYS ---']);
+    let grandCumulativeCost = 0;
+    let totalIncidentFlightHours = 0;
+    let totalIncidentSorties = 0;
+    const pilotCumulativeHours = {};
+    const airframeCumulativeHours = {};
+    const airframeCumulativeSorties = {};
+
+    roster.pilots.forEach(p => { if (p && p.name) pilotCumulativeHours[p.name] = 0; });
+    roster.aircraft.forEach(a => { 
+      if (a.tail) {
+        airframeCumulativeHours[a.tail] = 0;
+        airframeCumulativeSorties[a.tail] = 0;
+      }
+    });
+
+    selectedKeys.forEach(k => {
+      const d = packageStore[k];
+      if (!d) return;
+      const dTotal = parseFloat((d.grandTotal || '0').replace(/[^0-9.]/g, '')) || 0;
+      grandCumulativeCost += dTotal;
+
+      const dSorties = d.sorties || [];
+      totalIncidentSorties += dSorties.length;
+
+      dSorties.forEach(st => {
+        const dur = parseFloat(st.duration) || 0;
+        totalIncidentFlightHours += dur;
+        
+        const ac = roster.aircraft[st.aircraftIndex];
+        if (ac && ac.tail) {
+          airframeCumulativeHours[ac.tail] = (airframeCumulativeHours[ac.tail] || 0) + dur;
+          airframeCumulativeSorties[ac.tail] = (airframeCumulativeSorties[ac.tail] || 0) + 1;
+        }
+
+        if (st.pilotAllocations) {
+          Object.keys(st.pilotAllocations).forEach(pIdx => {
+            const pObj = roster.pilots[pIdx];
+            if (pObj && pObj.name) {
+              pilotCumulativeHours[pObj.name] = (pilotCumulativeHours[pObj.name] || 0) + (parseFloat(st.pilotAllocations[pIdx]) || 0);
+            }
+          });
+        }
+      });
+    });
+
+    rows.push(['Total Selected Flight Hours (Aircraft)', Number(totalIncidentFlightHours.toFixed(2))]);
+    rows.push(['Total Selected Sorties Flown', totalIncidentSorties]);
+    rows.push(['CUMULATIVE SELECTED COST (GRAND TOTAL)', `$ ${grandCumulativeCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`]);
+    rows.push([]);
+
+    rows.push(['Pilot / Flight Operator Name', 'Cumulative Flight Hours']);
+    Object.keys(pilotCumulativeHours).forEach(p => {
+      rows.push([p, Number(pilotCumulativeHours[p].toFixed(2))]);
+    });
+    rows.push([]);
+
+    rows.push(['Airframe Tail #', 'Cumulative Sorties', 'Cumulative Flight Hours']);
+    Object.keys(airframeCumulativeHours).forEach(tail => {
+      rows.push([tail, airframeCumulativeSorties[tail] || 0, Number(airframeCumulativeHours[tail].toFixed(2))]);
+    });
+    rows.push([], ['========================================================================'], []);
+
+    // Daily shift ticket breakdowns for selected days
+    rows.push(['--- 2. SELECTED DAILY SHIFT TICKET BREAKDOWNS ---']);
+    selectedKeys.forEach((k, dayIdx) => {
+      const d = packageStore[k];
+      if (!d) return;
+      rows.push([]);
+      rows.push([`>>> SHIFT DAY ${dayIdx + 1}: ${d.doc_date || k}`]);
+      rows.push(['Contractor / Vendor', d.vendor_name || '']);
+      rows.push(['Incident / Project', d.inc_name || '']);
+      rows.push(['LRZ Location', d.base_loc || '']);
+      rows.push(['Order # / Task Order', d.order_num || '']);
+      rows.push(['Contract Type', d.ctype || '']);
+      rows.push(['FRAT Completed', d.frat ? 'Yes' : 'No']);
+      
+      rows.push(['Cost Item Description', 'Quantity', 'Rate ($)', 'Day Cost ($)']);
+      rows.push(['Revenue Flight Hours', d.q_flt || '0', d.r_flt || '0', d.c_flt || '0']);
+      rows.push(['Daily Availability', d.q_avail || '0', d.r_avail || '0', d.c_avail || '0']);
+      
+      for (let i = 1; i <= 8; i++) {
+        if (d[`p${i}_desc`]) {
+          rows.push([d[`p${i}_desc`], d[`q_p${i}`] || '', d[`r_p${i}`] || '', d[`c_p${i}`] || '']);
+        }
+        if (d[`v${i}_desc`]) {
+          rows.push([d[`v${i}_desc`], d[`q_v${i}`] || '', d[`r_v${i}`] || '', d[`c_v${i}`] || '']);
+        }
+      }
+      if (d.pay_desc) rows.push([d.pay_desc, d.q_pay || '', d.r_pay || '', d.c_pay || '']);
+      if (d.misc_desc) rows.push([d.misc_desc, d.q_misc || '', d.r_misc || '', d.c_misc || '']);
+      rows.push(['DAY TOTAL COST', '', '', d.grandTotal || '$ 0.00']);
+
+      rows.push(['Aircraft Status', `"${(d.box_ac_status || '').replace(/"/g, '""')}"`]);
+      rows.push(['Weather Observations', `"${(d.box_weather || '').replace(/"/g, '""')}"`]);
+      rows.push(['Narrative Report', `"${(d.box_narrative || '').replace(/"/g, '""')}"`]);
+      rows.push(['Approved By (Gov Rep)', d.sig_name || '']);
+      rows.push(['Signed Date', d.sig_date || '']);
+      rows.push(['------------------------------------------------------------------------']);
+    });
+
+    // Chronological Sorties
+    rows.push([], ['========================================================================'], ['--- 3. SORTIE FLIGHT LEGS (SELECTED DAYS) ---']);
+    rows.push(['Date', 'Sortie #', 'Airframe Tail', 'Model', 'Flight Duration (hrs)', 'Crew & Allocations']);
+
+    selectedKeys.forEach(k => {
+      const d = packageStore[k];
+      if (!d) return;
+      const dSorties = d.sorties || [];
+      dSorties.forEach((st, sIdx) => {
+        const ac = roster.aircraft[st.aircraftIndex] || { tail: 'A/C', model: '' };
+        const crewAllocations = [];
+        if (st.pilotAllocations) {
+          Object.keys(st.pilotAllocations).forEach(pIdx => {
+            const pObj = roster.pilots[pIdx];
+            if (pObj && pObj.name) {
+              crewAllocations.push(`${pObj.name}: ${st.pilotAllocations[pIdx]}h`);
+            }
+          });
+        }
+        rows.push([d.doc_date || k, `Sortie ${sIdx+1}`, ac.tail, ac.model, st.duration, `"${crewAllocations.join('; ')}"`]);
+      });
+    });
+
+    const csvContent = rows.map(e => e.map(cell => `"${String(cell || '').replace(/"/g, '""')}"`).join(',')).join('\n');
+    const fileName = `Selected_Days_Rollup_${incidentName}_(${selectedKeys.length}_days).csv`;
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+    if (navigator.canShare && navigator.canShare({ files: [new File([blob], fileName, { type: 'text/csv' })] })) {
+      navigator.share({
+        files: [new File([blob], fileName, { type: 'text/csv' })],
+        title: fileName
+      }).catch(() => {});
+      return;
+    }
+
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    updateStatus(`Exported ${selectedKeys.length} Selected Days to CSV`);
+    closeExportModal();
+  }
+
+  // --- EXPORT SELECTED DAYS TO JSON ---
+  function exportSelectedDaysJSON() {
+    const selectedKeys = getSelectedDayKeys();
+    if (selectedKeys.length === 0) {
+      alert('Please check at least one day from the list to export.');
+      return;
+    }
+
+    const packageStore = getIncidentPackageStore();
+    const settingsProfile = JSON.parse(localStorage.getItem(STORAGE_SETTINGS) || '{}');
+    const incidentName = getIncidentIdentifier();
+
+    const selectedDaysObject = {};
+    selectedKeys.forEach(k => {
+      if (packageStore[k]) selectedDaysObject[k] = packageStore[k];
+    });
+
+    const masterPackage = {
+      packageVersion: 'UAS_INCIDENT_PACKAGE_V1',
+      exportedAt: new Date().toISOString(),
+      incidentName: incidentName,
+      settings: settingsProfile,
+      totalDaysCount: selectedKeys.length,
+      days: selectedDaysObject
+    };
+
+    const fileName = `Selected_Days_Package_${incidentName}_(${selectedKeys.length}_days).json`;
+    const blob = new Blob([JSON.stringify(masterPackage, null, 2)], { type: "application/json" });
+
+    if (navigator.canShare && navigator.canShare({ files: [new File([blob], fileName, { type: "application/json" })] })) {
+      navigator.share({
+        files: [new File([blob], fileName, { type: "application/json" })],
+        title: fileName
+      }).catch(() => {});
+      return;
+    }
+
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    updateStatus(`Exported ${selectedKeys.length} Days to JSON`);
+    closeExportModal();
+  }
+
+  // --- DELETE SELECTED DAYS FROM MASTER ARCHIVE ---
+  function deleteSelectedDays() {
+    const selectedKeys = getSelectedDayKeys();
+    if (selectedKeys.length === 0) {
+      alert('Please check at least one day to delete.');
+      return;
+    }
+
+    if (confirm(`Are you sure you want to permanently delete the ${selectedKeys.length} selected days from memory?`)) {
+      const packageStore = getIncidentPackageStore();
+      let index = JSON.parse(localStorage.getItem(STORAGE_DRAFTS_INDEX) || '[]');
+
+      selectedKeys.forEach(k => {
+        delete packageStore[k];
+        localStorage.removeItem('draft_' + k);
+        index = index.filter(item => item !== k);
+      });
+
+      localStorage.setItem(STORAGE_INCIDENT_DAYS_STORE, JSON.stringify(packageStore));
+      localStorage.setItem(STORAGE_DRAFTS_INDEX, JSON.stringify(index));
+
+      refreshUnifiedOpenDropdown();
+      renderDaysManagerTable();
+      updateStatus(`Deleted ${selectedKeys.length} Days from Archive`);
+    }
   }
 
   // --- ✍️ POPOUT SIGNATURE MODAL ---
@@ -2034,7 +2296,7 @@
     for (let i = 1; i <= numPersonnel; i++) {
       if (prevDay[`p${i}_desc`]) document.getElementById(`p${i}_desc`).value = prevDay[`p${i}_desc`];
       if (prevDay[`r_p${i}`]) document.getElementById(`r_p${i}`).value = prevDay[`r_p${i}`];
-      document.getElementById(`q_p${i}` ).value = '';
+      document.getElementById(`q_p${i}`).value = '';
     }
 
     const numVehicles = parseInt(document.getElementById('cfg_vehicles').value) || 5;
@@ -2161,231 +2423,6 @@
       
       updateStatus("New Day Shift Ready (Roster Retained)");
     }
-  }
-
-  // --- 🗑️ CLEAR SAVED DAYS ARCHIVE ---
-  function clearIncidentDaysArchive() {
-    const count = Object.keys(getIncidentPackageStore()).length;
-    if (confirm(`Are you sure you want to clear all ${count} saved days from memory?\n\n(Your crew roster, fleet, and contract rates will NOT be deleted).`)) {
-      localStorage.removeItem(STORAGE_INCIDENT_DAYS_STORE);
-      localStorage.removeItem(STORAGE_DRAFTS_INDEX);
-      localStorage.removeItem(STORAGE_ACTIVE_LOG);
-
-      const keysToRemove = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const k = localStorage.key(i);
-        if (k && k.startsWith('draft_')) keysToRemove.push(k);
-      }
-      keysToRemove.forEach(k => localStorage.removeItem(k));
-
-      refreshUnifiedOpenDropdown();
-      startNewDayShift(true);
-      closeExportModal();
-      alert('Saved days archive cleared successfully! Ready for a fresh incident.');
-      updateStatus('Cleared saved days archive.');
-    }
-  }
-
-  // --- 📤 MULTI-DAY MASTER JSON EXPORT ---
-  function exportIncidentJSONPackage() {
-    saveInAppDraft();
-    const packageStore = getIncidentPackageStore();
-    const settingsProfile = JSON.parse(localStorage.getItem(STORAGE_SETTINGS) || '{}');
-    const incidentName = getIncidentIdentifier();
-
-    const masterPackage = {
-      packageVersion: 'UAS_INCIDENT_PACKAGE_V1',
-      exportedAt: new Date().toISOString(),
-      incidentName: incidentName,
-      settings: settingsProfile,
-      totalDaysCount: Object.keys(packageStore).length,
-      days: packageStore
-    };
-
-    const fileName = `Incident_Package_${incidentName}.json`;
-    const blob = new Blob([JSON.stringify(masterPackage, null, 2)], { type: "application/json" });
-
-    if (navigator.canShare && navigator.canShare({ files: [new File([blob], fileName, { type: "application/json" })] })) {
-      navigator.share({
-        files: [new File([blob], fileName, { type: "application/json" })],
-        title: fileName
-      }).catch(() => {});
-      return;
-    }
-
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = fileName;
-    a.click();
-    URL.revokeObjectURL(a.href);
-    updateStatus(`Exported Master Package: ${fileName}`);
-    closeExportModal();
-  }
-
-  // --- 📊 MULTI-DAY MASTER CSV EXPORT ---
-  function exportMasterIncidentCSV() {
-    saveInAppDraft();
-    const packageStore = getIncidentPackageStore();
-    const dayKeys = Object.keys(packageStore).sort();
-    const incidentName = getIncidentIdentifier();
-    const roster = getRosterData();
-
-    if (dayKeys.length === 0) {
-      alert('No saved days found in package. Tap "💾 Save Day" first.');
-      return;
-    }
-
-    const rows = [
-      ['========================================================================'],
-      ['UAS INCIDENT OPERATIONS & PAYMENT MASTER ROLLUP SPREADSHEET (ALL DAYS)'],
-      ['Incident / Assignment', incidentName],
-      ['Total Days in Report', dayKeys.length],
-      ['Generated Date', new Date().toISOString()],
-      ['========================================================================'],
-      []
-    ];
-
-    rows.push(['--- 1. CUMULATIVE INCIDENT TOTALS ---']);
-    let grandCumulativeCost = 0;
-    let totalIncidentFlightHours = 0;
-    let totalIncidentSorties = 0;
-    const pilotCumulativeHours = {};
-    const airframeCumulativeHours = {};
-    const airframeCumulativeSorties = {};
-
-    roster.pilots.forEach(p => { if (p && p.name) pilotCumulativeHours[p.name] = 0; });
-    roster.aircraft.forEach(a => { 
-      if (a.tail) {
-        airframeCumulativeHours[a.tail] = 0;
-        airframeCumulativeSorties[a.tail] = 0;
-      }
-    });
-
-    dayKeys.forEach(k => {
-      const d = packageStore[k];
-      const dTotal = parseFloat((d.grandTotal || '0').replace(/[^0-9.]/g, '')) || 0;
-      grandCumulativeCost += dTotal;
-
-      const dSorties = d.sorties || [];
-      totalIncidentSorties += dSorties.length;
-
-      dSorties.forEach(st => {
-        const dur = parseFloat(st.duration) || 0;
-        totalIncidentFlightHours += dur;
-        
-        const ac = roster.aircraft[st.aircraftIndex];
-        if (ac && ac.tail) {
-          airframeCumulativeHours[ac.tail] = (airframeCumulativeHours[ac.tail] || 0) + dur;
-          airframeCumulativeSorties[ac.tail] = (airframeCumulativeSorties[ac.tail] || 0) + 1;
-        }
-
-        if (st.pilotAllocations) {
-          Object.keys(st.pilotAllocations).forEach(pIdx => {
-            const pObj = roster.pilots[pIdx];
-            if (pObj && pObj.name) {
-              pilotCumulativeHours[pObj.name] = (pilotCumulativeHours[pObj.name] || 0) + (parseFloat(st.pilotAllocations[pIdx]) || 0);
-            }
-          });
-        }
-      });
-    });
-
-    rows.push(['Total Incident Flight Hours (Aircraft)', Number(totalIncidentFlightHours.toFixed(2))]);
-    rows.push(['Total Sorties Flown', totalIncidentSorties]);
-    rows.push(['CUMULATIVE INCIDENT COST (GRAND TOTAL)', `$ ${grandCumulativeCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`]);
-    rows.push([]);
-
-    rows.push(['Pilot / Flight Operator Name', 'Cumulative Flight Hours']);
-    Object.keys(pilotCumulativeHours).forEach(p => {
-      rows.push([p, Number(pilotCumulativeHours[p].toFixed(2))]);
-    });
-    rows.push([]);
-
-    rows.push(['Airframe Tail #', 'Cumulative Sorties', 'Cumulative Flight Hours']);
-    Object.keys(airframeCumulativeHours).forEach(tail => {
-      rows.push([tail, airframeCumulativeSorties[tail] || 0, Number(airframeCumulativeHours[tail].toFixed(2))]);
-    });
-    rows.push([], ['========================================================================'], []);
-
-    // --- SECTION 2: DAILY SHIFT TICKET BREAKDOWNS ---
-    rows.push(['--- 2. DAILY SHIFT TICKET & INVOICE BREAKDOWNS ---']);
-
-    dayKeys.forEach((k, dayIdx) => {
-      const d = packageStore[k];
-      rows.push([]);
-      rows.push([`>>> SHIFT DAY ${dayIdx + 1}: ${d.doc_date || k}`]);
-      rows.push(['Contractor / Vendor', d.vendor_name || '']);
-      rows.push(['Incident / Project', d.inc_name || '']);
-      rows.push(['LRZ Location', d.base_loc || '']);
-      rows.push(['Order # / Task Order', d.order_num || '']);
-      rows.push(['Contract Type', d.ctype || '']);
-      rows.push(['FRAT Completed', d.frat ? 'Yes' : 'No']);
-      
-      rows.push(['Cost Item Description', 'Quantity', 'Rate ($)', 'Day Cost ($)']);
-      rows.push(['Revenue Flight Hours', d.q_flt || '0', d.r_flt || '0', d.c_flt || '0']);
-      rows.push(['Daily Availability', d.q_avail || '0', d.r_avail || '0', d.c_avail || '0']);
-      
-      for (let i = 1; i <= 8; i++) {
-        if (d[`p${i}_desc`]) {
-          rows.push([d[`p${i}_desc`], d[`q_p${i}`] || '', d[`r_p${i}`] || '', d[`c_p${i}`] || '']);
-        }
-        if (d[`v${i}_desc`]) {
-          rows.push([d[`v${i}_desc`], d[`q_v${i}`] || '', d[`r_v${i}`] || '', d[`c_v${i}`] || '']);
-        }
-      }
-      if (d.pay_desc) rows.push([d.pay_desc, d.q_pay || '', d.r_pay || '', d.c_pay || '']);
-      if (d.misc_desc) rows.push([d.misc_desc, d.q_misc || '', d.r_misc || '', d.c_misc || '']);
-      rows.push(['DAY TOTAL COST', '', '', d.grandTotal || '$ 0.00']);
-
-      rows.push(['Aircraft Status', `"${(d.box_ac_status || '').replace(/"/g, '""')}"`]);
-      rows.push(['Weather Observations', `"${(d.box_weather || '').replace(/"/g, '""')}"`]);
-      rows.push(['Narrative Report', `"${(d.box_narrative || '').replace(/"/g, '""')}"`]);
-      rows.push(['Approved By (Gov Rep)', d.sig_name || '']);
-      rows.push(['Signed Date', d.sig_date || '']);
-      rows.push(['------------------------------------------------------------------------']);
-    });
-
-    // --- SECTION 3: MASTER SORTIE LOG ---
-    rows.push([], ['========================================================================'], ['--- 3. ALL SORTIE FLIGHT LEGS (CHRONOLOGICAL) ---']);
-    rows.push(['Date', 'Sortie #', 'Airframe Tail', 'Model', 'Flight Duration (hrs)', 'Crew & Allocations']);
-
-    dayKeys.forEach(k => {
-      const d = packageStore[k];
-      const dSorties = d.sorties || [];
-      dSorties.forEach((st, sIdx) => {
-        const ac = roster.aircraft[st.aircraftIndex] || { tail: 'A/C', model: '' };
-        const crewAllocations = [];
-        if (st.pilotAllocations) {
-          Object.keys(st.pilotAllocations).forEach(pIdx => {
-            const pObj = roster.pilots[pIdx];
-            if (pObj && pObj.name) {
-              crewAllocations.push(`${pObj.name}: ${st.pilotAllocations[pIdx]}h`);
-            }
-          });
-        }
-        rows.push([d.doc_date || k, `Sortie ${sIdx+1}`, ac.tail, ac.model, st.duration, `"${crewAllocations.join('; ')}"`]);
-      });
-    });
-
-    const csvContent = rows.map(e => e.map(cell => `"${String(cell || '').replace(/"/g, '""')}"`).join(',')).join('\n');
-    const fileName = `Incident_Master_Rollup_${incidentName}.csv`;
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-    if (navigator.canShare && navigator.canShare({ files: [new File([blob], fileName, { type: 'text/csv' })] })) {
-      navigator.share({
-        files: [new File([blob], fileName, { type: 'text/csv' })],
-        title: fileName
-      }).catch(() => {});
-      return;
-    }
-
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = fileName;
-    a.click();
-    URL.revokeObjectURL(a.href);
-    updateStatus(`Exported Master Rollup: ${fileName}`);
-    closeExportModal();
   }
 
   // --- 📥 SMART IMPORT ---
