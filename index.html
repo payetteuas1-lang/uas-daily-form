@@ -152,16 +152,19 @@
   .btn-print { background: #059669; color: white; }
   .btn-print:hover { background: #047857; }
 
-  .btn-image { background: #9333ea; color: white; }
-  .btn-image:hover { background: #7e22ce; }
-
   .btn-csv { background: #0d9488; color: white; }
   .btn-csv:hover { background: #0f766e; }
 
-  .btn-aux { background: #e2e8f0; color: #0f2744; border: 1px solid #cbd5e1; }
+  .btn-aux {
+    background: #e2e8f0;
+    color: #0f2744;
+    border: 1px solid #cbd5e1;
+  }
+
   .btn-aux:hover { background: #cbd5e1; }
 
-  .btn-gps, .btn-action {
+  .btn-gps,
+  .btn-action {
     background: #e2e8f0;
     border: 1px solid #cbd5e1;
     color: #0f2744;
@@ -174,7 +177,10 @@
     height: 16px;
   }
 
-  .btn-gps:hover, .btn-action:hover { background: #cbd5e1; }
+  .btn-gps:hover,
+  .btn-action:hover {
+    background: #cbd5e1;
+  }
 
   .page-container {
     max-width: 8.5in;
@@ -214,7 +220,8 @@
     margin-bottom: 3px;
   }
 
-  th, td {
+  th,
+  td {
     border: 1px solid var(--border);
     padding: 1.6px 3px;
     vertical-align: middle;
@@ -227,7 +234,10 @@
   .center { text-align: center; }
   .right { text-align: right; }
 
-  input[type="text"], input[type="date"], input[type="number"], select {
+  input[type="text"],
+  input[type="date"],
+  input[type="number"],
+  select {
     width: 100%;
     border: 1px solid #cbd5e1;
     background: #ffffff;
@@ -619,7 +629,9 @@
       display: none !important;
     }
 
-    th, td, .narrative-card {
+    th,
+    td,
+    .narrative-card {
       border-color: #000000 !important;
     }
 
@@ -637,7 +649,8 @@
       color: #000000 !important;
     }
 
-    input, select {
+    input,
+    select {
       border: none !important;
       background: transparent !important;
       box-shadow: none !important;
@@ -694,12 +707,10 @@
     <button class="btn btn-settings" onclick="openSettingsModal()">⚙️ Settings</button>
     <button class="btn btn-export" onclick="openExportModal()" title="Manage incident days, import/export files, delete days, or batch PDF">📦 Package</button>
     <button class="btn btn-print" onclick="printPDF()">🖨️ PDF</button>
-    <button class="btn btn-image" onclick="exportImagePNG()" title="Save current day as PNG image">🖼️ Image</button>
     <button class="btn btn-help" onclick="openHelpModal()" title="View operational guide and update app">❓ Help</button>
   </div>
 </div>
 
-<!-- HELP MODAL -->
 <div class="modal-overlay" id="helpModal">
   <div class="modal-content" style="max-width: 550px;">
     <div class="modal-header">
@@ -710,15 +721,14 @@
     <div style="background:#f0fdf4; border:1px solid #86efac; border-radius:4px; padding:8px 10px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
       <div>
         <strong style="color:#166534; font-size:7.4pt;">🔄 App Updates &amp; Cache Refresher</strong>
-        <span style="display:block; font-size:6.4pt; color:#15803d;">Check for new code updates from GitHub and reload without losing your active log.</span>
+        <span style="display:block; font-size:6.4pt; color:#15803d;">Check for new code updates and reload without losing your active log.</span>
       </div>
       <button class="btn" style="background:#16a34a; color:white; height:26px; font-size:7.2pt;" onclick="forceAppRefresh()">🔄 Refresh App</button>
     </div>
 
     <div class="help-step-box" style="border-left-color: #8b5cf6; background: #fdf4ff;">
-      <div class="help-step-title" style="color:#6b21a8;">📲 How to Install as an App</div>
+      <div class="help-step-title" style="color:#6b21a8;">📲 Install as an App</div>
       <div class="help-step-desc">
-        Installing as a PWA gives you a dedicated home-screen app icon, removes browser URL bars, and supports offline use.<br><br>
         <strong>iOS:</strong> Open in Safari, tap Share, then Add to Home Screen.<br>
         <strong>Android:</strong> Open in Chrome or Edge, tap menu, then Install app or Add to Home screen.
       </div>
@@ -727,14 +737,15 @@
     <div class="help-step-box">
       <div class="help-step-title">1. Initial Setup</div>
       <div class="help-step-desc">
-        Tap <strong>⚙️ Settings</strong> to build your team roster, aircraft list, vehicle list, and contract rates.
+        Tap <strong>⚙️ Settings</strong> to build your crew roster, aircraft list, vehicle list, and contract rates.
       </div>
     </div>
 
     <div class="help-step-box">
-      <div class="help-step-title">2. Daily Flight Logging</div>
+      <div class="help-step-title">2. Flight Logging</div>
       <div class="help-step-desc">
-        Tap <strong>➕ Add Sortie</strong>, select the airframe, enter flight time in hours and minutes, and assign crew. Summaries convert the time to decimal hours.
+        Tap <strong>➕ Add Sortie</strong>, select the airframe, enter sortie time as hours and minutes, and assign crew.
+        The summary converts flight time to decimal hours.
       </div>
     </div>
 
@@ -758,7 +769,6 @@
   </div>
 </div>
 
-<!-- PACKAGE MODAL -->
 <div class="modal-overlay" id="exportModal">
   <div class="modal-content" style="max-width: 560px;">
     <div class="modal-header">
@@ -804,7 +814,6 @@
   </div>
 </div>
 
-<!-- SIGNATURE MODAL -->
 <div class="modal-overlay" id="sigModal">
   <div class="modal-content" style="max-width: 460px;">
     <div class="modal-header">
@@ -830,7 +839,6 @@
   </div>
 </div>
 
-<!-- SORTIE MODAL -->
 <div class="modal-overlay" id="sortieModal">
   <div class="modal-content" style="max-width: 460px;">
     <div class="modal-header">
@@ -873,7 +881,6 @@
   </div>
 </div>
 
-<!-- SETTINGS MODAL -->
 <div class="modal-overlay" id="settingsModal">
   <div class="modal-content">
     <div class="modal-header">
@@ -1008,13 +1015,13 @@
     </tr>
 
     <tr>
-      <td style="width: 50%;">
+      <td>
         <div class="flex-align">
           <span class="bold" style="white-space:nowrap; width:125px;">Contractor / Vendor:</span>
           <input type="text" id="vendor_name" placeholder="Vendor / Company Name">
         </div>
       </td>
-      <td colspan="2" style="width: 50%;">
+      <td colspan="2">
         <div class="flex-align">
           <span class="bold" style="white-space:nowrap; width:125px;">Incident / Project:</span>
           <input type="text" id="inc_name" placeholder="Incident or Project Name">
@@ -1023,20 +1030,20 @@
     </tr>
 
     <tr>
-      <td style="width: 50%;">
+      <td>
         <div class="flex-align">
           <span class="bold" style="white-space:nowrap; width:125px;">LRZ:</span>
           <input type="text" id="base_loc" placeholder="LRZ Location or GPS Coordinates">
           <button type="button" class="btn-gps" onclick="captureGPSLocation()" title="Capture GPS Lat/Long and Elevation">📍 GPS</button>
         </div>
       </td>
-      <td style="width: 25%;">
+      <td>
         <div class="flex-align">
           <span class="bold" style="white-space:nowrap;">Agency:</span>
           <input type="text" id="agency_name" placeholder="Host Agency / Unit">
         </div>
       </td>
-      <td style="width: 25%;">
+      <td>
         <div class="flex-align">
           <span class="bold" style="white-space:nowrap;">Order #:</span>
           <input type="text" id="order_num" placeholder="A-...">
@@ -1057,7 +1064,6 @@
   </table>
 
   <div class="layout-split-top">
-
     <div class="col-top-left">
       <div style="display:flex; justify-content:space-between; align-items:center; background:#1e3a5f; color:white; padding:2.5px 6px; border-radius:2px; margin-bottom:2px;">
         <span class="bold" style="font-size:7.0pt;">FLIGHT SORTIE LOG</span>
@@ -1107,6 +1113,7 @@
             <th style="width: 28%;">Cost ($)</th>
           </tr>
         </thead>
+
         <tbody>
           <tr class="calc-row">
             <td class="bold">Revenue Flight Hours (Auto):</td>
@@ -1123,11 +1130,17 @@
           </tr>
 
           <tr class="bg-section"><td colspan="4">PERSONNEL PER DIEM / EXTENDED STANDBY</td></tr>
-          <tbody id="personnel_tbody"></tbody>
+        </tbody>
 
+        <tbody id="personnel_tbody"></tbody>
+
+        <tbody>
           <tr class="bg-section"><td colspan="4">VEHICLE MILEAGE &amp; SUPPORT TRUCKS</td></tr>
-          <tbody id="vehicles_tbody"></tbody>
+        </tbody>
 
+        <tbody id="vehicles_tbody"></tbody>
+
+        <tbody>
           <tr class="calc-row">
             <td><input type="text" id="pay_desc" placeholder="Payload Package (EO/IR, PSD, etc.)"></td>
             <td><input type="number" step="any" class="qty" id="q_pay" placeholder="Qty"></td>
@@ -1312,6 +1325,23 @@
       keys.push(cb.getAttribute('data-key'));
     });
     return keys;
+  }
+
+  async function shareOrDownloadBlob(blob, fileName, title) {
+    const file = new File([blob], fileName, { type: blob.type });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: title || fileName });
+        return;
+      } catch (e) {}
+    }
+
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(a.href);
   }
 
   function exportSelectedDaysCSV() {
@@ -2307,125 +2337,6 @@
     });
   }
 
-  async function shareOrDownloadBlob(blob, fileName, title) {
-    const file = new File([blob], fileName, { type: blob.type });
-
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({ files: [file], title: title || fileName });
-        return;
-      } catch (e) {}
-    }
-
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = fileName;
-    a.click();
-    URL.revokeObjectURL(a.href);
-  }
-
-  async function exportImagePNG() {
-    try {
-      updateDocumentTitle();
-      syncPrintMirrors();
-      autoSaveActive();
-
-      const source = document.querySelector('.page-container');
-      if (!source) {
-        alert('Unable to find the form page to export.');
-        return;
-      }
-
-      const clone = source.cloneNode(true);
-      hydrateFormControlsForClone(source, clone);
-
-      clone.querySelectorAll('.no-print-bar, .modal-overlay, .btn-gps, .btn-action, .veh-rate-select')
-        .forEach(el => el.remove());
-
-      clone.style.margin = '0';
-      clone.style.boxShadow = 'none';
-      clone.style.borderRadius = '0';
-      clone.style.background = '#ffffff';
-
-      const width = Math.ceil(source.scrollWidth);
-      const height = Math.ceil(source.scrollHeight);
-
-      const wrapper = document.createElement('div');
-      wrapper.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
-      wrapper.style.width = width + 'px';
-      wrapper.style.minHeight = height + 'px';
-      wrapper.style.background = '#ffffff';
-
-      const style = document.createElement('style');
-      style.textContent = getAllInlineStylesForExport() + `
-        body { background:#ffffff !important; }
-        .page-container {
-          width:${width}px !important;
-          max-width:${width}px !important;
-          margin:0 !important;
-          box-shadow:none !important;
-        }
-        .no-print-bar, .modal-overlay, .btn-gps, .btn-action, .veh-rate-select {
-          display:none !important;
-        }
-        .narrative-card textarea { display:none !important; }
-        .print-mirror-text { display:block !important; }
-      `;
-
-      wrapper.appendChild(style);
-      wrapper.appendChild(clone);
-
-      const serialized = new XMLSerializer().serializeToString(wrapper);
-
-      const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
-          <foreignObject width="100%" height="100%">
-            ${serialized}
-          </foreignObject>
-        </svg>
-      `;
-
-      const img = new Image();
-      const svgBlob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
-      const url = URL.createObjectURL(svgBlob);
-
-      img.onload = async function () {
-        const scale = Math.max(2, window.devicePixelRatio || 1);
-        const canvas = document.createElement('canvas');
-        canvas.width = width * scale;
-        canvas.height = height * scale;
-
-        const ctx = canvas.getContext('2d');
-        ctx.setTransform(scale, 0, 0, scale, 0, 0);
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, width, height);
-        ctx.drawImage(img, 0, 0, width, height);
-
-        URL.revokeObjectURL(url);
-
-        canvas.toBlob(async function (blob) {
-          if (!blob) {
-            alert('Image export failed.');
-            return;
-          }
-
-          const fileName = `${buildBaseName()}.png`;
-          await shareOrDownloadBlob(blob, fileName, 'UAS Daily Operations Image');
-          updateStatus(`Saved Image: ${fileName}`);
-        }, 'image/png');
-      };
-
-      img.onerror = function () {
-        URL.revokeObjectURL(url);
-        alert('Image export failed in this browser. Try using the PDF button instead.');
-      };
-
-      img.src = url;
-    } catch (err) {
-      alert('Image export error: ' + err.message);
-    }
-  }
-
   function renderSavedDayIntoCurrentForm(dayData) {
     if (!dayData) return;
 
@@ -2756,7 +2667,10 @@
         const cost = qty * rate;
 
         if (qty > 0 && rate > 0) {
-          cEl.value = '$ ' + cost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          cEl.value = '$ ' + cost.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          });
           grandTotal += cost;
         } else {
           cEl.value = '';
@@ -2768,7 +2682,10 @@
 
     const gtEl = document.getElementById('grandTotal');
     if (gtEl) {
-      gtEl.value = '$ ' + grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      gtEl.value = '$ ' + grandTotal.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
     }
 
     updateDocumentTitle();
@@ -3014,6 +2931,7 @@
           refreshUnifiedOpenDropdown();
 
           const latestKey = importedKeys.sort().reverse()[0];
+
           if (latestKey) {
             renderCostRows();
             applyDataToForm(packageStore[latestKey]);
