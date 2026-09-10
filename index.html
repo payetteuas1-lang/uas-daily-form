@@ -24,6 +24,7 @@
     --success-text: #065f46;
   }
 
+  /* NO URL/PAGE HEADERS OR FOOTERS IN PRINT */
   @page {
     size: letter portrait;
     margin: 0;
@@ -45,6 +46,7 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* TOP STICKY TOOLBAR */
   .no-print-bar {
     position: sticky;
     top: 0;
@@ -101,13 +103,13 @@
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.15);
   }
-
   .unified-open-select:focus {
     outline: none;
     border-color: #93c5fd !important;
     box-shadow: 0 0 0 2px rgba(96,165,250,0.4);
   }
 
+  /* BUTTONS */
   .btn {
     border: none;
     padding: 4px 9px;
@@ -127,44 +129,28 @@
   }
 
   .btn:active { transform: scale(0.96); }
-
   .btn-save { background: #2563eb; color: white; }
   .btn-save:hover { background: #1d4ed8; }
-
   .btn-copy { background: #0891b2; color: white; }
   .btn-copy:hover { background: #0e7490; }
-
   .btn-export { background: #0284c7; color: white; }
   .btn-export:hover { background: #0369a1; }
-
   .btn-settings { background: #7c3aed; color: white; }
   .btn-settings:hover { background: #6d28d9; }
-
   .btn-help { background: #475569; color: white; }
   .btn-help:hover { background: #334155; }
-
   .btn-clear { background: #64748b; color: white; }
   .btn-clear:hover { background: #475569; }
-
   .btn-danger { background: #dc2626; color: white; }
   .btn-danger:hover { background: #b91c1c; }
-
   .btn-print { background: #059669; color: white; }
   .btn-print:hover { background: #047857; }
-
   .btn-csv { background: #0d9488; color: white; }
   .btn-csv:hover { background: #0f766e; }
-
-  .btn-aux {
-    background: #e2e8f0;
-    color: #0f2744;
-    border: 1px solid #cbd5e1;
-  }
-
+  .btn-aux { background: #e2e8f0; color: #0f2744; border: 1px solid #cbd5e1; }
   .btn-aux:hover { background: #cbd5e1; }
 
-  .btn-gps,
-  .btn-action {
+  .btn-gps, .btn-action {
     background: #e2e8f0;
     border: 1px solid #cbd5e1;
     color: #0f2744;
@@ -176,12 +162,9 @@
     white-space: nowrap;
     height: 16px;
   }
+  .btn-gps:hover, .btn-action:hover { background: #cbd5e1; }
 
-  .btn-gps:hover,
-  .btn-action:hover {
-    background: #cbd5e1;
-  }
-
+  /* PAGE CONTAINER */
   .page-container {
     max-width: 8.5in;
     margin: 6px auto;
@@ -214,14 +197,14 @@
     margin-top: 1px;
   }
 
+  /* TABLES */
   table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 3px;
   }
 
-  th,
-  td {
+  th, td {
     border: 1px solid var(--border);
     padding: 1.6px 3px;
     vertical-align: middle;
@@ -234,10 +217,8 @@
   .center { text-align: center; }
   .right { text-align: right; }
 
-  input[type="text"],
-  input[type="date"],
-  input[type="number"],
-  select {
+  /* INPUTS */
+  input[type="text"], input[type="date"], input[type="time"], input[type="number"], select {
     width: 100%;
     border: 1px solid #cbd5e1;
     background: #ffffff;
@@ -255,11 +236,7 @@
     font-weight: 600;
   }
 
-  input[type="text"]:focus,
-  input[type="date"]:focus,
-  input[type="number"]:focus,
-  textarea:focus,
-  select:focus {
+  input[type="text"]:focus, input[type="date"]:focus, input[type="time"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
     outline: none;
     border-color: var(--accent);
     background-color: #f8faff;
@@ -307,6 +284,7 @@
     font-weight: normal;
   }
 
+  /* SIDE-BY-SIDE UPPER SECTION */
   .layout-split-top {
     display: flex;
     gap: 5px;
@@ -314,13 +292,13 @@
     margin-bottom: 3px;
   }
 
-  .col-top-left,
-  .col-top-right {
+  .col-top-left, .col-top-right {
     flex: 1.05;
     display: flex;
     flex-direction: column;
   }
 
+  /* MINIMIZED SORTIES COMPACT LIST */
   .sortie-min-row {
     display: flex;
     align-items: center;
@@ -332,17 +310,30 @@
     margin-bottom: 2px;
     font-size: 6.6pt;
   }
-
   .sortie-min-info {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
     flex: 1;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
 
+  .time-split {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .time-split input {
+    width: 42px !important;
+    height: 20px !important;
+    font-size: 7.2pt !important;
+    font-weight: bold;
+    text-align: right;
+  }
+
+  /* FULL-WIDTH LOWER NARRATIVES SECTION */
   .narrative-fullwidth-stack {
     display: flex;
     flex-direction: column;
@@ -383,6 +374,7 @@
     box-sizing: border-box;
   }
 
+  /* PRINT MIRRORS */
   .print-mirror-text {
     display: none;
     white-space: pre-wrap;
@@ -396,6 +388,7 @@
     color: #000000;
   }
 
+  /* SIGNATURE BOX */
   .sig-thumbnail-box {
     width: 100%;
     height: 38px;
@@ -409,25 +402,21 @@
     position: relative;
     overflow: hidden;
   }
-
   .sig-thumbnail-box img {
     max-height: 100%;
     max-width: 100%;
     object-fit: contain;
   }
-
   .sig-prompt-text {
     font-size: 6.8pt;
     color: #64748b;
     font-style: italic;
   }
 
+  /* MODALS */
   .modal-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(15, 23, 42, 0.75);
     backdrop-filter: blur(4px);
     display: none;
@@ -496,6 +485,7 @@
     flex-shrink: 0;
   }
 
+  /* CANVAS */
   .modal-sig-canvas-container {
     width: 100%;
     height: 160px;
@@ -506,7 +496,6 @@
     margin-bottom: 10px;
     touch-action: none;
   }
-
   #popout-sig-canvas {
     width: 100%;
     height: 100%;
@@ -521,14 +510,11 @@
     margin-top: 4px;
     margin-bottom: 8px;
   }
-
-  .days-manager-table th,
-  .days-manager-table td {
+  .days-manager-table th, .days-manager-table td {
     border: 1px solid #cbd5e1;
     padding: 3px 5px;
     font-size: 6.8pt;
   }
-
   .days-manager-table th {
     background: #f1f5f9;
     font-weight: 700;
@@ -542,7 +528,6 @@
     padding: 6px 8px;
     margin-bottom: 6px;
   }
-
   .help-step-title {
     font-weight: 700;
     font-size: 7.5pt;
@@ -552,7 +537,6 @@
     gap: 4px;
     margin-bottom: 2px;
   }
-
   .help-step-desc {
     font-size: 6.8pt;
     color: #334155;
@@ -566,7 +550,6 @@
     padding: 4px 6px;
     border-bottom: 1px solid #e2e8f0;
   }
-
   .pilot-alloc-row:last-child {
     border-bottom: none;
   }
@@ -581,104 +564,63 @@
     font-size: 6.8pt;
     font-weight: 700;
   }
-
   .alloc-valid {
     background: #ecfdf5;
     color: #065f46;
     border-color: #86efac;
   }
-
   .alloc-invalid {
     background: #fef2f2;
     color: #991b1b;
     border-color: #fecaca;
   }
 
-  .time-split {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-  }
-
-  .time-split input {
-    width: 42px !important;
-    height: 20px !important;
-    font-size: 7.2pt !important;
-    font-weight: bold;
-    text-align: right;
-  }
-
+  /* PRINT STYLING */
   @media print {
     body {
       background: #ffffff !important;
       padding: 0.16in 0.20in !important;
     }
-
     .page-container {
       margin: 0 !important;
       padding: 0 !important;
       max-width: 100% !important;
       box-shadow: none !important;
     }
-
-    .no-print-bar,
-    .modal-overlay,
-    .btn-gps,
-    .btn-action,
-    .veh-rate-select {
-      display: none !important;
-    }
-
-    th,
-    td,
-    .narrative-card {
-      border-color: #000000 !important;
-    }
-
+    .no-print-bar, .modal-overlay, .btn-gps, .btn-action, .veh-rate-select { display: none !important; }
+    th, td, .narrative-card { border-color: #000000 !important; }
     .header-banner {
       background: #0f2744 !important;
       color: #ffffff !important;
       border: 1px solid #000000;
     }
-
-    .bg-header,
-    .bg-sub,
-    .bg-section,
-    .narrative-card-header {
+    .bg-header, .bg-sub, .bg-section, .narrative-card-header {
       background-color: #f1f5f9 !important;
       color: #000000 !important;
     }
-
-    input,
-    select {
+    input, select {
       border: none !important;
       background: transparent !important;
       box-shadow: none !important;
       color: #000000 !important;
       padding: 0 !important;
     }
-
     .narrative-card textarea {
       display: none !important;
     }
-
     .print-mirror-text {
       display: block !important;
     }
-
     .sig-prompt-text {
       display: none !important;
     }
-
     .sig-thumbnail-box {
       border: none !important;
     }
-
     #sorties_container {
       max-height: none !important;
       overflow: visible !important;
     }
-
     .sortie-min-row {
       border-color: #000000 !important;
       padding: 1px 2px !important;
@@ -686,9 +628,9 @@
   }
 </style>
 </head>
-
 <body>
 
+<!-- TOP CONTROL BAR -->
 <div class="no-print-bar">
   <div class="status-badge">
     <div class="status-dot"></div>
@@ -711,6 +653,7 @@
   </div>
 </div>
 
+<!-- ❓ HELP MODAL -->
 <div class="modal-overlay" id="helpModal">
   <div class="modal-content" style="max-width: 550px;">
     <div class="modal-header">
@@ -727,39 +670,34 @@
     </div>
 
     <div class="help-step-box" style="border-left-color: #8b5cf6; background: #fdf4ff;">
-      <div class="help-step-title" style="color:#6b21a8;">📲 Install as an App</div>
+      <div class="help-step-title" style="color:#6b21a8;">📲 How to Install as an App</div>
       <div class="help-step-desc">
-        <strong>iOS:</strong> Open in Safari, tap Share, then Add to Home Screen.<br>
-        <strong>Android:</strong> Open in Chrome or Edge, tap menu, then Install app or Add to Home screen.
+        <strong>iOS (Safari):</strong> Tap Share &rarr; <strong>Add to Home Screen</strong>.<br>
+        <strong>Android (Chrome/Edge):</strong> Tap menu (⋮) &rarr; <strong>Install app</strong> or <strong>Add to Home screen</strong>.
       </div>
     </div>
 
     <div class="help-step-box">
-      <div class="help-step-title">1. Initial Setup</div>
+      <div class="help-step-title">1. Work Day Hours &amp; Availability</div>
       <div class="help-step-desc">
-        Tap <strong>⚙️ Settings</strong> to build your crew roster, aircraft list, vehicle list, and contract rates.
+        &bull; Set <strong>Work Day Start &amp; End</strong> in the header logistics.<br>
+        &bull; <strong>14 hours = 1.00 Day Availability</strong>. Scheduled shifts under 14 hours automatically calculate as a decimal fraction of daily availability.
       </div>
     </div>
 
     <div class="help-step-box">
-      <div class="help-step-title">2. Flight Logging</div>
+      <div class="help-step-title">2. Sortie Flight Logging</div>
       <div class="help-step-desc">
-        Tap <strong>➕ Add Sortie</strong>, select the airframe, enter sortie time as hours and minutes, and assign crew.
-        The summary converts flight time to decimal hours.
+        &bull; Tap <strong>➕ Add Sortie</strong> to record flights.<br>
+        &bull; Select <strong>Flight Use Code</strong> and enter either <strong>Start/Stop Times</strong> or manual <strong>Hours &amp; Minutes</strong>.<br>
+        &bull; Summaries and cost tickets automatically convert and display time in standard decimal hours.
       </div>
     </div>
 
     <div class="help-step-box">
-      <div class="help-step-title">3. Daily Shift Transitions</div>
+      <div class="help-step-title">3. Incident Package Manager</div>
       <div class="help-step-desc">
-        Tap <strong>💾 Save Day</strong> at the end of each shift. Use <strong>➕ New Day</strong> to start the next daily log.
-      </div>
-    </div>
-
-    <div class="help-step-box">
-      <div class="help-step-title">4. Incident Package Management</div>
-      <div class="help-step-desc">
-        Tap <strong>📦 Package</strong> to print selected/all days, export CSV, export/import JSON, or delete saved days.
+        &bull; Tap <strong>📦 Package</strong> to batch print all selected days into a consolidated PDF, export CSVs, or transfer master JSON packages.
       </div>
     </div>
 
@@ -769,6 +707,7 @@
   </div>
 </div>
 
+<!-- 📦 INCIDENT PACKAGE MANAGER MODAL -->
 <div class="modal-overlay" id="exportModal">
   <div class="modal-content" style="max-width: 560px;">
     <div class="modal-header">
@@ -814,13 +753,13 @@
   </div>
 </div>
 
+<!-- ✍️ SIGNATURE MODAL -->
 <div class="modal-overlay" id="sigModal">
   <div class="modal-content" style="max-width: 460px;">
     <div class="modal-header">
       <span>✍️ Government Representative Signature</span>
       <button style="border:none; background:none; font-size:12pt; cursor:pointer;" onclick="closeSigModal()">✕</button>
     </div>
-
     <div style="font-size:7.2pt; color:#475569; margin-bottom:6px;">
       Draw signature using Apple Pencil, stylus, or finger inside the box below:
     </div>
@@ -839,8 +778,9 @@
   </div>
 </div>
 
+<!-- 🛸 SORTIE MODAL (WITH USE CODE, START/STOP, AND HM TIME) -->
 <div class="modal-overlay" id="sortieModal">
-  <div class="modal-content" style="max-width: 460px;">
+  <div class="modal-content" style="max-width: 480px;">
     <div class="modal-header">
       <span id="sortieModalTitle">🛸 Sortie Flight Entry</span>
       <button style="border:none; background:none; font-size:12pt; cursor:pointer;" onclick="closeSortieModal()">✕</button>
@@ -848,15 +788,42 @@
 
     <div style="background:#f8fafc; padding:8px; border:1px solid #cbd5e1; border-radius:4px; margin-bottom:8px;">
       <div style="display:flex; gap:6px; margin-bottom:6px;">
-        <label style="flex:1; font-weight:bold; font-size:7.0pt; color:#0f2744;">Select Airframe:
+        <label style="flex:1.2; font-weight:bold; font-size:7.0pt; color:#0f2744;">Select Airframe:
           <select id="pop_sortie_aircraft" style="height:20px; font-weight:600;"></select>
         </label>
+        <label style="flex:1.2; font-weight:bold; font-size:7.0pt; color:#0f2744;">Flight Use Code:
+          <select id="pop_sortie_usecode" onchange="onPopoutUseCodeChange()" style="height:20px; font-weight:600;">
+            <option value="">Select Use...</option>
+            <option value="FIRE">FIRE - Fire Suppression</option>
+            <option value="IR">IR - Infrared / Heat Detect</option>
+            <option value="RECON">RECON - Reconnaissance</option>
+            <option value="MAP">MAP - Mapping / Ortho Survey</option>
+            <option value="SAR">SAR - Search and Rescue</option>
+            <option value="LE">LE - Law Enforcement</option>
+            <option value="TRAIN">TRAIN - Training / Proficiency</option>
+            <option value="ADMIN">ADMIN - Administrative Flight</option>
+            <option value="MAINT">MAINT - Maintenance / Test</option>
+            <option value="OTHER">OTHER - Special Mission</option>
+          </select>
+        </label>
+      </div>
 
-        <label style="width:135px; font-weight:bold; font-size:7.0pt; color:#0f2744;">Sortie Flight Time:
+      <div style="display:flex; gap:6px; margin-bottom:6px; align-items:flex-end;">
+        <label style="flex:1; font-weight:bold; font-size:7.0pt; color:#0f2744;">Start Time:
+          <input type="time" id="pop_sortie_start" onchange="onPopoutStartEndChange()" oninput="onPopoutStartEndChange()" style="height:20px; font-weight:bold;">
+        </label>
+
+        <label style="flex:1; font-weight:bold; font-size:7.0pt; color:#0f2744;">Stop Time:
+          <input type="time" id="pop_sortie_end" onchange="onPopoutStartEndChange()" oninput="onPopoutStartEndChange()" style="height:20px; font-weight:bold;">
+        </label>
+
+        <div style="font-size:6.4pt; color:#64748b; padding-bottom:4px; font-weight:600;">-OR-</div>
+
+        <label style="width:125px; font-weight:bold; font-size:7.0pt; color:#0f2744;">Duration:
           <div class="time-split">
-            <input type="number" min="0" step="1" id="pop_sortie_hours" placeholder="hr" oninput="onPopoutDurationHMChange()">
+            <input type="number" min="0" step="1" id="pop_sortie_hours" placeholder="hr" oninput="onPopoutDurationHMChange(true)">
             <span style="font-size:6.4pt;">h</span>
-            <input type="number" min="0" max="59" step="1" id="pop_sortie_minutes" placeholder="min" oninput="onPopoutDurationHMChange()">
+            <input type="number" min="0" max="59" step="1" id="pop_sortie_minutes" placeholder="min" oninput="onPopoutDurationHMChange(true)">
             <span style="font-size:6.4pt;">m</span>
           </div>
         </label>
@@ -881,6 +848,7 @@
   </div>
 </div>
 
+<!-- ⚙️ SETTINGS MODAL -->
 <div class="modal-overlay" id="settingsModal">
   <div class="modal-content">
     <div class="modal-header">
@@ -888,62 +856,46 @@
       <button style="border:none; background:none; font-size:12pt; cursor:pointer;" onclick="closeSettingsModal()">✕</button>
     </div>
 
+    <!-- SECTION 1: CREW ROSTER -->
     <div class="modal-section-title">
       <span>👥 Crew Roster Builder</span>
       <label style="font-size:6.8pt; display:inline-flex; align-items:center; gap:4px; margin:0;">
         Count:
         <select id="cfg_personnel" onchange="onCrewCountChange(); saveSettingsProfile(true);" style="width:65px; height:18px;">
-          <option value="1">1 Person</option>
-          <option value="2">2 Persons</option>
-          <option value="3">3 Persons</option>
-          <option value="4">4 Persons</option>
-          <option value="5" selected>5 Persons</option>
-          <option value="6">6 Persons</option>
-          <option value="7">7 Persons</option>
-          <option value="8">8 Persons</option>
+          <option value="1">1 Person</option><option value="2">2 Persons</option><option value="3">3 Persons</option><option value="4">4 Persons</option><option value="5" selected>5 Persons</option><option value="6">6 Persons</option><option value="7">7 Persons</option><option value="8">8 Persons</option>
         </select>
       </label>
     </div>
     <div id="roster_crew_builder_container" style="margin-bottom:8px;"></div>
 
+    <!-- SECTION 2: VEHICLE FLEET -->
     <div class="modal-section-title">
       <span>🚙 Vehicle Fleet Builder</span>
       <label style="font-size:6.8pt; display:inline-flex; align-items:center; gap:4px; margin:0;">
         Count:
         <select id="cfg_vehicles" onchange="onVehicleCountChange(); saveSettingsProfile(true);" style="width:65px; height:18px;">
-          <option value="1">1 Vehicle</option>
-          <option value="2">2 Vehicles</option>
-          <option value="3">3 Vehicles</option>
-          <option value="4">4 Vehicles</option>
-          <option value="5" selected>5 Vehicles</option>
-          <option value="6">6 Vehicles</option>
-          <option value="7">7 Vehicles</option>
-          <option value="8">8 Vehicles</option>
+          <option value="1">1 Vehicle</option><option value="2">2 Vehicles</option><option value="3">3 Vehicles</option><option value="4">4 Vehicles</option><option value="5" selected>5 Vehicles</option><option value="6">6 Vehicles</option><option value="7">7 Vehicles</option><option value="8">8 Vehicles</option>
         </select>
       </label>
     </div>
     <div id="roster_vehicle_builder_container" style="margin-bottom:8px;"></div>
 
+    <!-- SECTION 3: AIRCRAFT FLEET -->
     <div class="modal-section-title">
       <span>🛸 Aircraft Fleet Builder</span>
       <label style="font-size:6.8pt; display:inline-flex; align-items:center; gap:4px; margin:0;">
         Count:
         <select id="cfg_aircraft" onchange="onAircraftCountChange(); saveSettingsProfile(true);" style="width:65px; height:18px;">
-          <option value="1">1 Aircraft</option>
-          <option value="2">2 Aircraft</option>
-          <option value="3">3 Aircraft</option>
-          <option value="4" selected>4 Aircraft</option>
-          <option value="5">5 Aircraft</option>
-          <option value="6">6 Aircraft</option>
+          <option value="1">1 Aircraft</option><option value="2">2 Aircraft</option><option value="3">3 Aircraft</option><option value="4" selected>4 Aircraft</option><option value="5">5 Aircraft</option><option value="6">6 Aircraft</option>
         </select>
       </label>
     </div>
     <div id="roster_aircraft_builder_container" style="margin-bottom:8px;"></div>
 
+    <!-- SECTION 4: RATES -->
     <div class="modal-section-title">
       <span>💲 Vendor Contract Rates &amp; Mileage Presets</span>
     </div>
-
     <div class="modal-grid">
       <label style="grid-column: span 2;">Contractor / Vendor Name:
         <input type="text" id="preset_vendor_name" oninput="saveSettingsProfile(true)" placeholder="e.g. Drone Aviation Services LLC">
@@ -983,11 +935,13 @@
 
 <div class="page-container">
 
+  <!-- BANNER -->
   <div class="header-banner">
     <div class="title-bar">UAS Daily Operations &amp; Cost Summary</div>
     <div class="sub-title-bar">Interagency Aviation Operations &bull; UAS Contractor &amp; Resource Daily Diary</div>
   </div>
 
+  <!-- HEADER LOGISTICS TABLE -->
   <table>
     <tr>
       <td style="width: 50%;">
@@ -1015,13 +969,13 @@
     </tr>
 
     <tr>
-      <td>
+      <td style="width: 50%;">
         <div class="flex-align">
           <span class="bold" style="white-space:nowrap; width:125px;">Contractor / Vendor:</span>
           <input type="text" id="vendor_name" placeholder="Vendor / Company Name">
         </div>
       </td>
-      <td colspan="2">
+      <td colspan="2" style="width: 50%;">
         <div class="flex-align">
           <span class="bold" style="white-space:nowrap; width:125px;">Incident / Project:</span>
           <input type="text" id="inc_name" placeholder="Incident or Project Name">
@@ -1029,30 +983,53 @@
       </td>
     </tr>
 
+    <!-- UASD AND WORK DAY SCHEDULE ROW -->
     <tr>
-      <td>
+      <td style="width: 50%;">
+        <div class="flex-align">
+          <span class="bold" style="white-space:nowrap; width:125px;">UASD:</span>
+          <input type="text" id="uasd_name" placeholder="UASD Name / Position">
+        </div>
+      </td>
+      <td style="width: 25%;">
+        <div class="flex-align">
+          <span class="bold" style="white-space:nowrap;">Work Day:</span>
+          <input type="time" id="work_start_time" title="Work day start time" onchange="updateWorkDayAvailability()" oninput="updateWorkDayAvailability()">
+          <span style="font-size:6pt;">to</span>
+          <input type="time" id="work_end_time" title="Work day end time" onchange="updateWorkDayAvailability()" oninput="updateWorkDayAvailability()">
+        </div>
+      </td>
+      <td style="width: 25%;">
+        <div class="flex-align">
+          <span class="bold" style="white-space:nowrap;">Sched Hrs:</span>
+          <input type="text" id="work_total_hours" readonly placeholder="0.00" style="background:#f8fafc; text-align:right; font-weight:700;">
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td style="width: 50%;">
         <div class="flex-align">
           <span class="bold" style="white-space:nowrap; width:125px;">LRZ:</span>
           <input type="text" id="base_loc" placeholder="LRZ Location or GPS Coordinates">
           <button type="button" class="btn-gps" onclick="captureGPSLocation()" title="Capture GPS Lat/Long and Elevation">📍 GPS</button>
         </div>
       </td>
-      <td>
+      <td style="width: 25%;">
         <div class="flex-align">
           <span class="bold" style="white-space:nowrap;">Agency:</span>
           <input type="text" id="agency_name" placeholder="Host Agency / Unit">
         </div>
       </td>
-      <td>
+      <td style="width: 25%;">
         <div class="flex-align">
           <span class="bold" style="white-space:nowrap;">Order #:</span>
           <input type="text" id="order_num" placeholder="A-...">
         </div>
       </td>
     </tr>
-
     <tr>
-      <td colspan="3">
+      <td colspan="3" style="width: 100%;">
         <div class="flex-align">
           <span class="bold" style="white-space:nowrap; margin-right:8px;">Contract Type:</span>
           <label class="checkbox-label" style="margin-right:12px;"><input type="radio" name="ctype" id="ct_cwn"> CWN / On-Call</label>
@@ -1063,21 +1040,28 @@
     </tr>
   </table>
 
+  <!-- UPPER SECTION: SORTIE LOGGER & SUMMARY / COST -->
   <div class="layout-split-top">
+
+    <!-- LEFT SIDE: SORTIE LOGGER & SUMMARY ROLLUPS -->
     <div class="col-top-left">
+
       <div style="display:flex; justify-content:space-between; align-items:center; background:#1e3a5f; color:white; padding:2.5px 6px; border-radius:2px; margin-bottom:2px;">
         <span class="bold" style="font-size:7.0pt;">FLIGHT SORTIE LOG</span>
         <button type="button" class="btn btn-print no-print-bar" onclick="openSortieModal(-1)" style="padding:1px 6px; font-size:6.4pt; height:18px;">➕ Add Sortie</button>
       </div>
 
+      <!-- MINIMIZED SORTIES LIST -->
       <div id="sorties_container" style="margin-bottom:3px; max-height:85px; overflow-y:auto;"></div>
 
+      <!-- PILOT & AIRCRAFT SUMMARY ROLLUPS -->
       <table>
         <tr class="bg-header bold center">
           <td style="width: 45%;">PILOT FLIGHT SUMMARY</td>
           <td style="width: 55%;">AIRCRAFT SUMMARY (ROLLUP)</td>
         </tr>
         <tr>
+          <!-- PILOTS SUMMARY -->
           <td style="vertical-align:top; padding:0;">
             <table style="margin:0; border:none;">
               <tr class="bg-sub bold center" style="font-size:6.4pt;">
@@ -1088,6 +1072,7 @@
             </table>
           </td>
 
+          <!-- AIRCRAFT SUMMARY -->
           <td style="vertical-align:top; padding:0;">
             <table style="margin:0; border:none;">
               <tr class="bg-sub bold center" style="font-size:6.4pt;">
@@ -1101,8 +1086,10 @@
           </td>
         </tr>
       </table>
+
     </div>
 
+    <!-- RIGHT SIDE: COST TABLE -->
     <div class="col-top-right">
       <table>
         <thead>
@@ -1113,33 +1100,33 @@
             <th style="width: 28%;">Cost ($)</th>
           </tr>
         </thead>
-
         <tbody>
+          <!-- CORE ITEMS -->
           <tr class="calc-row">
             <td class="bold">Revenue Flight Hours (Auto):</td>
             <td><input type="number" step="any" class="qty" id="q_flt" placeholder="0.00" readonly style="background:#f8fafc;"></td>
             <td><input type="number" step="any" class="rate" id="r_flt" placeholder="0.00"></td>
             <td><input type="text" class="cost-output" id="c_flt" readonly placeholder="$ 0.00"></td>
           </tr>
-
           <tr class="calc-row">
-            <td class="bold">*Daily System Availability:</td>
-            <td><input type="number" step="any" class="qty" id="q_avail" value="1.0" placeholder="1.0"></td>
+            <td class="bold">*Daily System Availability:<br><span class="sub-note">Auto: 14 hrs = 1.00 day</span></td>
+            <td><input type="number" step="any" class="qty" id="q_avail" value="1.00" placeholder="Auto" readonly style="background:#f8fafc;"></td>
             <td><input type="number" step="any" class="rate" id="r_avail" placeholder="0.00"></td>
             <td><input type="text" class="cost-output" id="c_avail" readonly placeholder="$ 0.00"></td>
           </tr>
 
+          <!-- DYNAMIC PERSONNEL ROWS -->
           <tr class="bg-section"><td colspan="4">PERSONNEL PER DIEM / EXTENDED STANDBY</td></tr>
         </tbody>
-
         <tbody id="personnel_tbody"></tbody>
 
+        <!-- DYNAMIC VEHICLE ROWS -->
         <tbody>
           <tr class="bg-section"><td colspan="4">VEHICLE MILEAGE &amp; SUPPORT TRUCKS</td></tr>
         </tbody>
-
         <tbody id="vehicles_tbody"></tbody>
 
+        <!-- PAYLOAD & REIMBURSABLES -->
         <tbody>
           <tr class="calc-row">
             <td><input type="text" id="pay_desc" placeholder="Payload Package (EO/IR, PSD, etc.)"></td>
@@ -1147,7 +1134,6 @@
             <td><input type="number" step="any" class="rate" id="r_pay" placeholder="Rate"></td>
             <td><input type="text" class="cost-output" id="c_pay" readonly placeholder="$ 0.00"></td>
           </tr>
-
           <tr class="calc-row">
             <td><input type="text" id="misc_desc" placeholder="Misc Reimbursable (Fuel, Fees, Power)"></td>
             <td><input type="number" step="any" class="qty" id="q_misc" placeholder="Qty"></td>
@@ -1155,28 +1141,30 @@
             <td><input type="text" class="cost-output" id="c_misc" readonly placeholder="$ 0.00"></td>
           </tr>
 
+          <!-- GRAND TOTAL -->
           <tr class="bg-sub">
             <td colspan="3" class="right bold" style="font-size: 7.4pt;">DAILY GRAND TOTAL COST:</td>
             <td><input type="text" id="grandTotal" value="$ 0.00" readonly></td>
           </tr>
         </tbody>
       </table>
-
-      <div class="sub-note" style="margin-top:-2px; margin-bottom:2px;">
-        * Do not calculate availability for exclusive use contracts paid from base funds.
-      </div>
+      <div class="sub-note" style="margin-top:-2px; margin-bottom:2px;">* Do not calculate availability for exclusive use contracts paid from base funds.</div>
     </div>
+
   </div>
 
+  <!-- NARRATIVES SECTION -->
   <div class="narrative-fullwidth-stack">
+    <!-- 15. AIRCRAFT STATUS -->
     <div class="narrative-card">
       <div class="narrative-card-header">
-        <span>15. Aircraft Status &amp; Maintenance <span class="sub-note">(Inspections, battery cycles, motor calibrations, reasons for unavailability)</span></span>
+        <span>15. Aircraft Status &amp; Maintenance <span class="sub-note">(Inspections, battery cycles, motor calibrations, downtime causes)</span></span>
       </div>
       <textarea id="box_ac_status" placeholder="Detail airworthiness checks, motor calibrations, battery cycle logs, maintenance performed, or downtime causes..."></textarea>
       <div id="print_mirror_ac_status" class="print-mirror-text"></div>
     </div>
 
+    <!-- 16. WEATHER OBSERVATIONS -->
     <div class="narrative-card">
       <div class="narrative-card-header">
         <span>16. Weather Observations &amp; Conditions <span class="sub-note">(Surface wind, gusts, temp, turbulence/inversion layers, weather delays)</span></span>
@@ -1185,6 +1173,7 @@
       <div id="print_mirror_weather" class="print-mirror-text"></div>
     </div>
 
+    <!-- 17. DAILY NARRATIVE REPORT -->
     <div class="narrative-card">
       <div class="narrative-card-header">
         <span>17. Daily Operational Narrative Report <span class="sub-note">(Sortie details, mission objectives, airspace deconfliction, deliverables, SAFECOMs)</span></span>
@@ -1194,13 +1183,13 @@
     </div>
   </div>
 
+  <!-- SECTION 5: APPROVAL SIGNATURES -->
   <table>
     <tr>
       <td style="width: 38%; vertical-align: bottom; padding-bottom: 4px;">
         <div class="bold" style="margin-bottom: 3px;">Govt Representative / UASM Name (Print):</div>
         <input type="text" id="sig_name" placeholder="Printed Full Name &amp; Title">
       </td>
-
       <td style="width: 44%; vertical-align: top;">
         <div class="bold" style="margin-bottom: 2px;">Govt Representative Signature: <span class="sub-note">(Tap box to sign)</span></div>
         <div class="sig-thumbnail-box" onclick="openSigModal()" title="Tap to sign on large drawing canvas">
@@ -1208,7 +1197,6 @@
           <span id="sig_thumbnail_prompt" class="sig-prompt-text">✍️ Tap here to open signature pad</span>
         </div>
       </td>
-
       <td style="width: 18%; vertical-align: bottom; padding-bottom: 4px;">
         <div class="bold" style="margin-bottom: 3px;">Date:</div>
         <input type="date" id="sig_date">
@@ -1219,6 +1207,7 @@
 </div>
 
 <script>
+  // STORAGE KEYS
   const STORAGE_ACTIVE_LOG = 'UAS_LOG_ACTIVE_DRAFT';
   const STORAGE_DRAFTS_INDEX = 'UAS_LOG_SAVED_INDEX';
   const STORAGE_SETTINGS = 'UAS_LOG_SETTINGS_PROFILE';
@@ -1242,6 +1231,7 @@
 
   window.addEventListener('beforeprint', syncPrintMirrors);
 
+  // --- 🔄 CACHE BUSTER ENGINE ---
   async function forceAppRefresh() {
     updateStatus("🔄 Refreshing app with latest code...");
     autoSaveActive();
@@ -1250,7 +1240,6 @@
       try {
         const registrations = await navigator.serviceWorker.getRegistrations();
         for (let registration of registrations) await registration.update();
-
         if ('caches' in window) {
           const cacheNames = await caches.keys();
           await Promise.all(cacheNames.map(name => caches.delete(name)));
@@ -1262,22 +1251,16 @@
     window.location.href = cleanUrl + '?t=' + Date.now();
   }
 
-  function openHelpModal() {
-    document.getElementById('helpModal').style.display = 'flex';
-  }
+  // --- ❓ HELP MODAL ---
+  function openHelpModal() { document.getElementById('helpModal').style.display = 'flex'; }
+  function closeHelpModal() { document.getElementById('helpModal').style.display = 'none'; }
 
-  function closeHelpModal() {
-    document.getElementById('helpModal').style.display = 'none';
-  }
-
+  // --- 📦 PACKAGE MODAL ---
   function openExportModal() {
     renderDaysManagerTable();
     document.getElementById('exportModal').style.display = 'flex';
   }
-
-  function closeExportModal() {
-    document.getElementById('exportModal').style.display = 'none';
-  }
+  function closeExportModal() { document.getElementById('exportModal').style.display = 'none'; }
 
   function renderDaysManagerTable() {
     const packageStore = getIncidentPackageStore();
@@ -1285,21 +1268,17 @@
     const tbody = document.getElementById('days_manager_tbody');
 
     if (dayKeys.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:10px; color:#64748b; font-style:italic;">No saved days found. Use "💾 Save Day" on each completed shift ticket.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:10px; color:#64748b; font-style:italic;">No saved days found in memory yet. Use "💾 Save Day" on each completed shift ticket.</td></tr>`;
       return;
     }
 
     let html = '';
-
     dayKeys.forEach(k => {
       const d = packageStore[k];
       const dTotal = d.grandTotal || '$ 0.00';
       const dSortiesCount = (d.sorties || []).length;
       let dFltHours = 0;
-
-      (d.sorties || []).forEach(st => {
-        dFltHours += parseFloat(st.duration) || 0;
-      });
+      (d.sorties || []).forEach(st => dFltHours += (parseFloat(st.duration) || 0));
 
       html += `
         <tr>
@@ -1327,26 +1306,94 @@
     return keys;
   }
 
-  async function shareOrDownloadBlob(blob, fileName, title) {
-    const file = new File([blob], fileName, { type: blob.type });
-
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({ files: [file], title: title || fileName });
-        return;
-      } catch (e) {}
-    }
-
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = fileName;
-    a.click();
-    URL.revokeObjectURL(a.href);
+  // --- TIME AND AVAILABILITY HELPERS ---
+  function timeStringToMinutes(t) {
+    if (!t || !t.includes(':')) return null;
+    const parts = t.split(':');
+    const h = parseInt(parts[0], 10);
+    const m = parseInt(parts[1], 10);
+    if (isNaN(h) || isNaN(m)) return null;
+    return h * 60 + m;
   }
 
+  function minutesBetweenTimes(startTime, endTime) {
+    const start = timeStringToMinutes(startTime);
+    const end = timeStringToMinutes(endTime);
+    if (start === null || end === null) return 0;
+    let diff = end - start;
+    if (diff < 0) diff += 24 * 60; // Crosses midnight
+    return diff;
+  }
+
+  function decimalHoursToHM(value) {
+    const totalMinutes = Math.round((parseFloat(value) || 0) * 60);
+    return {
+      h: Math.floor(totalMinutes / 60),
+      m: totalMinutes % 60
+    };
+  }
+
+  function hmToDecimal(hours, minutes) {
+    let h = parseInt(hours, 10);
+    let m = parseInt(minutes, 10);
+    if (isNaN(h)) h = 0;
+    if (isNaN(m)) m = 0;
+    if (m < 0) m = 0;
+    if (m > 59) {
+      h += Math.floor(m / 60);
+      m = m % 60;
+      const hEl = document.getElementById('pop_sortie_hours');
+      const mEl = document.getElementById('pop_sortie_minutes');
+      if (hEl) hEl.value = h;
+      if (mEl) mEl.value = m;
+    }
+    return Number((h + (m / 60)).toFixed(2));
+  }
+
+  function setDurationInputsFromDecimal(value) {
+    const hEl = document.getElementById('pop_sortie_hours');
+    const mEl = document.getElementById('pop_sortie_minutes');
+    if (!hEl || !mEl) return;
+    if (value === '' || value === null || value === undefined) {
+      hEl.value = '';
+      mEl.value = '';
+      return;
+    }
+    const hm = decimalHoursToHM(value);
+    hEl.value = hm.h > 0 ? hm.h : '';
+    mEl.value = hm.m > 0 ? hm.m : '';
+  }
+
+  function updateWorkDayAvailability() {
+    const startEl = document.getElementById('work_start_time');
+    const endEl = document.getElementById('work_end_time');
+    const totalEl = document.getElementById('work_total_hours');
+    const qAvailEl = document.getElementById('q_avail');
+    if (!startEl || !endEl || !totalEl || !qAvailEl) return;
+
+    const startTime = startEl.value;
+    const endTime = endEl.value;
+
+    if (!startTime || !endTime) {
+      totalEl.value = '';
+      qAvailEl.value = '1.00';
+      doMath();
+      return;
+    }
+
+    const minutes = minutesBetweenTimes(startTime, endTime);
+    const hours = minutes / 60;
+    totalEl.value = hours > 0 ? hours.toFixed(2) : '';
+
+    // 14 Scheduled Hours = 1.00 Availability Day
+    const availabilityQty = Math.min(hours / 14, 1.0);
+    qAvailEl.value = availabilityQty > 0 ? availabilityQty.toFixed(2) : '0.00';
+    doMath();
+  }
+
+  // --- EXPORT CSV ---
   function exportSelectedDaysCSV() {
     const selectedKeys = getSelectedDayKeys();
-
     if (selectedKeys.length === 0) {
       alert('Please check at least one day from the list to export.');
       return;
@@ -1358,7 +1405,7 @@
 
     const rows = [
       ['========================================================================'],
-      ['UAS INCIDENT OPERATIONS & PAYMENT ROLLUP'],
+      ['UAS INCIDENT OPERATIONS & PAYMENT ROLLUP (SELECTED DAYS EXPORT)'],
       ['Incident / Assignment', incidentName],
       ['Total Days in Report', selectedKeys.length],
       ['Generated Date', new Date().toISOString()],
@@ -1366,20 +1413,15 @@
       []
     ];
 
-    rows.push(['--- CUMULATIVE TOTALS ---']);
-
+    rows.push(['--- 1. CUMULATIVE TOTALS FOR SELECTED DAYS ---']);
     let grandCumulativeCost = 0;
     let totalIncidentFlightHours = 0;
     let totalIncidentSorties = 0;
-
     const pilotCumulativeHours = {};
     const airframeCumulativeHours = {};
     const airframeCumulativeSorties = {};
 
-    roster.pilots.forEach(p => {
-      if (p && p.name) pilotCumulativeHours[p.name] = 0;
-    });
-
+    roster.pilots.forEach(p => { if (p && p.name) pilotCumulativeHours[p.name] = 0; });
     roster.aircraft.forEach(a => {
       if (a.tail) {
         airframeCumulativeHours[a.tail] = 0;
@@ -1390,7 +1432,6 @@
     selectedKeys.forEach(k => {
       const d = packageStore[k];
       if (!d) return;
-
       const dTotal = parseFloat((d.grandTotal || '0').replace(/[^0-9.]/g, '')) || 0;
       grandCumulativeCost += dTotal;
 
@@ -1418,55 +1459,72 @@
       });
     });
 
-    rows.push(['Total Flight Hours', totalIncidentFlightHours.toFixed(2)]);
-    rows.push(['Total Sorties', totalIncidentSorties]);
-    rows.push(['Cumulative Cost', `$ ${grandCumulativeCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`]);
+    rows.push(['Total Selected Flight Hours (Aircraft)', Number(totalIncidentFlightHours.toFixed(2))]);
+    rows.push(['Total Selected Sorties Flown', totalIncidentSorties]);
+    rows.push(['CUMULATIVE SELECTED COST (GRAND TOTAL)', `$ ${grandCumulativeCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`]);
     rows.push([]);
 
     rows.push(['Pilot / Flight Operator Name', 'Cumulative Flight Hours']);
     Object.keys(pilotCumulativeHours).forEach(p => {
-      rows.push([p, pilotCumulativeHours[p].toFixed(2)]);
+      rows.push([p, Number(pilotCumulativeHours[p].toFixed(2))]);
     });
-
     rows.push([]);
+
     rows.push(['Airframe Tail #', 'Cumulative Sorties', 'Cumulative Flight Hours']);
     Object.keys(airframeCumulativeHours).forEach(tail => {
-      rows.push([tail, airframeCumulativeSorties[tail] || 0, airframeCumulativeHours[tail].toFixed(2)]);
+      rows.push([tail, airframeCumulativeSorties[tail] || 0, Number(airframeCumulativeHours[tail].toFixed(2))]);
     });
-
     rows.push([], ['========================================================================'], []);
-    rows.push(['--- DAILY SHIFT BREAKDOWNS ---']);
 
+    rows.push(['--- 2. SELECTED DAILY SHIFT TICKET BREAKDOWNS ---']);
     selectedKeys.forEach((k, dayIdx) => {
       const d = packageStore[k];
       if (!d) return;
-
       rows.push([]);
-      rows.push([`SHIFT DAY ${dayIdx + 1}: ${d.doc_date || k}`]);
+      rows.push([`>>> SHIFT DAY ${dayIdx + 1}: ${d.doc_date || k}`]);
       rows.push(['Contractor / Vendor', d.vendor_name || '']);
       rows.push(['Incident / Project', d.inc_name || '']);
+      rows.push(['UASD', d.uasd_name || '']);
+      rows.push(['Work Day Shift', `${d.work_start_time || ''} to ${d.work_end_time || ''} (${d.work_total_hours || ''} hrs)`]);
       rows.push(['LRZ Location', d.base_loc || '']);
-      rows.push(['Order #', d.order_num || '']);
-      rows.push(['Grand Total', d.grandTotal || '$ 0.00']);
-      rows.push(['Aircraft Status', d.box_ac_status || '']);
-      rows.push(['Weather Observations', d.box_weather || '']);
-      rows.push(['Narrative Report', d.box_narrative || '']);
-      rows.push(['Approved By', d.sig_name || '']);
+      rows.push(['Order # / Task Order', d.order_num || '']);
+      rows.push(['Contract Type', d.ctype || '']);
+      rows.push(['FRAT Completed', d.frat ? 'Yes' : 'No']);
+
+      rows.push(['Cost Item Description', 'Quantity', 'Rate ($)', 'Day Cost ($)']);
+      rows.push(['Revenue Flight Hours', d.q_flt || '0.00', d.r_flt || '0.00', d.c_flt || '0.00']);
+      rows.push(['Daily Availability (14h base)', d.q_avail || '1.00', d.r_avail || '0.00', d.c_avail || '0.00']);
+
+      for (let i = 1; i <= 8; i++) {
+        if (d[`p${i}_desc`]) {
+          rows.push([d[`p${i}_desc`], d[`q_p${i}`] || '', d[`r_p${i}`] || '', d[`c_p${i}`] || '']);
+        }
+        if (d[`v${i}_desc`]) {
+          rows.push([d[`v${i}_desc`], d[`q_v${i}`] || '', d[`r_v${i}`] || '', d[`c_v${i}`] || '']);
+        }
+      }
+      if (d.pay_desc) rows.push([d.pay_desc, d.q_pay || '', d.r_pay || '', d.c_pay || '']);
+      if (d.misc_desc) rows.push([d.misc_desc, d.q_misc || '', d.r_misc || '', d.c_misc || '']);
+      rows.push(['DAY TOTAL COST', '', '', d.grandTotal || '$ 0.00']);
+
+      rows.push(['Aircraft Status', `"${(d.box_ac_status || '').replace(/"/g, '""')}"`]);
+      rows.push(['Weather Observations', `"${(d.box_weather || '').replace(/"/g, '""')}"`]);
+      rows.push(['Narrative Report', `"${(d.box_narrative || '').replace(/"/g, '""')}"`]);
+      rows.push(['Approved By (Gov Rep)', d.sig_name || '']);
       rows.push(['Signed Date', d.sig_date || '']);
+      rows.push(['------------------------------------------------------------------------']);
     });
 
-    rows.push([], ['========================================================================'], ['--- SORTIE FLIGHT LEGS ---']);
-    rows.push(['Date', 'Sortie #', 'Airframe Tail', 'Model', 'Flight Duration Decimal Hours', 'Crew & Allocations']);
+    rows.push([], ['========================================================================'], ['--- 3. SORTIE FLIGHT LEGS (SELECTED DAYS) ---']);
+    rows.push(['Date', 'Sortie #', 'Use Code', 'Start', 'Stop', 'Airframe Tail', 'Model', 'Flight Duration (hrs)', 'Crew & Allocations']);
 
     selectedKeys.forEach(k => {
       const d = packageStore[k];
       if (!d) return;
-
       const dSorties = d.sorties || [];
       dSorties.forEach((st, sIdx) => {
         const ac = roster.aircraft[st.aircraftIndex] || { tail: 'A/C', model: '' };
         const crewAllocations = [];
-
         if (st.pilotAllocations) {
           Object.keys(st.pilotAllocations).forEach(pIdx => {
             const pObj = roster.pilots[pIdx];
@@ -1475,23 +1533,31 @@
             }
           });
         }
-
-        rows.push([d.doc_date || k, `Sortie ${sIdx + 1}`, ac.tail, ac.model, parseFloat(st.duration || 0).toFixed(2), crewAllocations.join('; ')]);
+        rows.push([
+          d.doc_date || k,
+          `Sortie ${sIdx+1}`,
+          st.useCode || '',
+          st.startTime || '',
+          st.endTime || '',
+          ac.tail,
+          ac.model,
+          parseFloat(st.duration || 0).toFixed(2),
+          `"${crewAllocations.join('; ')}"`
+        ]);
       });
     });
 
     const csvContent = rows.map(e => e.map(cell => `"${String(cell || '').replace(/"/g, '""')}"`).join(',')).join('\n');
-    const fileName = `Selected_Days_Rollup_${incidentName}_${selectedKeys.length}_days.csv`;
+    const fileName = `Selected_Days_Rollup_${incidentName}_(${selectedKeys.length}_days).csv`;
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
     shareOrDownloadBlob(blob, fileName, fileName);
-    updateStatus(`Exported ${selectedKeys.length} day(s) to CSV`);
+    updateStatus(`Exported ${selectedKeys.length} Selected Days to CSV`);
     closeExportModal();
   }
 
+  // --- EXPORT JSON ---
   function exportSelectedDaysJSON() {
     const selectedKeys = getSelectedDayKeys();
-
     if (selectedKeys.length === 0) {
       alert('Please check at least one day from the list to export.');
       return;
@@ -1515,53 +1581,164 @@
       days: selectedDaysObject
     };
 
-    const fileName = `Selected_Days_Package_${incidentName}_${selectedKeys.length}_days.json`;
+    const fileName = `Selected_Days_Package_${incidentName}_(${selectedKeys.length}_days).json`;
     const blob = new Blob([JSON.stringify(masterPackage, null, 2)], { type: "application/json" });
-
     shareOrDownloadBlob(blob, fileName, fileName);
-    updateStatus(`Exported ${selectedKeys.length} day(s) to JSON`);
+    updateStatus(`Exported ${selectedKeys.length} Days to JSON`);
     closeExportModal();
   }
 
+  // --- DELETE SELECTED DAYS ---
   function deleteSelectedDays() {
     const selectedKeys = getSelectedDayKeys();
-
     if (selectedKeys.length === 0) {
       alert('Please check at least one day to delete.');
       return;
     }
 
-    if (!confirm(`Are you sure you want to permanently delete ${selectedKeys.length} selected day(s)?`)) return;
+    if (confirm(`Are you sure you want to permanently delete the ${selectedKeys.length} selected days from memory?`)) {
+      const packageStore = getIncidentPackageStore();
+      let index = JSON.parse(localStorage.getItem(STORAGE_DRAFTS_INDEX) || '[]');
+      const activeBaseName = buildBaseName();
 
-    const packageStore = getIncidentPackageStore();
-    let index = JSON.parse(localStorage.getItem(STORAGE_DRAFTS_INDEX) || '[]');
-    const activeBaseName = buildBaseName();
+      selectedKeys.forEach(k => {
+        delete packageStore[k];
+        localStorage.removeItem('draft_' + k);
+        index = index.filter(item => item !== k);
+      });
 
-    selectedKeys.forEach(k => {
-      delete packageStore[k];
-      localStorage.removeItem('draft_' + k);
-      index = index.filter(item => item !== k);
-    });
+      localStorage.setItem(STORAGE_INCIDENT_DAYS_STORE, JSON.stringify(packageStore));
+      localStorage.setItem(STORAGE_DRAFTS_INDEX, JSON.stringify(index));
 
-    localStorage.setItem(STORAGE_INCIDENT_DAYS_STORE, JSON.stringify(packageStore));
-    localStorage.setItem(STORAGE_DRAFTS_INDEX, JSON.stringify(index));
-
-    if (selectedKeys.includes(activeBaseName)) {
-      localStorage.removeItem(STORAGE_ACTIVE_LOG);
-      const remainingKeys = Object.keys(packageStore).sort().reverse();
-      if (remainingKeys.length > 0) {
-        renderCostRows();
-        applyDataToForm(packageStore[remainingKeys[0]]);
-      } else {
-        startNewDayShift(true);
+      if (selectedKeys.includes(activeBaseName)) {
+        localStorage.removeItem(STORAGE_ACTIVE_LOG);
+        const remainingKeys = Object.keys(packageStore).sort().reverse();
+        if (remainingKeys.length > 0) {
+          applyDataToForm(packageStore[remainingKeys[0]]);
+        } else {
+          startNewDayShift(true);
+        }
       }
-    }
 
-    refreshUnifiedOpenDropdown();
-    renderDaysManagerTable();
-    updateStatus(`Deleted ${selectedKeys.length} day(s)`);
+      refreshUnifiedOpenDropdown();
+      renderDaysManagerTable();
+      updateStatus(`Deleted ${selectedKeys.length} Days from Archive`);
+    }
   }
 
+  // --- BATCH PRINT ALL / SELECTED PDF ---
+  function printSelectedDaysPDF() {
+    const selectedKeys = getSelectedDayKeys();
+    if (selectedKeys.length === 0) {
+      alert('Please check at least one day to print.');
+      return;
+    }
+
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      alert('Popup blocked. Please allow popups for this site, then try PDF Selected / All again.');
+      return;
+    }
+
+    closeExportModal();
+
+    const packageStore = getIncidentPackageStore();
+    const restoreData = JSON.parse(JSON.stringify(getFormDataObject()));
+    const printablePages = [];
+
+    selectedKeys.forEach(k => {
+      const dayData = packageStore[k];
+      if (!dayData) return;
+
+      renderSavedDayIntoCurrentForm(dayData);
+      const source = document.querySelector('.page-container');
+      const clone = source.cloneNode(true);
+      hydrateFormControlsForClone(source, clone);
+
+      clone.querySelectorAll('.no-print-bar, .modal-overlay, .btn-gps, .btn-action, .veh-rate-select')
+        .forEach(el => el.remove());
+
+      printablePages.push(`<div class="batch-page">${clone.outerHTML}</div>`);
+    });
+
+    renderSavedDayIntoCurrentForm(restoreData);
+
+    if (printablePages.length === 0) {
+      printWindow.close();
+      alert('No printable saved days were found.');
+      return;
+    }
+
+    const styles = getAllInlineStylesForExport();
+    const printTitle = `${getIncidentIdentifier()}_Selected_Days_PDF`;
+
+    printWindow.document.open();
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>${printTitle}</title>
+        <style>
+          ${styles}
+          body { background: #ffffff !important; margin: 0 !important; padding: 0 !important; }
+          .batch-print-close-bar {
+            position: sticky; top: 0; z-index: 9999;
+            background: #0f2744; color: #ffffff; padding: 8px 12px;
+            display: flex; justify-content: space-between; align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-size: 10pt; box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+          }
+          .batch-print-close-bar button {
+            border: none; background: #dc2626; color: #ffffff;
+            border-radius: 4px; padding: 5px 10px; font-weight: 700; cursor: pointer;
+          }
+          .batch-page { page-break-after: always; break-after: page; padding: 0.16in 0.20in; background: #ffffff; }
+          .batch-page:last-child { page-break-after: auto; break-after: auto; }
+          .batch-page .page-container { margin: 0 !important; padding: 0 !important; max-width: 100% !important; box-shadow: none !important; border-radius: 0 !important; }
+          .no-print-bar, .modal-overlay, .btn-gps, .btn-action, .veh-rate-select { display: none !important; }
+          .narrative-card textarea { display: none !important; }
+          .print-mirror-text { display: block !important; }
+          @media print {
+            .batch-print-close-bar { display: none !important; }
+            .batch-page { padding: 0.16in 0.20in !important; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="batch-print-close-bar">
+          <span>Bulk PDF print window. It will close automatically after printing or canceling.</span>
+          <button onclick="window.close()">Close This Print Window</button>
+        </div>
+        ${printablePages.join('\n')}
+        <script>
+          let printStarted = false;
+          let closeTimer = null;
+          function safeClosePrintWindow() {
+            if (closeTimer) clearTimeout(closeTimer);
+            closeTimer = setTimeout(function() {
+              try { window.close(); } catch(e) {}
+            }, 600);
+          }
+          window.onafterprint = function() { safeClosePrintWindow(); };
+          window.addEventListener('focus', function() { if (printStarted) safeClosePrintWindow(); });
+          window.onload = function() {
+            setTimeout(function() {
+              printStarted = true;
+              window.focus();
+              window.print();
+              setTimeout(function() { safeClosePrintWindow(); }, 3500);
+            }, 500);
+          };
+        <\/script>
+      </body>
+      </html>
+    `);
+    printWindow.document.close();
+    updateStatus(`Prepared PDF for ${selectedKeys.length} selected day(s)`);
+  }
+
+  // --- SIGNATURE CANVAS ENGINE ---
   let popSigCanvas, popSigCtx, popSigDrawing = false;
 
   function initPopoutSigCanvas() {
@@ -1598,9 +1775,7 @@
       e.preventDefault();
     }
 
-    function endDraw() {
-      popSigDrawing = false;
-    }
+    function endDraw() { popSigDrawing = false; }
 
     popSigCanvas.onmousedown = startDraw;
     popSigCanvas.onmousemove = moveDraw;
@@ -1613,10 +1788,8 @@
 
   function openSigModal() {
     document.getElementById('sigModal').style.display = 'flex';
-
     setTimeout(() => {
       initPopoutSigCanvas();
-
       if (savedSignatureDataUrl) {
         const img = new Image();
         img.onload = () => popSigCtx.drawImage(img, 0, 0, popSigCanvas.width, popSigCanvas.height);
@@ -1625,14 +1798,10 @@
     }, 50);
   }
 
-  function closeSigModal() {
-    document.getElementById('sigModal').style.display = 'none';
-  }
+  function closeSigModal() { document.getElementById('sigModal').style.display = 'none'; }
 
   function clearPopoutCanvas() {
-    if (popSigCtx && popSigCanvas) {
-      popSigCtx.clearRect(0, 0, popSigCanvas.width, popSigCanvas.height);
-    }
+    if (popSigCtx && popSigCanvas) popSigCtx.clearRect(0, 0, popSigCanvas.width, popSigCanvas.height);
   }
 
   function acceptPopoutSignature() {
@@ -1641,7 +1810,6 @@
       updateSignatureThumbnail();
       autoSaveActive();
     }
-
     closeSigModal();
   }
 
@@ -1655,7 +1823,6 @@
   function updateSignatureThumbnail() {
     const img = document.getElementById('sig_thumbnail_img');
     const prompt = document.getElementById('sig_thumbnail_prompt');
-
     if (savedSignatureDataUrl) {
       img.src = savedSignatureDataUrl;
       img.style.display = 'block';
@@ -1667,80 +1834,10 @@
     }
   }
 
-  function decimalHoursToHM(value) {
-    const totalMinutes = Math.round((parseFloat(value) || 0) * 60);
-    return {
-      h: Math.floor(totalMinutes / 60),
-      m: totalMinutes % 60
-    };
-  }
-
-  function hmToDecimal(hours, minutes) {
-    let h = parseInt(hours, 10);
-    let m = parseInt(minutes, 10);
-
-    if (isNaN(h)) h = 0;
-    if (isNaN(m)) m = 0;
-    if (m < 0) m = 0;
-
-    if (m > 59) {
-      h += Math.floor(m / 60);
-      m = m % 60;
-
-      const hEl = document.getElementById('pop_sortie_hours');
-      const mEl = document.getElementById('pop_sortie_minutes');
-      if (hEl) hEl.value = h;
-      if (mEl) mEl.value = m;
-    }
-
-    return Number((h + (m / 60)).toFixed(2));
-  }
-
-  function setDurationInputsFromDecimal(value) {
-    const hEl = document.getElementById('pop_sortie_hours');
-    const mEl = document.getElementById('pop_sortie_minutes');
-
-    if (!hEl || !mEl) return;
-
-    if (value === '' || value === null || value === undefined) {
-      hEl.value = '';
-      mEl.value = '';
-      return;
-    }
-
-    const hm = decimalHoursToHM(value);
-    hEl.value = hm.h > 0 ? hm.h : '';
-    mEl.value = hm.m > 0 ? hm.m : '';
-  }
-
-  function onPopoutDurationHMChange() {
-    const hEl = document.getElementById('pop_sortie_hours');
-    const mEl = document.getElementById('pop_sortie_minutes');
-
-    const hRaw = hEl ? hEl.value : '';
-    const mRaw = mEl ? mEl.value : '';
-
-    const isBlank = hRaw === '' && mRaw === '';
-    const decimalDuration = isBlank ? '' : hmToDecimal(hRaw, mRaw);
-
-    onPopoutDurationChange(decimalDuration);
-  }
-
-  function onCrewCountChange() {
-    renderCrewBuilderInputs();
-    renderCostRows();
-  }
-
-  function onVehicleCountChange() {
-    renderVehicleBuilderInputs();
-    renderCostRows();
-  }
-
-  function onAircraftCountChange() {
-    renderAircraftBuilderInputs();
-    renderMinimizedSorties();
-    recalcFlightSummaries();
-  }
+  // --- ⚙️ ROSTER BUILDER UI IN SETTINGS ---
+  function onCrewCountChange() { renderCrewBuilderInputs(); renderCostRows(); }
+  function onVehicleCountChange() { renderVehicleBuilderInputs(); renderCostRows(); }
+  function onAircraftCountChange() { renderAircraftBuilderInputs(); renderMinimizedSorties(); recalcFlightSummaries(); }
 
   function renderCrewBuilderInputs() {
     const container = document.getElementById('roster_crew_builder_container');
@@ -1748,18 +1845,17 @@
     const currentSaved = JSON.parse(localStorage.getItem(STORAGE_SETTINGS) || '{}').crewMembers || [];
 
     let html = '<div class="modal-grid">';
-
     for (let i = 1; i <= count; i++) {
-      const mem = currentSaved[i - 1] || {};
+      const mem = currentSaved[i-1] || {};
       html += `
         <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:3px; padding:4px;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
             <strong style="font-size:6.8pt; color:#0f2744;">Crew Member #${i}</strong>
             <select id="rst_role_${i}" onchange="saveSettingsProfile(true)" style="width:90px; height:16px; font-size:6.4pt;">
-              <option value="Pilot / RPIC" ${mem.role === 'Pilot / RPIC' ? 'selected' : ''}>Pilot / RPIC</option>
-              <option value="Sensor Op" ${mem.role === 'Sensor Op' ? 'selected' : ''}>Sensor Op</option>
-              <option value="Tech / Driver" ${mem.role === 'Tech / Driver' ? 'selected' : ''}>Tech / Driver</option>
-              <option value="Ground Crew" ${mem.role === 'Ground Crew' ? 'selected' : ''}>Ground Crew</option>
+              <option value="Pilot / RPIC" ${mem.role==='Pilot / RPIC'?'selected':''}>Pilot / RPIC</option>
+              <option value="Sensor Op" ${mem.role==='Sensor Op'?'selected':''}>Sensor Op</option>
+              <option value="Tech / Driver" ${mem.role==='Tech / Driver'?'selected':''}>Tech / Driver</option>
+              <option value="Ground Crew" ${mem.role==='Ground Crew'?'selected':''}>Ground Crew</option>
             </select>
           </div>
           <div style="display:flex; gap:2px;">
@@ -1769,7 +1865,6 @@
         </div>
       `;
     }
-
     html += '</div>';
     container.innerHTML = html;
   }
@@ -1780,9 +1875,8 @@
     const currentSaved = JSON.parse(localStorage.getItem(STORAGE_SETTINGS) || '{}').vehiclesList || [];
 
     let html = '<div class="modal-grid">';
-
     for (let i = 1; i <= count; i++) {
-      const veh = currentSaved[i - 1] || {};
+      const veh = currentSaved[i-1] || {};
       html += `
         <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:3px; padding:4px;">
           <strong style="font-size:6.8pt; color:#0f2744;">Vehicle #${i}</strong>
@@ -1793,7 +1887,6 @@
         </div>
       `;
     }
-
     html += '</div>';
     container.innerHTML = html;
   }
@@ -1804,9 +1897,8 @@
     const currentSaved = JSON.parse(localStorage.getItem(STORAGE_SETTINGS) || '{}').aircraft || [];
 
     let html = '<div class="modal-grid">';
-
     for (let i = 1; i <= count; i++) {
-      const ac = currentSaved[i - 1] || {};
+      const ac = currentSaved[i-1] || {};
       html += `
         <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:3px; padding:4px;">
           <strong style="font-size:6.8pt; color:#0f2744;">Aircraft #${i}</strong>
@@ -1817,18 +1909,17 @@
         </div>
       `;
     }
-
     html += '</div>';
     container.innerHTML = html;
   }
 
+  // --- POPOUT SORTIE MODAL LOGIC ---
   function openSortieModal(index = -1) {
     currentEditingSortieIndex = index;
     const roster = getRosterData();
 
     const acSelect = document.getElementById('pop_sortie_aircraft');
     acSelect.innerHTML = '';
-
     roster.aircraft.forEach((ac, aIdx) => {
       if (ac.tail || ac.model) {
         const opt = document.createElement('option');
@@ -1837,7 +1928,6 @@
         acSelect.appendChild(opt);
       }
     });
-
     if (acSelect.children.length === 0) {
       acSelect.innerHTML = `<option value="0">Aircraft 1</option>`;
     }
@@ -1850,6 +1940,9 @@
       tempSortieData = {
         id: Date.now(),
         aircraftIndex: 0,
+        useCode: '',
+        startTime: '',
+        endTime: '',
         duration: '',
         pilotAllocations: {}
       };
@@ -1858,6 +1951,9 @@
     }
 
     acSelect.value = tempSortieData.aircraftIndex || 0;
+    document.getElementById('pop_sortie_usecode').value = tempSortieData.useCode || '';
+    document.getElementById('pop_sortie_start').value = tempSortieData.startTime || '';
+    document.getElementById('pop_sortie_end').value = tempSortieData.endTime || '';
     setDurationInputsFromDecimal(tempSortieData.duration);
 
     renderPopoutCrewAllocations();
@@ -1868,6 +1964,43 @@
     document.getElementById('sortieModal').style.display = 'none';
     tempSortieData = null;
     currentEditingSortieIndex = -1;
+  }
+
+  function onPopoutUseCodeChange() {
+    if (!tempSortieData) return;
+    tempSortieData.useCode = document.getElementById('pop_sortie_usecode').value || '';
+  }
+
+  function onPopoutStartEndChange() {
+    if (!tempSortieData) return;
+    const startVal = document.getElementById('pop_sortie_start').value;
+    const endVal = document.getElementById('pop_sortie_end').value;
+    tempSortieData.startTime = startVal;
+    tempSortieData.endTime = endVal;
+
+    if (startVal && endVal) {
+      const minutes = minutesBetweenTimes(startVal, endVal);
+      const decHours = Number((minutes / 60).toFixed(2));
+      tempSortieData.duration = decHours;
+      setDurationInputsFromDecimal(decHours);
+      onPopoutDurationChange(decHours);
+    }
+  }
+
+  function onPopoutDurationHMChange(manualEntry = false) {
+    if (!tempSortieData) return;
+    const hRaw = document.getElementById('pop_sortie_hours').value;
+    const mRaw = document.getElementById('pop_sortie_minutes').value;
+    const isBlank = hRaw === '' && mRaw === '';
+    const decimalDuration = isBlank ? '' : hmToDecimal(hRaw, mRaw);
+
+    if (manualEntry && !isBlank) {
+      document.getElementById('pop_sortie_start').value = '';
+      document.getElementById('pop_sortie_end').value = '';
+      tempSortieData.startTime = '';
+      tempSortieData.endTime = '';
+    }
+    onPopoutDurationChange(decimalDuration);
   }
 
   function renderPopoutCrewAllocations() {
@@ -1882,9 +2015,8 @@
       if (pObj.name.trim()) {
         const isAssigned = tempSortieData.pilotAllocations && tempSortieData.pilotAllocations[pIdx] !== undefined;
         const assignedHours = isAssigned ? tempSortieData.pilotAllocations[pIdx] : '';
-
         if (isAssigned) {
-          allocatedPilotHours += parseFloat(assignedHours) || 0;
+          allocatedPilotHours += (parseFloat(assignedHours) || 0);
         }
 
         html += `
@@ -1907,10 +2039,7 @@
       }
     });
 
-    if (!html) {
-      html = `<div style="padding:8px; color:#94a3b8; font-style:italic; font-size:6.8pt; text-align:center;">Add pilots in ⚙️ Settings first</div>`;
-    }
-
+    if (!html) html = `<div style="padding:8px; color:#94a3b8; font-style:italic; font-size:6.8pt; text-align:center;">Add pilots in ⚙️ Settings first</div>`;
     container.innerHTML = html;
     updatePopoutBadge(allocatedPilotHours, totalSortieHours);
   }
@@ -1921,7 +2050,6 @@
 
     if (tempSortieData.pilotAllocations) {
       const pKeys = Object.keys(tempSortieData.pilotAllocations);
-
       if (pKeys.length === 1) {
         tempSortieData.pilotAllocations[pKeys[0]] = dur;
       } else if (pKeys.length > 1 && dur > 0) {
@@ -1929,24 +2057,20 @@
         return;
       }
     }
-
     renderPopoutCrewAllocations();
   }
 
   function togglePopoutPilot(pIdx, isChecked) {
     if (!tempSortieData.pilotAllocations) tempSortieData.pilotAllocations = {};
-
     const dur = parseFloat(tempSortieData.duration) || 0;
 
     if (isChecked) {
       const assignedKeys = Object.keys(tempSortieData.pilotAllocations);
-
       if (assignedKeys.length === 0) {
         tempSortieData.pilotAllocations[pIdx] = dur;
       } else if (assignedKeys.length === 1) {
         const otherIdx = assignedKeys[0];
         const currentOther = parseFloat(tempSortieData.pilotAllocations[otherIdx]) || 0;
-
         if (currentOther >= dur) {
           const split = Number((dur / 2).toFixed(2));
           tempSortieData.pilotAllocations[otherIdx] = split;
@@ -1956,47 +2080,40 @@
         }
       } else {
         let currentAllocated = 0;
-        assignedKeys.forEach(k => currentAllocated += parseFloat(tempSortieData.pilotAllocations[k]) || 0);
+        assignedKeys.forEach(k => currentAllocated += (parseFloat(tempSortieData.pilotAllocations[k]) || 0));
         tempSortieData.pilotAllocations[pIdx] = Math.max(0, Number((dur - currentAllocated).toFixed(2)));
       }
     } else {
       delete tempSortieData.pilotAllocations[pIdx];
-
       const remainingKeys = Object.keys(tempSortieData.pilotAllocations);
       if (remainingKeys.length === 1 && dur > 0) {
         tempSortieData.pilotAllocations[remainingKeys[0]] = dur;
       }
     }
-
     renderPopoutCrewAllocations();
   }
 
   function onPopoutPilotHourChange(changedPIdx, enteredHours) {
     if (!tempSortieData.pilotAllocations) tempSortieData.pilotAllocations = {};
-
     const totalSortieHours = parseFloat(tempSortieData.duration) || 0;
     let newHrs = parseFloat(enteredHours) || 0;
 
     if (totalSortieHours > 0 && newHrs > totalSortieHours) newHrs = totalSortieHours;
-
     tempSortieData.pilotAllocations[changedPIdx] = Number(newHrs.toFixed(2));
 
     const assignedKeys = Object.keys(tempSortieData.pilotAllocations);
 
     if (totalSortieHours > 0 && assignedKeys.length === 2) {
       const otherPIdx = assignedKeys.find(k => parseInt(k) !== parseInt(changedPIdx));
-
       if (otherPIdx !== undefined) {
         const balanced = Math.max(0, Number((totalSortieHours - newHrs).toFixed(2)));
         tempSortieData.pilotAllocations[otherPIdx] = balanced;
-
         const otherInput = document.querySelector(`.pop-pilot-input[data-pidx="${otherPIdx}"]`);
         if (otherInput) otherInput.value = balanced.toFixed(2);
       }
     }
-
     let allocatedTotal = 0;
-    Object.values(tempSortieData.pilotAllocations).forEach(v => allocatedTotal += parseFloat(v) || 0);
+    Object.values(tempSortieData.pilotAllocations).forEach(v => allocatedTotal += (parseFloat(v)||0));
     updatePopoutBadge(allocatedTotal, totalSortieHours);
   }
 
@@ -2009,7 +2126,6 @@
     if (count <= 1) return;
 
     const splitHrs = Number((dur / count).toFixed(2));
-
     pKeys.forEach((pIdx, idx) => {
       if (idx === 0) {
         tempSortieData.pilotAllocations[pIdx] = Number((dur - (splitHrs * (count - 1))).toFixed(2));
@@ -2017,16 +2133,14 @@
         tempSortieData.pilotAllocations[pIdx] = splitHrs;
       }
     });
-
     renderPopoutCrewAllocations();
   }
 
   function updatePopoutBadge(allocated, total) {
     const badge = document.getElementById('pop_alloc_badge');
-
     const allocFixed = Number(allocated.toFixed(2));
     const totalFixed = Number(total.toFixed(2));
-    const isOver = totalFixed > 0 && allocFixed > totalFixed + 0.001;
+    const isOver = totalFixed > 0 && allocFixed > (totalFixed + 0.001);
     const isComplete = totalFixed > 0 && Math.abs(allocFixed - totalFixed) < 0.001;
 
     badge.textContent = `Allocated: ${allocFixed.toFixed(2)} / ${totalFixed.toFixed(2)} hrs`;
@@ -2035,11 +2149,19 @@
 
   function savePopoutSortie() {
     tempSortieData.aircraftIndex = parseInt(document.getElementById('pop_sortie_aircraft').value) || 0;
+    tempSortieData.useCode = document.getElementById('pop_sortie_usecode').value || '';
+    tempSortieData.startTime = document.getElementById('pop_sortie_start').value || '';
+    tempSortieData.endTime = document.getElementById('pop_sortie_end').value || '';
 
-    const hRaw = document.getElementById('pop_sortie_hours').value;
-    const mRaw = document.getElementById('pop_sortie_minutes').value;
-    const hasDuration = hRaw !== '' || mRaw !== '';
-    tempSortieData.duration = hasDuration ? hmToDecimal(hRaw, mRaw) : '';
+    if (tempSortieData.startTime && tempSortieData.endTime) {
+      const minutes = minutesBetweenTimes(tempSortieData.startTime, tempSortieData.endTime);
+      tempSortieData.duration = Number((minutes / 60).toFixed(2));
+    } else {
+      const hRaw = document.getElementById('pop_sortie_hours').value;
+      const mRaw = document.getElementById('pop_sortie_minutes').value;
+      const hasDuration = hRaw !== '' || mRaw !== '';
+      tempSortieData.duration = hasDuration ? hmToDecimal(hRaw, mRaw) : '';
+    }
 
     if (currentEditingSortieIndex >= 0) {
       sortiesList[currentEditingSortieIndex] = tempSortieData;
@@ -2063,6 +2185,7 @@
     }
   }
 
+  // --- MINIMIZED SORTIES LIST RENDERING ---
   function renderMinimizedSorties() {
     const container = document.getElementById('sorties_container');
     const roster = getRosterData();
@@ -2073,27 +2196,29 @@
     }
 
     let html = '';
-
     sortiesList.forEach((st, idx) => {
-      const ac = roster.aircraft[st.aircraftIndex] || { tail: `A/C #${st.aircraftIndex + 1}`, model: '' };
+      const ac = roster.aircraft[st.aircraftIndex] || { tail: `A/C #${st.aircraftIndex+1}`, model: '' };
       const crewBadges = [];
-
       if (st.pilotAllocations) {
         Object.keys(st.pilotAllocations).forEach(pIdx => {
-          const pObj = roster.pilots[pIdx] || { name: `P${parseInt(pIdx) + 1}` };
+          const pObj = roster.pilots[pIdx] || { name: `P${parseInt(pIdx)+1}` };
           const hrs = parseFloat(st.pilotAllocations[pIdx]) || 0;
           crewBadges.push(`${pObj.name} (${hrs.toFixed(2)}h)`);
         });
       }
 
       const durVal = parseFloat(st.duration || 0);
+      const timeWindow = (st.startTime && st.endTime) ? `${st.startTime}-${st.endTime}` : 'Manual Time';
+      const useCode = st.useCode || 'No Use Code';
 
       html += `
         <div class="sortie-min-row">
           <div class="sortie-min-info">
             <strong style="color:#0f2744;">#${idx + 1}</strong>
             <span style="color:#1e3a5f; font-weight:600;">${ac.tail || 'A/C'} ${ac.model ? '(' + ac.model + ')' : ''}</span>
-            <span style="background:#e0f2fe; color:#0369a1; padding:0 3px; border-radius:2px; font-weight:bold;">${durVal.toFixed(2)} hrs</span>
+            <span style="background:#fef3c7; color:#92400e; padding:0 3px; border-radius:2px; font-weight:bold;">${useCode}</span>
+            <span style="background:#e0f2fe; color:#0369a1; padding:0 3px; border-radius:2px; font-weight:bold;">${timeWindow}</span>
+            <span style="background:#dcfce7; color:#166534; padding:0 3px; border-radius:2px; font-weight:bold;">${durVal.toFixed(2)} hrs</span>
             <span style="color:#64748b;">Crew: ${crewBadges.length > 0 ? crewBadges.join(', ') : 'None'}</span>
           </div>
           <div style="display:flex; gap:2px; flex-shrink:0;">
@@ -2114,6 +2239,7 @@
     autoSaveActive();
   }
 
+  // --- RECALCULATE PILOT & AIRCRAFT ROLLUPS ---
   function recalcFlightSummaries() {
     const roster = getRosterData();
     const pilotHours = {};
@@ -2131,19 +2257,19 @@
         acStats[st.aircraftIndex].sorties += 1;
         acStats[st.aircraftIndex].hours += dur;
       }
-
       totalAircraftHours += dur;
 
       if (st.pilotAllocations) {
         Object.keys(st.pilotAllocations).forEach(pIdx => {
           const pHrs = parseFloat(st.pilotAllocations[pIdx]) || 0;
-          if (pilotHours[pIdx] !== undefined) pilotHours[pIdx] += pHrs;
+          if (pilotHours[pIdx] !== undefined) {
+            pilotHours[pIdx] += pHrs;
+          }
         });
       }
     });
 
     let pSummaryHtml = '';
-
     roster.pilots.forEach((pObj, pIdx) => {
       if (pObj.name.trim()) {
         const pHrTotal = pilotHours[pIdx] || 0;
@@ -2155,19 +2281,13 @@
         `;
       }
     });
-
-    if (!pSummaryHtml) {
-      pSummaryHtml = `<tr><td colspan="2" style="text-align:center; color:#94a3b8; font-style:italic;">Configure crew in Settings</td></tr>`;
-    }
-
+    if (!pSummaryHtml) pSummaryHtml = `<tr><td colspan="2" style="text-align:center; color:#94a3b8; font-style:italic;">Configure crew in Settings</td></tr>`;
     document.getElementById('pilot_summary_tbody').innerHTML = pSummaryHtml;
 
     let acSummaryHtml = '';
-
     roster.aircraft.forEach((ac, aIdx) => {
       if (ac.tail || ac.model) {
         const stats = acStats[aIdx] || { sorties: 0, hours: 0 };
-
         acSummaryHtml += `
           <tr style="border-bottom:1px solid #cbd5e1;">
             <td style="padding:1.5px 3px; border-right:1px solid #cbd5e1;">${ac.tail || ''}</td>
@@ -2178,15 +2298,13 @@
         `;
       }
     });
-
-    if (!acSummaryHtml) {
-      acSummaryHtml = `<tr><td colspan="4" style="text-align:center; color:#94a3b8; font-style:italic;">Configure aircraft in Settings</td></tr>`;
-    }
-
+    if (!acSummaryHtml) acSummaryHtml = `<tr><td colspan="4" style="text-align:center; color:#94a3b8; font-style:italic;">Configure aircraft in Settings</td></tr>`;
     document.getElementById('aircraft_summary_tbody').innerHTML = acSummaryHtml;
 
     const qFlt = document.getElementById('q_flt');
-    if (qFlt) qFlt.value = totalAircraftHours > 0 ? totalAircraftHours.toFixed(2) : '';
+    if (qFlt) {
+      qFlt.value = totalAircraftHours > 0 ? totalAircraftHours.toFixed(2) : '';
+    }
 
     doMath();
   }
@@ -2197,13 +2315,11 @@
     const airframes = settings.aircraft || [];
 
     const flightPilots = [];
-
     crew.forEach((c, idx) => {
       if (c && c.name && (c.role === 'Pilot / RPIC' || c.role === 'Sensor Op')) {
         flightPilots.push({ index: idx, name: c.name, role: c.role });
       }
     });
-
     if (flightPilots.length === 0) {
       flightPilots.push({ index: 0, name: 'Pilot 1 (RPIC)', role: 'Pilot / RPIC' });
     }
@@ -2215,6 +2331,7 @@
     };
   }
 
+  // --- RENDER COST TABLE ROWS ---
   function renderCostRows() {
     const numPersonnel = parseInt(document.getElementById('cfg_personnel').value) || 5;
     const numVehicles = parseInt(document.getElementById('cfg_vehicles').value) || 5;
@@ -2224,11 +2341,9 @@
     const currentData = getFormDataObject();
 
     let persHtml = '';
-
     for (let i = 1; i <= numPersonnel; i++) {
-      const cMem = crewRoster[i - 1] || {};
+      const cMem = crewRoster[i-1] || {};
       const defaultDesc = cMem.name ? `${cMem.name} (${cMem.role || 'Crew'}${cMem.base ? ' - ' + cMem.base : ''})` : '';
-
       persHtml += `
         <tr class="calc-row">
           <td><input type="text" id="p${i}_desc" value="${escapeHtml(currentData[`p${i}_desc`] || defaultDesc)}" placeholder="Person ${i}: Name / Duty Station"></td>
@@ -2238,15 +2353,12 @@
         </tr>
       `;
     }
-
     document.getElementById('personnel_tbody').innerHTML = persHtml;
 
     let vehHtml = '';
-
     for (let i = 1; i <= numVehicles; i++) {
-      const vMem = vehRoster[i - 1] || {};
+      const vMem = vehRoster[i-1] || {};
       const defaultDesc = vMem.name ? `${vMem.name}${vMem.route ? ' (' + vMem.route + ')' : ''}` : '';
-
       vehHtml += `
         <tr class="calc-row">
           <td>
@@ -2266,7 +2378,6 @@
         </tr>
       `;
     }
-
     document.getElementById('vehicles_tbody').innerHTML = vehHtml;
 
     attachInputListeners();
@@ -2295,9 +2406,7 @@
     return `${vendor}_${incident}`;
   }
 
-  function updateDocumentTitle() {
-    document.title = buildBaseName();
-  }
+  function updateDocumentTitle() { document.title = buildBaseName(); }
 
   function printPDF() {
     updateDocumentTitle();
@@ -2306,9 +2415,7 @@
   }
 
   function getAllInlineStylesForExport() {
-    return Array.from(document.querySelectorAll('style'))
-      .map(style => style.textContent || '')
-      .join('\n');
+    return Array.from(document.querySelectorAll('style')).map(s => s.textContent || '').join('\n');
   }
 
   function hydrateFormControlsForClone(sourceRoot, cloneRoot) {
@@ -2337,234 +2444,38 @@
     });
   }
 
+  async function shareOrDownloadBlob(blob, fileName, title) {
+    const file = new File([blob], fileName, { type: blob.type });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: title || fileName });
+        return;
+      } catch (e) {}
+    }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
   function renderSavedDayIntoCurrentForm(dayData) {
     if (!dayData) return;
-
     ['cfg_personnel', 'cfg_vehicles', 'cfg_aircraft'].forEach(id => {
       if (dayData[id]) {
         const el = document.getElementById(id);
         if (el) el.value = dayData[id];
       }
     });
-
     renderCostRows();
     applyDataToForm(dayData);
     syncPrintMirrors();
     doMath();
   }
 
-function printSelectedDaysPDF() {
-  const selectedKeys = getSelectedDayKeys();
-
-  if (selectedKeys.length === 0) {
-    alert('Please check at least one day to print.');
-    return;
-  }
-
-  /*
-    Open the print window immediately from the button click.
-    This helps avoid popup blockers, especially on iPad/Safari.
-  */
-  const printWindow = window.open('', '_blank');
-
-  if (!printWindow) {
-    alert('Popup blocked. Please allow popups for this site, then try PDF Selected / All again.');
-    return;
-  }
-
-  closeExportModal();
-
-  const packageStore = getIncidentPackageStore();
-  const restoreData = JSON.parse(JSON.stringify(getFormDataObject()));
-  const printablePages = [];
-
-  selectedKeys.forEach(k => {
-    const dayData = packageStore[k];
-    if (!dayData) return;
-
-    renderSavedDayIntoCurrentForm(dayData);
-
-    const source = document.querySelector('.page-container');
-    const clone = source.cloneNode(true);
-
-    hydrateFormControlsForClone(source, clone);
-
-    clone.querySelectorAll('.no-print-bar, .modal-overlay, .btn-gps, .btn-action, .veh-rate-select')
-      .forEach(el => el.remove());
-
-    printablePages.push(`<div class="batch-page">${clone.outerHTML}</div>`);
-  });
-
-  renderSavedDayIntoCurrentForm(restoreData);
-
-  if (printablePages.length === 0) {
-    printWindow.close();
-    alert('No printable saved days were found.');
-    return;
-  }
-
-  const styles = getAllInlineStylesForExport();
-  const printTitle = `${getIncidentIdentifier()}_Selected_Days_PDF`;
-
-  printWindow.document.open();
-  printWindow.document.write(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="UTF-8">
-      <title>${printTitle}</title>
-
-      <style>
-        ${styles}
-
-        body {
-          background: #ffffff !important;
-          margin: 0 !important;
-          padding: 0 !important;
-        }
-
-        .batch-print-close-bar {
-          position: sticky;
-          top: 0;
-          z-index: 9999;
-          background: #0f2744;
-          color: #ffffff;
-          padding: 8px 12px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-          font-size: 10pt;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.25);
-        }
-
-        .batch-print-close-bar button {
-          border: none;
-          background: #dc2626;
-          color: #ffffff;
-          border-radius: 4px;
-          padding: 5px 10px;
-          font-weight: 700;
-          cursor: pointer;
-        }
-
-        .batch-page {
-          page-break-after: always;
-          break-after: page;
-          padding: 0.16in 0.20in;
-          background: #ffffff;
-        }
-
-        .batch-page:last-child {
-          page-break-after: auto;
-          break-after: auto;
-        }
-
-        .batch-page .page-container {
-          margin: 0 !important;
-          padding: 0 !important;
-          max-width: 100% !important;
-          box-shadow: none !important;
-          border-radius: 0 !important;
-        }
-
-        .no-print-bar,
-        .modal-overlay,
-        .btn-gps,
-        .btn-action,
-        .veh-rate-select {
-          display: none !important;
-        }
-
-        .narrative-card textarea {
-          display: none !important;
-        }
-
-        .print-mirror-text {
-          display: block !important;
-        }
-
-        @media print {
-          .batch-print-close-bar {
-            display: none !important;
-          }
-
-          .batch-page {
-            padding: 0.16in 0.20in !important;
-          }
-        }
-      </style>
-    </head>
-
-    <body>
-      <div class="batch-print-close-bar">
-        <span>Bulk PDF print window. It should close after printing or canceling.</span>
-        <button onclick="window.close()">Close This Print Window</button>
-      </div>
-
-      ${printablePages.join('\n')}
-
-      <script>
-        let printStarted = false;
-        let closeTimer = null;
-
-        function safeClosePrintWindow() {
-          if (closeTimer) {
-            clearTimeout(closeTimer);
-          }
-
-          closeTimer = setTimeout(function() {
-            try {
-              window.close();
-            } catch (e) {
-              // Some browsers block scripted close.
-            }
-          }, 600);
-        }
-
-        window.onafterprint = function() {
-          safeClosePrintWindow();
-        };
-
-        window.addEventListener('focus', function() {
-          if (printStarted) {
-            safeClosePrintWindow();
-          }
-        });
-
-        window.onload = function() {
-          setTimeout(function() {
-            printStarted = true;
-            window.focus();
-            window.print();
-
-            /*
-              Backup close attempt.
-              Some iPad/Safari versions do not reliably fire onafterprint.
-            */
-            setTimeout(function() {
-              safeClosePrintWindow();
-            }, 3500);
-          }, 500);
-        };
-      <\/script>
-    </body>
-    </html>
-  `);
-
-  printWindow.document.close();
-
-  updateStatus(`Prepared PDF for ${selectedKeys.length} selected day(s)`);
-}
-
-  function openSettingsModal() {
-    loadSettingsProfile();
-    document.getElementById('settingsModal').style.display = 'flex';
-  }
-
-  function closeSettingsModal() {
-    document.getElementById('settingsModal').style.display = 'none';
-  }
+  // --- ⚙️ SETTINGS ENGINE ---
+  function openSettingsModal() { loadSettingsProfile(); document.getElementById('settingsModal').style.display = 'flex'; }
+  function closeSettingsModal() { document.getElementById('settingsModal').style.display = 'none'; }
 
   function saveSettingsProfile(isSilent = false) {
     const crewCount = parseInt(document.getElementById('cfg_personnel').value) || 5;
@@ -2572,7 +2483,6 @@ function printSelectedDaysPDF() {
     const acCount = parseInt(document.getElementById('cfg_aircraft').value) || 4;
 
     const crewList = [];
-
     for (let i = 1; i <= crewCount; i++) {
       const nEl = document.getElementById(`rst_cname_${i}`);
       const rEl = document.getElementById(`rst_role_${i}`);
@@ -2581,7 +2491,6 @@ function printSelectedDaysPDF() {
     }
 
     const vehList = [];
-
     for (let i = 1; i <= vehCount; i++) {
       const vnEl = document.getElementById(`rst_vname_${i}`);
       const vrEl = document.getElementById(`rst_vroute_${i}`);
@@ -2589,7 +2498,6 @@ function printSelectedDaysPDF() {
     }
 
     const acList = [];
-
     for (let i = 1; i <= acCount; i++) {
       const tEl = document.getElementById(`rst_ac_tail_${i}`);
       const mEl = document.getElementById(`rst_ac_model_${i}`);
@@ -2614,7 +2522,6 @@ function printSelectedDaysPDF() {
     };
 
     localStorage.setItem(STORAGE_SETTINGS, JSON.stringify(profile));
-
     renderMinimizedSorties();
     recalcFlightSummaries();
 
@@ -2626,10 +2533,8 @@ function printSelectedDaysPDF() {
 
   function loadSettingsProfile() {
     const saved = localStorage.getItem(STORAGE_SETTINGS);
-
     if (saved) {
       const profile = JSON.parse(saved);
-
       document.getElementById('preset_vendor_name').value = profile.vendor || document.getElementById('vendor_name').value || '';
       document.getElementById('preset_r_flt').value = profile.r_flt || '';
       document.getElementById('preset_r_avail').value = profile.r_avail || '';
@@ -2645,7 +2550,6 @@ function printSelectedDaysPDF() {
     } else {
       document.getElementById('preset_vendor_name').value = document.getElementById('vendor_name').value || '';
     }
-
     renderCrewBuilderInputs();
     renderVehicleBuilderInputs();
     renderAircraftBuilderInputs();
@@ -2653,7 +2557,6 @@ function printSelectedDaysPDF() {
 
   function applySettingsToForm() {
     saveSettingsProfile(true);
-
     const profile = JSON.parse(localStorage.getItem(STORAGE_SETTINGS));
 
     if (profile.vendor) document.getElementById('vendor_name').value = profile.vendor;
@@ -2676,16 +2579,13 @@ function printSelectedDaysPDF() {
     if (val === '1' && profile.r_mi1) inputEl.value = profile.r_mi1;
     else if (val === '2' && profile.r_mi2) inputEl.value = profile.r_mi2;
     else if (val === '3' && profile.r_mi3) inputEl.value = profile.r_mi3;
-
     doMath();
   }
 
   function deleteActiveProfile() {
     if (!confirm('Clear saved roster, fleet and rates?')) return;
-
     localStorage.removeItem(STORAGE_SETTINGS);
     document.querySelectorAll('#settingsModal input').forEach(el => el.value = '');
-
     updateStatus('Settings cleared.');
     renderCrewBuilderInputs();
     renderVehicleBuilderInputs();
@@ -2695,16 +2595,15 @@ function printSelectedDaysPDF() {
     recalcFlightSummaries();
   }
 
+  // --- 📍 GPS CAPTURE ---
   function captureGPSLocation() {
     const baseField = document.getElementById('base_loc');
-
     if (!navigator.geolocation) {
       alert('Geolocation not supported by this browser.');
       return;
     }
 
     updateStatus('📍 Acquiring GPS fix...');
-
     navigator.geolocation.getCurrentPosition(
       position => {
         const lat = position.coords.latitude.toFixed(5);
@@ -2733,6 +2632,7 @@ function printSelectedDaysPDF() {
     );
   }
 
+  // --- LIVE MATH ENGINE ---
   function doMath() {
     let grandTotal = 0;
     const rows = document.querySelectorAll('.calc-row');
@@ -2748,10 +2648,7 @@ function printSelectedDaysPDF() {
         const cost = qty * rate;
 
         if (qty > 0 && rate > 0) {
-          cEl.value = '$ ' + cost.toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-          });
+          cEl.value = '$ ' + cost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
           grandTotal += cost;
         } else {
           cEl.value = '';
@@ -2760,19 +2657,16 @@ function printSelectedDaysPDF() {
     });
 
     totalCostGlobal = grandTotal;
-
     const gtEl = document.getElementById('grandTotal');
     if (gtEl) {
-      gtEl.value = '$ ' + grandTotal.toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
+      gtEl.value = '$ ' + grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     updateDocumentTitle();
     autoSaveActive();
   }
 
+  // --- FORM SERIALIZATION ---
   function getFormDataObject() {
     const data = {
       sorties: sortiesList,
@@ -2785,7 +2679,6 @@ function printSelectedDaysPDF() {
         else data[el.id] = el.value;
       }
     });
-
     return data;
   }
 
@@ -2793,13 +2686,7 @@ function printSelectedDaysPDF() {
     if (!data) return;
 
     sortiesList = data.sorties || [];
-
-    if (data.signature) {
-      savedSignatureDataUrl = data.signature;
-    } else {
-      savedSignatureDataUrl = null;
-    }
-
+    savedSignatureDataUrl = data.signature || null;
     updateSignatureThumbnail();
 
     ['cfg_personnel', 'cfg_vehicles', 'cfg_aircraft'].forEach(id => {
@@ -2811,7 +2698,6 @@ function printSelectedDaysPDF() {
 
     Object.keys(data).forEach(id => {
       if (id === 'sorties' || id === 'signature' || id === 'unified_open_select' || id === 'fileInput') return;
-
       const el = document.getElementById(id);
       if (el) {
         if (el.type === 'checkbox' || el.type === 'radio') el.checked = data[id];
@@ -2819,14 +2705,15 @@ function printSelectedDaysPDF() {
       }
     });
 
+    updateWorkDayAvailability();
     renderMinimizedSorties();
     recalcFlightSummaries();
   }
 
+  // --- COPY YESTERDAY ---
   function copyFromYesterday() {
     const packageStore = getIncidentPackageStore();
     const dayKeys = Object.keys(packageStore).sort();
-
     if (dayKeys.length === 0) {
       alert('No previous saved days found in the incident package to copy from.');
       return;
@@ -2834,10 +2721,9 @@ function printSelectedDaysPDF() {
 
     const lastDayKey = dayKeys[dayKeys.length - 1];
     const prevDay = packageStore[lastDayKey];
-
     if (!prevDay) return;
 
-    ['vendor_name', 'inc_name', 'base_loc', 'agency_name', 'order_num', 'pay_desc', 'r_pay', 'r_flt', 'r_avail'].forEach(id => {
+    ['vendor_name', 'inc_name', 'uasd_name', 'base_loc', 'agency_name', 'order_num', 'work_start_time', 'work_end_time', 'pay_desc', 'r_pay', 'r_flt', 'r_avail'].forEach(id => {
       if (prevDay[id] !== undefined && document.getElementById(id)) document.getElementById(id).value = prevDay[id];
     });
 
@@ -2850,7 +2736,6 @@ function printSelectedDaysPDF() {
     });
 
     const numPersonnel = parseInt(document.getElementById('cfg_personnel').value) || 5;
-
     for (let i = 1; i <= numPersonnel; i++) {
       if (prevDay[`p${i}_desc`] && document.getElementById(`p${i}_desc`)) document.getElementById(`p${i}_desc`).value = prevDay[`p${i}_desc`];
       if (prevDay[`r_p${i}`] && document.getElementById(`r_p${i}`)) document.getElementById(`r_p${i}`).value = prevDay[`r_p${i}`];
@@ -2858,7 +2743,6 @@ function printSelectedDaysPDF() {
     }
 
     const numVehicles = parseInt(document.getElementById('cfg_vehicles').value) || 5;
-
     for (let i = 1; i <= numVehicles; i++) {
       if (prevDay[`v${i}_desc`] && document.getElementById(`v${i}_desc`)) document.getElementById(`v${i}_desc`).value = prevDay[`v${i}_desc`];
       if (prevDay[`r_v${i}`] && document.getElementById(`r_v${i}`)) document.getElementById(`r_v${i}`).value = prevDay[`r_v${i}`];
@@ -2869,10 +2753,12 @@ function printSelectedDaysPDF() {
       document.getElementById('doc_date').value = new Date().toISOString().slice(0, 10);
     }
 
+    updateWorkDayAvailability();
     doMath();
     updateStatus(`📋 Copied Logistics & Roster from: ${lastDayKey}`);
   }
 
+  // --- PERSISTENCE AND INCIDENT STORE ---
   function getIncidentPackageStore() {
     try {
       return JSON.parse(localStorage.getItem(STORAGE_INCIDENT_DAYS_STORE) || '{}');
@@ -2894,13 +2780,11 @@ function printSelectedDaysPDF() {
     const data = getFormDataObject();
 
     localStorage.setItem('draft_' + key, JSON.stringify(data));
-
     const packageStore = getIncidentPackageStore();
     packageStore[key] = data;
     localStorage.setItem(STORAGE_INCIDENT_DAYS_STORE, JSON.stringify(packageStore));
 
     let index = JSON.parse(localStorage.getItem(STORAGE_DRAFTS_INDEX) || '[]');
-
     if (!index.includes(key)) {
       index.unshift(key);
       localStorage.setItem(STORAGE_DRAFTS_INDEX, JSON.stringify(index));
@@ -2915,7 +2799,6 @@ function printSelectedDaysPDF() {
     const index = JSON.parse(localStorage.getItem(STORAGE_DRAFTS_INDEX) || '[]');
 
     optgroup.innerHTML = '';
-
     index.forEach(item => {
       const opt = document.createElement('option');
       opt.value = 'draft_' + item;
@@ -2930,7 +2813,6 @@ function printSelectedDaysPDF() {
 
     if (val.startsWith('draft_')) {
       const saved = localStorage.getItem(val);
-
       if (saved) {
         const data = JSON.parse(saved);
         renderCostRows();
@@ -2938,19 +2820,21 @@ function printSelectedDaysPDF() {
         updateStatus('Loaded: ' + val.replace('draft_', ''));
       }
     }
-
     selectEl.value = '';
   }
 
   function startNewDayShift(isSilent = false) {
-    if (!isSilent && !confirm('Start a new shift day? This saves the current day and advances to a clean form.')) return;
+    if (!isSilent && !confirm('Start a new shift day? This commits current day to memory and advances to a fresh shift ticket.')) return;
 
     saveInAppDraft();
 
     const vendor = document.getElementById('vendor_name').value;
     const incident = document.getElementById('inc_name').value;
+    const uasd = document.getElementById('uasd_name').value;
     const agency = document.getElementById('agency_name').value;
     const order = document.getElementById('order_num').value;
+    const wStart = document.getElementById('work_start_time').value;
+    const wEnd = document.getElementById('work_end_time').value;
     const contractTypeRadio = document.querySelector('input[name="ctype"]:checked')?.id;
 
     document.querySelectorAll('input, textarea').forEach(el => {
@@ -2962,31 +2846,31 @@ function printSelectedDaysPDF() {
 
     document.getElementById('vendor_name').value = vendor;
     document.getElementById('inc_name').value = incident;
+    document.getElementById('uasd_name').value = uasd;
     document.getElementById('agency_name').value = agency;
     document.getElementById('order_num').value = order;
+    document.getElementById('work_start_time').value = wStart;
+    document.getElementById('work_end_time').value = wEnd;
 
     if (contractTypeRadio) document.getElementById(contractTypeRadio).checked = true;
 
     document.getElementById('doc_date').value = new Date().toISOString().slice(0, 10);
-    document.getElementById('q_avail').value = '1.0';
-
-    savedSignatureDataUrl = null;
-    updateSignatureThumbnail();
-
+    clearSignature();
     sortiesList = [];
     renderMinimizedSorties();
     recalcFlightSummaries();
     applySettingsToForm();
+    updateWorkDayAvailability();
 
     updateStatus('New Day Shift Ready');
   }
 
+  // --- SMART JSON IMPORT ---
   function openJSONFile(event) {
     const file = event.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
-
     reader.onload = function(e) {
       try {
         const data = JSON.parse(e.target.result);
@@ -3002,7 +2886,6 @@ function printSelectedDaysPDF() {
 
           const importedKeys = Object.keys(packageStore);
           let index = JSON.parse(localStorage.getItem(STORAGE_DRAFTS_INDEX) || '[]');
-
           importedKeys.forEach(k => {
             localStorage.setItem('draft_' + k, JSON.stringify(packageStore[k]));
             if (!index.includes(k)) index.unshift(k);
@@ -3012,13 +2895,12 @@ function printSelectedDaysPDF() {
           refreshUnifiedOpenDropdown();
 
           const latestKey = importedKeys.sort().reverse()[0];
-
           if (latestKey) {
             renderCostRows();
             applyDataToForm(packageStore[latestKey]);
           }
 
-          alert(`Successfully imported package with ${importedKeys.length} day(s).`);
+          alert(`Successfully imported Master Incident Package with ${importedKeys.length} day(s)!`);
           updateStatus(`Imported Package (${importedKeys.length} day(s))`);
         } else {
           renderCostRows();
@@ -3027,20 +2909,17 @@ function printSelectedDaysPDF() {
           alert(`Imported single day log: ${file.name}`);
           updateStatus('Imported Single Day: ' + file.name);
         }
-
         closeExportModal();
       } catch (err) {
         alert('Invalid JSON file: ' + err.message);
       }
     };
-
     reader.readAsText(file);
     event.target.value = '';
   }
 
   function updateStatus(msg, isError = false) {
     const el = document.getElementById('save-status');
-
     if (el) {
       el.innerHTML = msg;
       el.style.color = isError ? '#fca5a5' : '#ffffff';
@@ -3061,7 +2940,6 @@ function printSelectedDaysPDF() {
     renderCostRows();
 
     const active = localStorage.getItem(STORAGE_ACTIVE_LOG);
-
     if (active) {
       const data = JSON.parse(active);
       applyDataToForm(data);
@@ -3069,10 +2947,10 @@ function printSelectedDaysPDF() {
       if (!document.getElementById('doc_date').value) {
         document.getElementById('doc_date').value = new Date().toISOString().slice(0, 10);
       }
-
       renderMinimizedSorties();
       recalcFlightSummaries();
     }
+    updateWorkDayAvailability();
   });
 </script>
 
