@@ -197,6 +197,14 @@
     margin-top: 1px;
   }
 
+  /* SECTION WRAPPERS */
+  .section-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+
   /* TABLES */
   table {
     width: 100%;
@@ -282,20 +290,6 @@
     color: var(--text-muted);
     font-style: italic;
     font-weight: normal;
-  }
-
-  /* SIDE-BY-SIDE UPPER SECTION */
-  .layout-split-top {
-    display: flex;
-    gap: 5px;
-    align-items: flex-start;
-    margin-bottom: 3px;
-  }
-
-  .col-top-left, .col-top-right {
-    flex: 1.05;
-    display: flex;
-    flex-direction: column;
   }
 
   /* MINIMIZED SORTIES COMPACT LIST */
@@ -686,11 +680,10 @@
     </div>
 
     <div class="help-step-box">
-      <div class="help-step-title">2. Sortie Flight Logging</div>
+      <div class="help-step-title">2. Flight Logging &amp; Layout</div>
       <div class="help-step-desc">
-        &bull; Tap <strong>➕ Add Sortie</strong> to record flights.<br>
-        &bull; Select <strong>Flight Use Code</strong> and enter either <strong>Start/Stop Times</strong> or manual <strong>Hours &amp; Minutes</strong>.<br>
-        &bull; Summaries and cost tickets automatically convert and display time in standard decimal hours.
+        &bull; Sorties and Pilot / Aircraft flight totals are positioned directly above the cost summary table.<br>
+        &bull; Tap <strong>➕ Add Sortie</strong> to record flights with Flight Use Codes, Start/Stop times, or manual duration.
       </div>
     </div>
 
@@ -778,7 +771,7 @@
   </div>
 </div>
 
-<!-- 🛸 SORTIE MODAL (WITH USE CODE, START/STOP, AND HM TIME) -->
+<!-- 🛸 SORTIE MODAL -->
 <div class="modal-overlay" id="sortieModal">
   <div class="modal-content" style="max-width: 480px;">
     <div class="modal-header">
@@ -1040,12 +1033,11 @@
     </tr>
   </table>
 
-  <!-- UPPER SECTION: SORTIE LOGGER & SUMMARY / COST -->
-  <div class="layout-split-top">
+  <!-- VERTICAL STACK: FLIGHT SORTIE SECTION FIRST, THEN COST SECTION DIRECTLY BELOW -->
+  <div class="section-stack">
 
-    <!-- LEFT SIDE: SORTIE LOGGER & SUMMARY ROLLUPS -->
-    <div class="col-top-left">
-
+    <!-- 1. FULL-WIDTH FLIGHT SORTIE LOGGER & SUMMARY SECTION -->
+    <div style="width: 100%;">
       <div style="display:flex; justify-content:space-between; align-items:center; background:#1e3a5f; color:white; padding:2.5px 6px; border-radius:2px; margin-bottom:2px;">
         <span class="bold" style="font-size:7.0pt;">FLIGHT SORTIE LOG</span>
         <button type="button" class="btn btn-print no-print-bar" onclick="openSortieModal(-1)" style="padding:1px 6px; font-size:6.4pt; height:18px;">➕ Add Sortie</button>
@@ -1086,18 +1078,17 @@
           </td>
         </tr>
       </table>
-
     </div>
 
-    <!-- RIGHT SIDE: COST TABLE -->
-    <div class="col-top-right">
+    <!-- 2. FULL-WIDTH COST & REIMBURSABLES TABLE BELOW FLIGHT LOG -->
+    <div style="width: 100%;">
       <table>
         <thead>
           <tr class="bg-header bold center">
-            <th style="width: 38%; text-align: left; padding-left: 4px;">Cost Items &amp; Reimbursables</th>
-            <th style="width: 15%;">Qty</th>
-            <th style="width: 19%;">Rate ($)</th>
-            <th style="width: 28%;">Cost ($)</th>
+            <th style="width: 48%; text-align: left; padding-left: 4px;">Cost Items &amp; Reimbursables</th>
+            <th style="width: 14%;">Qty</th>
+            <th style="width: 18%;">Rate ($)</th>
+            <th style="width: 20%;">Cost ($)</th>
           </tr>
         </thead>
         <tbody>
@@ -1109,7 +1100,7 @@
             <td><input type="text" class="cost-output" id="c_flt" readonly placeholder="$ 0.00"></td>
           </tr>
           <tr class="calc-row">
-            <td class="bold">*Daily System Availability:<br><span class="sub-note">Auto: 14 hrs = 1.00 day</span></td>
+            <td class="bold">*Daily System Availability: <span class="sub-note">(Auto: 14 hrs = 1.00 day)</span></td>
             <td><input type="number" step="any" class="qty" id="q_avail" value="1.00" placeholder="Auto" readonly style="background:#f8fafc;"></td>
             <td><input type="number" step="any" class="rate" id="r_avail" placeholder="0.00"></td>
             <td><input type="text" class="cost-output" id="c_avail" readonly placeholder="$ 0.00"></td>
