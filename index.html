@@ -10,6 +10,10 @@
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0f2744">
 
+<!-- LEAFLET MAP CSS & JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <style>
   :root {
     --primary: #0f2744;
@@ -672,18 +676,19 @@
     </div>
 
     <div class="help-step-box">
-      <div class="help-step-title">1. Military Time &amp; Availability</div>
+      <div class="help-step-title">1. LRZ Map Location Picker</div>
       <div class="help-step-desc">
-        &bull; Enter <strong>Military Time</strong> (e.g. <code>0800</code> to <code>2200</code>) for daily shift hours and sorties.<br>
-        &bull; <strong>14 hours = 1.00 Day Availability</strong>. Scheduled shifts under 14 hours automatically calculate as a decimal fraction of daily availability.
+        &bull; Tap <strong>🗺️ Map</strong> next to the LRZ location box to open the interactive map.<br>
+        &bull; Click anywhere on the map or drag the pin to set the exact latitude/longitude.<br>
+        &bull; Tap <strong>📍 Locate Me</strong> to zoom to your current position.
       </div>
     </div>
 
     <div class="help-step-box">
-      <div class="help-step-title">2. Flight Logging &amp; Layout</div>
+      <div class="help-step-title">2. Military Time &amp; Availability</div>
       <div class="help-step-desc">
-        &bull; Sorties and Pilot / Aircraft flight totals are positioned directly above the cost summary table.<br>
-        &bull; Tap <strong>➕ Add Sortie</strong> to record flights with Flight Use Codes, Military Start/Stop times, or manual duration.
+        &bull; Enter <strong>Military Time</strong> (e.g. <code>0800</code> to <code>2200</code>) for daily shift hours and sorties.<br>
+        &bull; <strong>14 hours = 1.00 Day Availability</strong>. Scheduled shifts under 14 hours automatically calculate as a decimal fraction of daily availability.
       </div>
     </div>
 
@@ -696,6 +701,34 @@
 
     <div style="text-align:right; margin-top:8px;">
       <button class="btn btn-save" onclick="closeHelpModal()">Got it, thanks!</button>
+    </div>
+  </div>
+</div>
+
+<!-- 🗺️ MAP LOCATION PICKER MODAL -->
+<div class="modal-overlay" id="mapModal">
+  <div class="modal-content" style="max-width: 580px; padding: 12px;">
+    <div class="modal-header">
+      <span>🗺️ Pick LRZ / Base Coordinates</span>
+      <button style="border:none; background:none; font-size:12pt; cursor:pointer;" onclick="closeMapModal()">✕</button>
+    </div>
+    <div style="font-size:7.0pt; color:#475569; margin-bottom:6px;">
+      Click or tap anywhere on the map to place the marker, or drag the marker to your precise launch/landing site:
+    </div>
+
+    <div id="lrz_map_container" style="width: 100%; height: 300px; border: 1px solid #cbd5e1; border-radius: 4px; margin-bottom: 6px;"></div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 4px 8px; border: 1px solid #cbd5e1; border-radius: 4px; margin-bottom: 8px;">
+      <div>
+        <span style="font-size:6.6pt; color:#64748b; display:block;">Selected Location:</span>
+        <strong id="map_selected_coords" style="font-size: 7.4pt; color: #0f2744;">None selected</strong>
+      </div>
+      <button type="button" class="btn btn-aux" onclick="locateUserOnMap()" style="font-size: 6.6pt; height: 22px;">📍 Locate Me</button>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <button type="button" class="btn btn-clear" onclick="closeMapModal()">Cancel</button>
+      <button type="button" class="btn btn-print" onclick="applyMapLocation()">✓ Set Location</button>
     </div>
   </div>
 </div>
@@ -771,7 +804,7 @@
   </div>
 </div>
 
-<!-- 🛸 SORTIE MODAL (WITH MILITARY TIME) -->
+<!-- 🛸 SORTIE MODAL -->
 <div class="modal-overlay" id="sortieModal">
   <div class="modal-content" style="max-width: 480px;">
     <div class="modal-header">
@@ -1000,12 +1033,14 @@
       </td>
     </tr>
 
+    <!-- LRZ ROW WITH GPS & MAP BUTTONS -->
     <tr>
       <td style="width: 50%;">
         <div class="flex-align">
           <span class="bold" style="white-space:nowrap; width:125px;">LRZ:</span>
           <input type="text" id="base_loc" placeholder="LRZ Location or GPS Coordinates">
-          <button type="button" class="btn-gps" onclick="captureGPSLocation()" title="Capture GPS Lat/Long and Elevation">📍 GPS</button>
+          <button type="button" class="btn-gps" onclick="captureGPSLocation()" title="Capture Device GPS Lat/Long and Elevation">📍 GPS</button>
+          <button type="button" class="btn-gps" onclick="openMapModal()" title="Pick Location on Interactive Map">🗺️ Map</button>
         </div>
       </td>
       <td style="width: 25%;">
@@ -1428,6 +1463,123 @@
     const availabilityQty = Math.min(hours / 14, 1.0);
     qAvailEl.value = availabilityQty > 0 ? availabilityQty.toFixed(2) : '0.00';
     doMath();
+  }
+
+  // --- 🗺️ LEAFLET MAP PICKER ENGINE ---
+  let leafletMap = null;
+  let mapMarker = null;
+  let selectedMapLat = null;
+  let selectedMapLng = null;
+
+  function initLeafletMap() {
+    if (leafletMap) return;
+    leafletMap = L.map('lrz_map_container').setView([39.8283, -98.5795], 4); // Default center CONUS
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap'
+    }).addTo(leafletMap);
+
+    leafletMap.on('click', function(e) {
+      setMapMarkerPosition(e.latlng.lat, e.latlng.lng);
+    });
+  }
+
+  function setMapMarkerPosition(lat, lng) {
+    selectedMapLat = lat;
+    selectedMapLng = lng;
+
+    if (!mapMarker) {
+      mapMarker = L.marker([lat, lng], { draggable: true }).addTo(leafletMap);
+      mapMarker.on('dragend', function(e) {
+        const pos = e.target.getLatLng();
+        selectedMapLat = pos.lat;
+        selectedMapLng = pos.lng;
+        updateMapCoordsDisplay();
+      });
+    } else {
+      mapMarker.setLatLng([lat, lng]);
+    }
+    updateMapCoordsDisplay();
+  }
+
+  function updateMapCoordsDisplay() {
+    const displayEl = document.getElementById('map_selected_coords');
+    if (selectedMapLat !== null && selectedMapLng !== null) {
+      const latDir = selectedMapLat >= 0 ? 'N' : 'S';
+      const lngDir = selectedMapLng >= 0 ? 'E' : 'W';
+      displayEl.textContent = `${Math.abs(selectedMapLat).toFixed(5)}° ${latDir}, ${Math.abs(selectedMapLng).toFixed(5)}° ${lngDir}`;
+    } else {
+      displayEl.textContent = 'None selected';
+    }
+  }
+
+  function openMapModal() {
+    document.getElementById('mapModal').style.display = 'flex';
+    setTimeout(() => {
+      initLeafletMap();
+      leafletMap.invalidateSize();
+
+      // Check if existing text in base_loc contains coordinates
+      const currentVal = document.getElementById('base_loc').value || '';
+      const match = currentVal.match(/(-?\d+\.\d+)[,\s]+(-?\d+\.\d+)/);
+
+      if (match) {
+        const lat = parseFloat(match[1]);
+        const lng = parseFloat(match[2]);
+        setMapMarkerPosition(lat, lng);
+        leafletMap.setView([lat, lng], 13);
+      } else if (selectedMapLat !== null && selectedMapLng !== null) {
+        setMapMarkerPosition(selectedMapLat, selectedMapLng);
+        leafletMap.setView([selectedMapLat, selectedMapLng], 13);
+      } else {
+        locateUserOnMap(false);
+      }
+    }, 100);
+  }
+
+  function closeMapModal() {
+    document.getElementById('mapModal').style.display = 'none';
+  }
+
+  function locateUserOnMap(showAlert = true) {
+    if (!navigator.geolocation) {
+      if (showAlert) alert('Geolocation not supported by this browser.');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        setMapMarkerPosition(lat, lng);
+        if (leafletMap) leafletMap.setView([lat, lng], 14);
+      },
+      err => {
+        if (showAlert) alert(`Unable to acquire GPS fix: ${err.message}`);
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  }
+
+  function applyMapLocation() {
+    if (selectedMapLat === null || selectedMapLng === null) {
+      alert('Please click on the map to set a marker first.');
+      return;
+    }
+    const baseField = document.getElementById('base_loc');
+    const latDir = selectedMapLat >= 0 ? 'N' : 'S';
+    const lngDir = selectedMapLng >= 0 ? 'E' : 'W';
+    const coordText = `${Math.abs(selectedMapLat).toFixed(5)}° ${latDir}, ${Math.abs(selectedMapLng).toFixed(5)}° ${lngDir}`;
+
+    if (baseField.value.trim() !== '' && !baseField.value.includes('°')) {
+      baseField.value += ` | ${coordText}`;
+    } else {
+      baseField.value = coordText;
+    }
+
+    updateStatus(`📍 Map Location Set: ${coordText}`);
+    autoSaveActive();
+    closeMapModal();
   }
 
   // --- EXPORT CSV ---
@@ -2639,7 +2791,7 @@
     recalcFlightSummaries();
   }
 
-  // --- 📍 GPS CAPTURE ---
+  // --- 📍 DEVICE GPS CAPTURE ---
   function captureGPSLocation() {
     const baseField = document.getElementById('base_loc');
     if (!navigator.geolocation) {
@@ -2659,7 +2811,7 @@
           coordText += ` (${elevFeet.toLocaleString()} ft MSL)`;
         }
 
-        if (baseField.value.trim() !== '') {
+        if (baseField.value.trim() !== '' && !baseField.value.includes('°')) {
           baseField.value += ` | ${coordText}`;
         } else {
           baseField.value = coordText;
