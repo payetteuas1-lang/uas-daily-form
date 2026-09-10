@@ -10,7 +10,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0f2744">
 
-<!-- LEAFLET MAP CSS & JS -->
+<!-- LEAFLET MAP ASSETS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -156,15 +156,20 @@
 
   .btn-gps, .btn-action {
     background: #e2e8f0;
-    border: 1px solid #cbd5e1;
+    border: 1px solid #94a3b8;
     color: #0f2744;
-    font-size: 6.2pt;
-    padding: 1px 4px;
-    border-radius: 2px;
+    font-size: 6.5pt;
+    padding: 1px 5px;
+    border-radius: 3px;
     cursor: pointer;
     font-weight: 700;
     white-space: nowrap;
-    height: 16px;
+    height: 18px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
   }
   .btn-gps:hover, .btn-action:hover { background: #cbd5e1; }
 
@@ -201,7 +206,6 @@
     margin-top: 1px;
   }
 
-  /* SECTION WRAPPERS */
   .section-stack {
     display: flex;
     flex-direction: column;
@@ -237,7 +241,7 @@
     padding: 1.5px 3px;
     font-size: 7.2pt;
     font-family: inherit;
-    height: 16px;
+    height: 18px;
     border-radius: 2px;
     color: var(--text-main);
   }
@@ -278,6 +282,7 @@
     align-items: center;
     gap: 3px;
     flex-wrap: nowrap;
+    width: 100%;
   }
 
   .checkbox-label {
@@ -804,7 +809,7 @@
   </div>
 </div>
 
-<!-- 🛸 SORTIE MODAL -->
+<!-- 🛸 SORTIE MODAL (WITH MILITARY TIME) -->
 <div class="modal-overlay" id="sortieModal">
   <div class="modal-content" style="max-width: 480px;">
     <div class="modal-header">
@@ -835,12 +840,12 @@
       </div>
 
       <div style="display:flex; gap:6px; margin-bottom:6px; align-items:flex-end;">
-        <label style="flex:1; font-weight:bold; font-size:7.0pt; color:#0f2744;">Start (Military):
-          <input type="text" id="pop_sortie_start" placeholder="e.g. 0930" maxlength="5" onchange="formatSortieTime(this)" oninput="onPopoutStartEndChange()" style="height:20px; font-weight:bold; text-align:center;">
+        <label style="flex:1; font-weight:bold; font-size:7.0pt; color:#0f2744;">Start Time (0800):
+          <input type="text" id="pop_sortie_start" placeholder="0930" maxlength="5" onchange="formatSortieTime(this)" oninput="onPopoutStartEndChange()" style="height:20px; font-weight:bold; text-align:center;">
         </label>
 
-        <label style="flex:1; font-weight:bold; font-size:7.0pt; color:#0f2744;">Stop (Military):
-          <input type="text" id="pop_sortie_end" placeholder="e.g. 1045" maxlength="5" onchange="formatSortieTime(this)" oninput="onPopoutStartEndChange()" style="height:20px; font-weight:bold; text-align:center;">
+        <label style="flex:1; font-weight:bold; font-size:7.0pt; color:#0f2744;">Stop Time (1430):
+          <input type="text" id="pop_sortie_end" placeholder="1045" maxlength="5" onchange="formatSortieTime(this)" oninput="onPopoutStartEndChange()" style="height:20px; font-weight:bold; text-align:center;">
         </label>
 
         <div style="font-size:6.4pt; color:#64748b; padding-bottom:4px; font-weight:600;">-OR-</div>
@@ -1019,10 +1024,10 @@
       </td>
       <td style="width: 25%;">
         <div class="flex-align">
-          <span class="bold" style="white-space:nowrap;">Work Day:</span>
-          <input type="text" id="work_start_time" placeholder="0800" maxlength="5" title="Work day start military time" onchange="formatAndCalcWorkDay(this)" oninput="updateWorkDayAvailability()" style="text-align:center; font-weight:bold; width:48px;">
+          <span class="bold" style="white-space:nowrap;">Work Day (Mil):</span>
+          <input type="text" id="work_start_time" placeholder="0800" maxlength="5" title="Work day start military time (e.g. 0800)" onchange="formatAndCalcWorkDay(this)" oninput="updateWorkDayAvailability()" style="text-align:center; font-weight:bold; flex:1; min-width:40px;">
           <span style="font-size:6pt;">to</span>
-          <input type="text" id="work_end_time" placeholder="2200" maxlength="5" title="Work day end military time" onchange="formatAndCalcWorkDay(this)" oninput="updateWorkDayAvailability()" style="text-align:center; font-weight:bold; width:48px;">
+          <input type="text" id="work_end_time" placeholder="2200" maxlength="5" title="Work day end military time (e.g. 2200)" onchange="formatAndCalcWorkDay(this)" oninput="updateWorkDayAvailability()" style="text-align:center; font-weight:bold; flex:1; min-width:40px;">
         </div>
       </td>
       <td style="width: 25%;">
@@ -1033,12 +1038,12 @@
       </td>
     </tr>
 
-    <!-- LRZ ROW WITH GPS & MAP BUTTONS -->
+    <!-- LRZ ROW WITH PROMINENT GPS & MAP BUTTONS -->
     <tr>
       <td style="width: 50%;">
         <div class="flex-align">
           <span class="bold" style="white-space:nowrap; width:125px;">LRZ:</span>
-          <input type="text" id="base_loc" placeholder="LRZ Location or GPS Coordinates">
+          <input type="text" id="base_loc" placeholder="LRZ Location or GPS Coordinates" style="flex:1; min-width:0;">
           <button type="button" class="btn-gps" onclick="captureGPSLocation()" title="Capture Device GPS Lat/Long and Elevation">📍 GPS</button>
           <button type="button" class="btn-gps" onclick="openMapModal()" title="Pick Location on Interactive Map">🗺️ Map</button>
         </div>
@@ -1472,8 +1477,8 @@
   let selectedMapLng = null;
 
   function initLeafletMap() {
-    if (leafletMap) return;
-    leafletMap = L.map('lrz_map_container').setView([39.8283, -98.5795], 4); // Default center CONUS
+    if (leafletMap || typeof L === 'undefined') return;
+    leafletMap = L.map('lrz_map_container').setView([39.8283, -98.5795], 4);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -1518,9 +1523,8 @@
     document.getElementById('mapModal').style.display = 'flex';
     setTimeout(() => {
       initLeafletMap();
-      leafletMap.invalidateSize();
+      if (leafletMap) leafletMap.invalidateSize();
 
-      // Check if existing text in base_loc contains coordinates
       const currentVal = document.getElementById('base_loc').value || '';
       const match = currentVal.match(/(-?\d+\.\d+)[,\s]+(-?\d+\.\d+)/);
 
@@ -1528,14 +1532,14 @@
         const lat = parseFloat(match[1]);
         const lng = parseFloat(match[2]);
         setMapMarkerPosition(lat, lng);
-        leafletMap.setView([lat, lng], 13);
+        if (leafletMap) leafletMap.setView([lat, lng], 13);
       } else if (selectedMapLat !== null && selectedMapLng !== null) {
         setMapMarkerPosition(selectedMapLat, selectedMapLng);
-        leafletMap.setView([selectedMapLat, selectedMapLng], 13);
+        if (leafletMap) leafletMap.setView([selectedMapLat, selectedMapLng], 13);
       } else {
         locateUserOnMap(false);
       }
-    }, 100);
+    }, 150);
   }
 
   function closeMapModal() {
